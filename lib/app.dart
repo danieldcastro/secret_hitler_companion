@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:secret_hitler_companion/core/themes/app_themes.dart';
 import 'package:secret_hitler_companion/core/utils/flavors/flavors.dart';
 
 class App extends StatelessWidget {
@@ -12,6 +13,8 @@ class App extends StatelessWidget {
     routeInformationParser: Modular.routeInformationParser,
     routerDelegate: Modular.routerDelegate,
     debugShowCheckedModeBanner: false,
+    theme: AppThemes.light,
+    title: Flavors.appTitle,
     scrollBehavior: const MaterialScrollBehavior().copyWith(
       dragDevices: {
         PointerDeviceKind.mouse,
