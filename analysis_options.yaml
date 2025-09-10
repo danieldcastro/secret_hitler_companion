@@ -1,28 +1,87 @@
-# This file configures the analyzer, which statically analyzes Dart code to
-# check for errors, warnings, and lints.
-#
-# The issues identified by the analyzer are surfaced in the UI of Dart-enabled
-# IDEs (https://dart.dev/tools#ides-and-editors). The analyzer can also be
-# invoked from the command line by running `flutter analyze`.
+analyzer:
+  errors:
+    missing_required_param: error
+    todo: ignore
+    fixme: warning
+    invalid_use_of_visible_for_testing_member: error
 
-# The following line activates a set of recommended lints for Flutter apps,
-# packages, and plugins designed to encourage good coding practices.
+  plugins:
+    - custom_lint  
+
 include: package:flutter_lints/flutter.yaml
 
-linter:
-  # The lint rules applied to this project can be customized in the
-  # section below to disable rules from the `package:flutter_lints/flutter.yaml`
-  # included above or to enable additional rules. A list of all available lints
-  # and their documentation is published at https://dart.dev/lints.
-  #
-  # Instead of disabling a lint rule for the entire project in the
-  # section below, it can also be suppressed for a single line of code
-  # or a specific dart file by using the `// ignore: name_of_lint` and
-  # `// ignore_for_file: name_of_lint` syntax on the line or in the file
-  # producing the lint.
+custom_lint:
+  enable_all_lint_rules: false
   rules:
-    # avoid_print: false  # Uncomment to disable the `avoid_print` rule
-    # prefer_single_quotes: true  # Uncomment to enable the `prefer_single_quotes` rule
+    - fixed_text_scale_rich_text: true
+    - defined_void_callback_type: true
+    - defined_value_setter_type: true
+    - defined_value_getter_type: true
+    - defined_value_changed_type: true
+    - defined_async_value_setter_type: true
+    - defined_async_value_getter_type: true
+    - defined_async_callback_type: true
 
-# Additional information about this file can be found at
-# https://dart.dev/guides/language/analysis-options
+
+linter:
+  rules:
+    - always_use_package_imports
+    - always_put_required_named_parameters_first
+    - annotate_redeclares
+    - avoid_annotating_with_dynamic
+    - always_declare_return_types
+    - avoid_bool_literals_in_conditional_expressions
+    - avoid_double_and_int_checks
+    - avoid_empty_else
+    - avoid_escaping_inner_quotes
+    - avoid_unnecessary_containers
+    - avoid_unused_constructor_parameters
+    - avoid_void_async
+    - await_only_futures
+    - camel_case_types
+    - camel_case_extensions
+    - cancel_subscriptions
+    - curly_braces_in_flow_control_structures
+    - directives_ordering
+    - empty_catches
+    - file_names
+    - hash_and_equals
+    - join_return_with_assignment
+    - leading_newlines_in_multiline_strings
+    - missing_whitespace_between_adjacent_strings
+    - non_constant_identifier_names
+    - package_prefixed_library_names
+    - parameter_assignments
+    - prefer_is_empty
+    - prefer_is_not_empty
+    - prefer_single_quotes
+    - sort_pub_dependencies
+    - test_types_in_equals
+    - throw_in_finally
+    - unnecessary_lambdas
+    - unnecessary_overrides
+    - unnecessary_parenthesis
+    - unnecessary_statements
+    - unrelated_type_equality_checks
+    - use_is_even_rather_than_modulo
+    - valid_regexps
+    - void_checks
+    - unnecessary_await_in_return
+    - prefer_expression_function_bodies
+    - unnecessary_underscores
+    - use_decorated_box
+    - cascade_invocations
+    - prefer_const_declarations
+    - prefer_constructors_over_static_methods
+    - sized_box_shrink_expand
+    - prefer_const_literals_to_create_immutables
+    - prefer_final_locals
+    - prefer_final_fields
+    - prefer_final_in_for_each
+    - sort_unnamed_constructors_first
+    - prefer_null_aware_method_calls
+    - avoid_redundant_argument_values
+    - no_literal_bool_comparisons
+    - unnecessary_breaks
+    - matching_super_parameters
+    - unawaited_futures
