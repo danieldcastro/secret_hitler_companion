@@ -61,7 +61,7 @@ flutter run
 * [ ] Home screen with navigation menu
 * [ ] Player registration flow
 * [ ] Role distribution system
-* [ ] Guided round narration
+* [ ] Guided first rounds narration
 * [ ] Themed sounds and music
 * [ ] Multi-language translation via Crowdin
 * [ ] OTA updates and CI deployment via Shorebird
