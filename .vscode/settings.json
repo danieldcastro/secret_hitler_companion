@@ -1,13 +1,14 @@
 {
-    "cSpell.words": [
-        "appbundle",
-        "deintegrates",
-        "eskapade",
-        "Eskapade",
-        "fraktur",
-        "hitler",
-        "melos",
-        "nilts",
-        "Podfile"
-    ]
+  "cSpell.words": [
+    "appbundle",
+    "deintegrates",
+    "eskapade",
+    "Eskapade",
+    "fraktur",
+    "hitler",
+    "melos",
+    "nilts",
+    "Podfile"
+  ],
+  "dart.flutterSdkPath": ".fvm/versions/3.35.3"
 }
