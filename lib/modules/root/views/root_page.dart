@@ -7,6 +7,11 @@ class RootPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Scaffold(
     appBar: AppBar(title: const Text('Root Page')),
-    body: Container(child: Text('', style: AppTextStyles.bodyText1())),
+    body: Center(
+      child: Text(
+        'Welcome to the Root Page',
+        style: AppTextStyles.headlineLarge(),
+      ),
+    ),
   );
 }
