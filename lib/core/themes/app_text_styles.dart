@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:secret_hitler_companion/core/objects/enums/font_family_enum.dart';
 import 'package:secret_hitler_companion/core/themes/app_colors.dart';
 
 class AppTextStyles {
@@ -8,61 +9,121 @@ class AppTextStyles {
     double fontSize,
     FontWeight? fontWeight,
     Color? color,
+    FontFamilyEnum fontFamily,
   ) => TextStyle(
     fontSize: fontSize,
-    fontWeight: fontWeight,
+    fontWeight: fontWeight ?? FontWeight.normal,
     color: color ?? AppColors.black,
+    fontFamily: fontFamily.value,
   );
 
-  /// headline1: tamanho 96, peso light (w300)
-  static TextStyle headline1({Color? color, FontWeight? fontWeight}) =>
-      _base(96, fontWeight ?? FontWeight.w300, color);
+  // === Display ===
+  /// displayLarge: tamanho 64
+  static TextStyle displayLarge({
+    Color? color,
+    FontFamilyEnum fontFamily = FontFamilyEnum.display,
+    FontWeight? fontWeight,
+  }) => _base(64, fontWeight, color, fontFamily);
 
-  /// headline2: tamanho 60, peso light (w300)
-  static TextStyle headline2({Color? color, FontWeight? fontWeight}) =>
-      _base(60, fontWeight ?? FontWeight.w300, color);
+  /// displayMedium: tamanho 48
+  static TextStyle displayMedium({
+    Color? color,
+    FontFamilyEnum fontFamily = FontFamilyEnum.display,
+    FontWeight? fontWeight,
+  }) => _base(48, fontWeight, color, fontFamily);
 
-  /// headline3: tamanho 48, peso normal
-  static TextStyle headline3({Color? color, FontWeight? fontWeight}) =>
-      _base(48, fontWeight ?? FontWeight.normal, color);
+  /// displaySmall: tamanho 36
+  static TextStyle displaySmall({
+    Color? color,
+    FontFamilyEnum fontFamily = FontFamilyEnum.display,
+    FontWeight? fontWeight,
+  }) => _base(36, fontWeight, color, fontFamily);
 
-  /// headline4: tamanho 34, peso normal
-  static TextStyle headline4({Color? color, FontWeight? fontWeight}) =>
-      _base(34, fontWeight ?? FontWeight.normal, color);
+  // === Headline ===
+  /// headlineLarge: tamanho 32
+  static TextStyle headlineLarge({
+    Color? color,
+    FontFamilyEnum fontFamily = FontFamilyEnum.display,
+    FontWeight? fontWeight,
+  }) => _base(32, fontWeight, color, fontFamily);
 
-  /// headline5: tamanho 24, peso normal
-  static TextStyle headline5({Color? color, FontWeight? fontWeight}) =>
-      _base(24, fontWeight ?? FontWeight.normal, color);
+  /// headlineMedium: tamanho 28
+  static TextStyle headlineMedium({
+    Color? color,
+    FontFamilyEnum fontFamily = FontFamilyEnum.display,
+    FontWeight? fontWeight,
+  }) => _base(28, fontWeight, color, fontFamily);
 
-  /// headline6: tamanho 20, peso medium (w500)
-  static TextStyle headline6({Color? color, FontWeight? fontWeight}) =>
-      _base(20, fontWeight ?? FontWeight.w500, color);
+  /// headlineSmall: tamanho 24
+  static TextStyle headlineSmall({
+    Color? color,
+    FontFamilyEnum fontFamily = FontFamilyEnum.display,
+    FontWeight? fontWeight,
+  }) => _base(24, fontWeight, color, fontFamily);
 
-  /// subtitle1: tamanho 16, peso normal
-  static TextStyle subtitle1({Color? color, FontWeight? fontWeight}) =>
-      _base(16, fontWeight ?? FontWeight.normal, color);
+  // === Title ===
+  /// titleLarge: tamanho 20
+  static TextStyle titleLarge({
+    Color? color,
+    FontFamilyEnum fontFamily = FontFamilyEnum.body,
+    FontWeight? fontWeight,
+  }) => _base(20, fontWeight, color, fontFamily);
 
-  /// subtitle2: tamanho 14, peso medium (w500)
-  static TextStyle subtitle2({Color? color, FontWeight? fontWeight}) =>
-      _base(14, fontWeight ?? FontWeight.w500, color);
+  /// titleMedium: tamanho 18
+  static TextStyle titleMedium({
+    Color? color,
+    FontFamilyEnum fontFamily = FontFamilyEnum.body,
+    FontWeight? fontWeight,
+  }) => _base(18, fontWeight, color, fontFamily);
 
-  /// bodyText1: tamanho 16, peso normal
-  static TextStyle bodyText1({Color? color, FontWeight? fontWeight}) =>
-      _base(16, fontWeight ?? FontWeight.normal, color);
+  /// titleSmall: tamanho 16
+  static TextStyle titleSmall({
+    Color? color,
+    FontFamilyEnum fontFamily = FontFamilyEnum.body,
+    FontWeight? fontWeight,
+  }) => _base(16, fontWeight, color, fontFamily);
 
-  /// bodyText2: tamanho 14, peso normal
-  static TextStyle bodyText2({Color? color, FontWeight? fontWeight}) =>
-      _base(14, fontWeight ?? FontWeight.normal, color);
+  // === Body ===
+  /// bodyLarge: tamanho 15
+  static TextStyle bodyLarge({
+    Color? color,
+    FontFamilyEnum fontFamily = FontFamilyEnum.body,
+    FontWeight? fontWeight,
+  }) => _base(15, fontWeight, color, fontFamily);
 
-  /// button: tamanho 14, peso medium (w500)
-  static TextStyle button({Color? color, FontWeight? fontWeight}) =>
-      _base(14, fontWeight ?? FontWeight.w500, color);
+  /// bodyMedium: tamanho 14
+  static TextStyle bodyMedium({
+    Color? color,
+    FontFamilyEnum fontFamily = FontFamilyEnum.body,
+    FontWeight? fontWeight,
+  }) => _base(14, fontWeight, color, fontFamily);
 
-  /// caption: tamanho 12, peso normal
-  static TextStyle caption({Color? color, FontWeight? fontWeight}) =>
-      _base(12, fontWeight ?? FontWeight.normal, color);
+  /// bodySmall: tamanho 12
+  static TextStyle bodySmall({
+    Color? color,
+    FontFamilyEnum fontFamily = FontFamilyEnum.body,
+    FontWeight? fontWeight,
+  }) => _base(12, fontWeight, color, fontFamily);
 
-  /// overline: tamanho 10, peso normal
-  static TextStyle overline({Color? color, FontWeight? fontWeight}) =>
-      _base(10, fontWeight ?? FontWeight.normal, color);
+  // === Label ===
+  /// labelLarge: tamanho 11
+  static TextStyle labelLarge({
+    Color? color,
+    FontFamilyEnum fontFamily = FontFamilyEnum.body,
+    FontWeight? fontWeight,
+  }) => _base(11, fontWeight, color, fontFamily);
+
+  /// labelMedium: tamanho 10
+  static TextStyle labelMedium({
+    Color? color,
+    FontFamilyEnum fontFamily = FontFamilyEnum.body,
+    FontWeight? fontWeight,
+  }) => _base(10, fontWeight, color, fontFamily);
+
+  /// labelSmall: tamanho 9
+  static TextStyle labelSmall({
+    Color? color,
+    FontFamilyEnum fontFamily = FontFamilyEnum.body,
+    FontWeight? fontWeight,
+  }) => _base(9, fontWeight, color, fontFamily);
 }

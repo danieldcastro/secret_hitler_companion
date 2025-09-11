@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:secret_hitler_companion/core/themes/app_colors.dart';
+import 'package:secret_hitler_companion/core/themes/app_text_theme.dart';
 
 class AppThemes {
   AppThemes._();
@@ -17,14 +18,7 @@ class AppThemes {
       backgroundColor: AppColors.propRed,
       foregroundColor: Colors.white,
     ),
-    textTheme: const TextTheme(
-      headlineLarge: TextStyle(
-        color: AppColors.black,
-        fontWeight: FontWeight.bold,
-      ),
-      bodyLarge: TextStyle(color: AppColors.black),
-      bodyMedium: TextStyle(color: AppColors.black),
-    ),
+    textTheme: AppTextTheme.primary,
     colorScheme: const ColorScheme.light(
       primary: AppColors.propRed,
       secondary: AppColors.paper,
