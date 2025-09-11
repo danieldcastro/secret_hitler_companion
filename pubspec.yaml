@@ -52,10 +52,10 @@ flutter:
     - family: Playpen Sans
       fonts:
         - asset: assets/fonts/playpen_sans/PlaypenSans-Regular.ttf
-          weight: 100
+          weight: 400
           style: normal
         - asset: assets/fonts/playpen_sans/PlaypenSans-Medium.ttf
-          weight: 400
+          weight: 500
           style: normal
         - asset: assets/fonts/playpen_sans/PlaypenSans-SemiBold.ttf
           weight: 600
