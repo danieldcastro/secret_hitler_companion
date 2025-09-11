@@ -1,0 +1,34 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Secret Hitler Companion - QA",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main.dart",
+            "toolArgs": [
+                "--flavor",
+                "qa",
+                "--dart-define",
+                "env=qa",
+                "--dart-define-from-file",
+                "env/env_qa.json",
+            ]
+        },
+        {
+            "name": "Secret Hitler Companion - PROD",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main.dart",
+            "toolArgs": [
+                "--flavor",
+                "prod",
+                "--dart-define",
+                "env=prod",
+                "--dart-define-from-file",
+                "env/env_prod.json",
+            ]
+        },
+    ]
+}
+
