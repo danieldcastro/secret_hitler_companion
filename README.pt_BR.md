@@ -61,7 +61,7 @@ flutter run
 * [ ] Tela inicial com menu de navegação
 * [ ] Fluxo de cadastro de jogadores
 * [ ] Sistema de distribuição de papéis
-* [ ] Narração guiada das rodadas
+* [ ] Narração guiada das rodadas iniciais
 * [ ] Sons e músicas temáticas
 * [ ] Tradução para múltiplos idiomas via Crowdin
 * [ ] Atualizações OTA e deploy via CI com Shorebird
