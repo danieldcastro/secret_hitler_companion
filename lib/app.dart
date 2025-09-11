@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:secret_hitler_companion/core/themes/app_themes.dart';
 import 'package:secret_hitler_companion/core/utils/flavors/flavors.dart';
@@ -15,6 +16,11 @@ class App extends StatelessWidget {
     debugShowCheckedModeBanner: false,
     theme: AppThemes.light,
     title: Flavors.appTitle,
+    localizationsDelegates: const [
+      GlobalMaterialLocalizations.delegate,
+      GlobalWidgetsLocalizations.delegate,
+      GlobalCupertinoLocalizations.delegate,
+    ],
     scrollBehavior: const MaterialScrollBehavior().copyWith(
       dragDevices: {
         PointerDeviceKind.mouse,

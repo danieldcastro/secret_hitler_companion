@@ -8,17 +8,14 @@ version: 1.0.0+1
 environment:
   sdk: ^3.9.2
 
-# Como você está usando o root como package, não precisa da seção workspace
-# A configuração useRootAsPackage: true no melos cuida disso
-
 dependencies:
   cupertino_icons: ^1.0.8
   flutter:
     sdk: flutter
   flutter_bloc: ^9.1.1
-  flutter_modular: ^6.4.1
   flutter_localizations:
     sdk: flutter
+  flutter_modular: ^6.4.1
   nilts: ^0.24.0
 
 dev_dependencies:
@@ -29,6 +26,43 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
+  fonts:
+    - family: Eskapade Fraktur
+      fonts:
+        - asset: assets/fonts/eskapade_fraktur/EskapadeFraktur-Thin.ttf
+          weight: 100
+          style: normal
+        - asset: assets/fonts/eskapade_fraktur/EskapadeFraktur-ThinItalic.ttf
+          weight: 100
+          style: italic
+        - asset: assets/fonts/eskapade_fraktur/EskapadeFraktur-Regular.ttf
+          weight: 400
+          style: normal
+        - asset: assets/fonts/eskapade_fraktur/EskapadeFraktur-RegularItalic.ttf
+          weight: 400
+          style: italic
+        - asset: assets/fonts/eskapade_fraktur/EskapadeFraktur-Black.ttf
+          weight: 900
+          style: normal
+        - asset: assets/fonts/eskapade_fraktur/EskapadeFraktur-BlackItalic.ttf
+          weight: 900
+          style: italic
+
+    - family: Playpen Sans
+      fonts:
+        - asset: assets/fonts/playpen_sans/PlaypenSans-Regular.ttf
+          weight: 100
+          style: normal
+        - asset: assets/fonts/playpen_sans/PlaypenSans-Medium.ttf
+          weight: 400
+          style: normal
+        - asset: assets/fonts/playpen_sans/PlaypenSans-SemiBold.ttf
+          weight: 600
+          style: normal
+        - asset: assets/fonts/playpen_sans/PlaypenSans-Bold.ttf
+          weight: 700
+          style: normal  
 
 melos:
   useRootAsPackage: true
