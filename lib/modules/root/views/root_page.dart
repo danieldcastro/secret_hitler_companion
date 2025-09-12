@@ -1,16 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:secret_hitler_companion/core/themes/app_text_styles.dart';
+import 'package:flutter_advanced_drawer/flutter_advanced_drawer.dart';
+import 'package:flutter_modular/flutter_modular.dart';
+import 'package:secret_hitler_companion/core/themes/app_colors.dart';
 
 class RootPage extends StatelessWidget {
   const RootPage({super.key});
 
   @override
   Widget build(BuildContext context) => Scaffold(
-    appBar: AppBar(title: const Text('Root Page')),
-    body: Center(
-      child: Text(
-        'Welcome to the Root Page',
-        style: AppTextStyles.headlineLarge(),
+    bottomNavigationBar: ElevatedButton(
+      onPressed: () {},
+      child: const Text('Open Drawer'),
+    ),
+    body: AdvancedDrawer(
+      rtlOpening: true,
+      openScale: 0.9,
+      openRatio: 0.5,
+      backdropColor: AppColors.beige,
+      drawer: Container(),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(8),
+        child: RouterOutlet(),
       ),
     ),
   );

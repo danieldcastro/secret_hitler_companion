@@ -21,7 +21,10 @@ class HomePage extends StatelessWidget {
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: LogoWidget(fontSize: 80),
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 350),
+                  child: LogoWidget(fontSize: 80),
+                ),
               ),
             ),
             Column(
