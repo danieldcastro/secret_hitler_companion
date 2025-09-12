@@ -49,18 +49,19 @@ class _PunchButtonState extends State<PunchButton>
   @override
   void initState() {
     super.initState();
-    _resetController =
-        AnimationController(
-          vsync: this,
-          duration: const Duration(milliseconds: 400),
-        )..addListener(() {
-          setState(() {
-            _progress = _resetController.value;
-          });
-        });
+    _resetController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 400),
+    )..addListener(_updateProgressListener);
+  }
+
+  void _updateProgressListener() {
+    if (!mounted) return;
+    setState(() => _progress = _resetController.value);
   }
 
   void _startHold() {
+    if (!mounted) return;
     _resetController.stop();
     _progress = 0;
 
@@ -70,6 +71,11 @@ class _PunchButtonState extends State<PunchButton>
     _holdTimer?.cancel();
     _holdTimer = Timer.periodic(tick, (timer) async {
       elapsed += tick.inMilliseconds;
+      if (!mounted) {
+        timer.cancel();
+        return;
+      }
+
       setState(() {
         _progress = (elapsed / _holdDuration.inMilliseconds).clamp(0.0, 1.0);
       });
@@ -77,22 +83,29 @@ class _PunchButtonState extends State<PunchButton>
       if (_progress >= 1) {
         timer.cancel();
         widget.onPressed?.call();
-        await Future.delayed(const Duration(milliseconds: 500), _cancelHold);
+        if (mounted) {
+          Future.delayed(const Duration(milliseconds: 500), () {
+            if (mounted) _cancelHold();
+          });
+        }
       }
     });
   }
 
   void _cancelHold() {
     _holdTimer?.cancel();
+    if (!mounted) return; // evita crash se já desmontou
     _resetController.value = _progress;
     _resetController.reverse(from: _progress);
   }
 
   @override
   void dispose() {
-    _cancelHold();
+    _holdTimer?.cancel();
     _player.dispose();
-    _resetController.dispose();
+    _resetController
+      ..removeListener(_updateProgressListener)
+      ..dispose();
     super.dispose();
   }
 
@@ -106,18 +119,18 @@ class _PunchButtonState extends State<PunchButton>
       child: GestureDetector(
         onTapDown: (_) {
           _playButtonDownSound();
-          setState(() => _position = 0);
+          if (mounted) setState(() => _position = 0);
           _startHold();
         },
         onTapUp: (_) async {
           await _playButtonUpSound();
-          setState(() => _position = _basePosition);
+          if (mounted) setState(() => _position = _basePosition);
           if (_progress < 1) {
             _cancelHold();
           }
         },
         onTapCancel: () {
-          setState(() => _position = _basePosition);
+          if (mounted) setState(() => _position = _basePosition);
           _cancelHold();
         },
         child: SizedBox(
@@ -150,7 +163,6 @@ class _PunchButtonState extends State<PunchButton>
                         borderRadius: borderRadius,
                       ),
                     ),
-
                     ClipRRect(
                       borderRadius: borderRadius,
                       child: Align(
@@ -163,7 +175,6 @@ class _PunchButtonState extends State<PunchButton>
                         ),
                       ),
                     ),
-
                     ClipRRect(
                       borderRadius: borderRadius,
                       child: Transform.translate(
@@ -175,7 +186,6 @@ class _PunchButtonState extends State<PunchButton>
                         ),
                       ),
                     ),
-
                     ClipRRect(
                       borderRadius: borderRadius,
                       child: Align(
