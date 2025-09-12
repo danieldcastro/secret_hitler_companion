@@ -1,6 +1,7 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:secret_hitler_companion/core/dependencies/core_binds.dart';
 import 'package:secret_hitler_companion/core/routes/app_routes.dart';
+import 'package:secret_hitler_companion/modules/home/home_module.dart';
 import 'package:secret_hitler_companion/modules/root/root_module.dart';
 
 class CoreModule extends Module {
@@ -9,7 +10,17 @@ class CoreModule extends Module {
 
   @override
   void routes(RouteManager r) {
-    r.module(AppRoutes.initial, module: RootModule());
+    r
+      ..module(
+        AppRoutes.initial,
+        module: HomeModule(),
+        transition: TransitionType.downToUp,
+      )
+      ..module(
+        AppRoutes.root,
+        module: RootModule(),
+        transition: TransitionType.downToUp,
+      );
     super.routes(r);
   }
 }

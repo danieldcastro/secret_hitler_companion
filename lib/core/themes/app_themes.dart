@@ -7,22 +7,18 @@ class AppThemes {
 
   static ThemeData get light => ThemeData(
     brightness: Brightness.light,
-    primaryColor: AppColors.propRed,
-    scaffoldBackgroundColor: AppColors.beige,
+    primaryColor: AppColors.beige,
+    scaffoldBackgroundColor: AppColors.propRed,
     appBarTheme: const AppBarTheme(
-      backgroundColor: AppColors.propRed,
-      foregroundColor: Colors.white,
+      backgroundColor: AppColors.beige,
+      foregroundColor: AppColors.propRed,
       elevation: 0,
-    ),
-    floatingActionButtonTheme: const FloatingActionButtonThemeData(
-      backgroundColor: AppColors.propRed,
-      foregroundColor: Colors.white,
     ),
     textTheme: AppTextTheme.primary,
     colorScheme: const ColorScheme.light(
-      primary: AppColors.propRed,
+      primary: AppColors.beige,
       secondary: AppColors.paper,
-      surface: AppColors.beige,
+      surface: AppColors.propRed,
       error: AppColors.coral,
       onSecondary: AppColors.black,
       onSurface: AppColors.black,
