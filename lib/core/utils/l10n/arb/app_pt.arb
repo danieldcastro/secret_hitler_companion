@@ -1,0 +1,6 @@
+{
+  "holdButtonMessage": "Toque e segure para iniciar a assembleia",
+  "@holdButtonMessage": {
+    "description": "Mensagem do botão segurar"
+  }
+}
