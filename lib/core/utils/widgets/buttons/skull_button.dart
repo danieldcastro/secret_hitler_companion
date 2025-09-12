@@ -5,7 +5,7 @@ import 'package:secret_hitler_companion/core/utils/widgets/buttons/punch_button.
 
 class SkullButton extends StatelessWidget {
   final VoidCallback? onPressed;
-  const SkullButton({super.key, this.onPressed});
+  const SkullButton({required this.onPressed, super.key});
 
   @override
   Widget build(BuildContext context) => PunchButton(

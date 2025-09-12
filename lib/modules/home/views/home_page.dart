@@ -34,7 +34,7 @@ class HomePage extends StatelessWidget {
                     fontWeight: FontWeight.w700,
                   ),
                 ),
-                FittedBox(child: SkullButton()),
+                FittedBox(child: SkullButton(onPressed: bloc.navigateToRoster)),
               ],
             ),
           ],
