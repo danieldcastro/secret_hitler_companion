@@ -19,5 +19,5 @@ class RootModule extends Module {
   }
 
   ModuleRoute _buildChild(String path, Module module) =>
-      ModuleRoute(path, module: module, transition: TransitionType.rightToLeft);
+      ModuleRoute(path, module: module);
 }
