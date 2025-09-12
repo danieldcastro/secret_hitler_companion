@@ -5,7 +5,7 @@ class RosterPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-    appBar: AppBar(title: const Text('')),
+    appBar: AppBar(title: const Text('Roster')),
     body: Container(),
   );
 }
