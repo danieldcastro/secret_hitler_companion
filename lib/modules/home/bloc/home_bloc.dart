@@ -7,6 +7,6 @@ class HomeBloc extends Cubit<HomeState> {
   HomeBloc() : super(HomeState());
 
   void navigateToRoster() {
-    Globals.nav.pushNamed(NestedRoutes.roster);
+    Globals.nav.pushReplacementNamed(NestedRoutes.roster);
   }
 }
