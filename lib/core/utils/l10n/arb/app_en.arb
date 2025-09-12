@@ -1,0 +1,6 @@
+{
+  "holdButtonMessage": "Tap and hold to start the assembly",
+  "@holdButtonMessage": {
+    "description": "Hold Button Message"
+  }
+}

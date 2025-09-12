@@ -5,6 +5,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:secret_hitler_companion/core/themes/app_themes.dart';
 import 'package:secret_hitler_companion/core/utils/flavors/flavors.dart';
+import 'package:secret_hitler_companion/core/utils/l10n/arb/s.dart';
 
 class App extends StatelessWidget {
   const App({super.key});
@@ -17,6 +18,7 @@ class App extends StatelessWidget {
     theme: AppThemes.light,
     title: Flavors.appTitle,
     localizationsDelegates: const [
+      S.delegate,
       GlobalMaterialLocalizations.delegate,
       GlobalWidgetsLocalizations.delegate,
       GlobalCupertinoLocalizations.delegate,
@@ -30,7 +32,7 @@ class App extends StatelessWidget {
         PointerDeviceKind.invertedStylus,
       },
     ),
-    supportedLocales: const <Locale>[Locale('pt', 'BR')],
+    supportedLocales: S.supportedLocales,
 
     builder: (context, child) => Material(
       child: Scaffold(
