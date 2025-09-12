@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:secret_hitler_companion/core/themes/app_colors.dart';
 import 'package:secret_hitler_companion/core/themes/app_text_styles.dart';
+import 'package:secret_hitler_companion/core/utils/extensions/context_extensions.dart';
 import 'package:secret_hitler_companion/core/utils/widgets/buttons/skull_button.dart';
 import 'package:secret_hitler_companion/core/utils/widgets/logo_widget.dart';
 import 'package:secret_hitler_companion/modules/home/bloc/home_bloc.dart';
@@ -27,7 +28,7 @@ class HomePage extends StatelessWidget {
               spacing: 40,
               children: [
                 Text(
-                  'Toque e segure para\niniciar a assembleia',
+                  context.loc.holdButtonMessage,
                   textAlign: TextAlign.center,
                   style: AppTextStyles.titleMedium(
                     color: AppColors.beige,
