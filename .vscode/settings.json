@@ -9,7 +9,25 @@
     "hitler",
     "melos",
     "nilts",
-    "Podfile"
+    "Podfile",
+    "unawaited"
   ],
-  "dart.flutterSdkPath": ".fvm/versions/3.35.3"
+  "dart.flutterSdkPath": ".fvm/versions/3.35.3",
+  "workbench.colorCustomizations": {
+    "activityBar.activeBackground": "#f58e7b",
+    "activityBar.activeBorder": "#e1fde6",
+    "activityBar.background": "#f58e7b",
+    "activityBar.foreground": "#15202b",
+    "activityBar.inactiveForeground": "#15202b99",
+    "activityBarBadge.background": "#e1fde6",
+    "activityBarBadge.foreground": "#15202b",
+    "statusBar.background": "#f2654b",
+    "statusBar.foreground": "#15202b",
+    "statusBarItem.hoverBackground": "#ef3c1b",
+    "titleBar.activeBackground": "#f2654b",
+    "titleBar.activeForeground": "#15202b",
+    "titleBar.inactiveBackground": "#f2654b99",
+    "titleBar.inactiveForeground": "#15202b99"
+  },
+  "peacock.color": "F2654B"
 }

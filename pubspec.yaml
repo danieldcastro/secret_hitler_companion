@@ -30,6 +30,7 @@ flutter:
 
   assets:
     - assets/audios/
+    - assets/images/
 
   fonts:
     - family: Eskapade Fraktur

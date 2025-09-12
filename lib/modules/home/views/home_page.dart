@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:secret_hitler_companion/core/themes/app_colors.dart';
 import 'package:secret_hitler_companion/core/themes/app_text_styles.dart';
+import 'package:secret_hitler_companion/core/utils/widgets/buttons/skull_button.dart';
 import 'package:secret_hitler_companion/core/utils/widgets/logo_widget.dart';
-import 'package:secret_hitler_companion/core/utils/widgets/punch_button.dart';
 import 'package:secret_hitler_companion/modules/home/bloc/home_bloc.dart';
 
 class HomePage extends StatelessWidget {
@@ -17,15 +17,25 @@ class HomePage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Flexible(child: LogoWidget(fontSize: 80)),
-            FittedBox(
-              child: PunchButton(
-                onPressed: bloc.navigateToRoster,
-                child: Text(
-                  'NÃO TOQUE AQUI!',
-                  style: AppTextStyles.titleSmall(color: AppColors.beige),
-                ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: LogoWidget(fontSize: 80),
               ),
+            ),
+            Column(
+              spacing: 40,
+              children: [
+                Text(
+                  'Toque e segure para\niniciar a assembleia',
+                  textAlign: TextAlign.center,
+                  style: AppTextStyles.titleMedium(
+                    color: AppColors.beige,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                FittedBox(child: SkullButton()),
+              ],
             ),
           ],
         ),
