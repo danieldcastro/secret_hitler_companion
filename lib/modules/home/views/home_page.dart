@@ -19,20 +19,24 @@ class HomePage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Container(
+                constraints: const BoxConstraints(maxWidth: 400),
+                padding: const EdgeInsets.all(20),
                 child: LogoWidget(fontSize: 80),
               ),
             ),
             Column(
               spacing: 40,
               children: [
-                Text(
-                  context.loc.holdButtonMessage,
-                  textAlign: TextAlign.center,
-                  style: AppTextStyles.titleMedium(
-                    color: AppColors.beige,
-                    fontWeight: FontWeight.w700,
+                ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 200),
+                  child: Text(
+                    context.loc.holdButtonMessage,
+                    textAlign: TextAlign.center,
+                    style: AppTextStyles.titleMedium(
+                      color: AppColors.beige,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                 ),
                 FittedBox(child: SkullButton(onPressed: bloc.navigateToRoster)),

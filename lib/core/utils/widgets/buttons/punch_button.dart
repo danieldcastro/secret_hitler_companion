@@ -4,6 +4,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:secret_hitler_companion/core/themes/app_colors.dart';
 import 'package:secret_hitler_companion/core/utils/constants/paths/audio_paths.dart';
+import 'package:vibration/vibration.dart';
 
 class PunchButton extends StatefulWidget {
   final VoidCallback? onPressed;
@@ -32,7 +33,9 @@ class _PunchButtonState extends State<PunchButton>
   static const double _shadowHeight = _basePosition;
   static const double _basePosition = 10;
   double _position = _basePosition;
-  final _player = AudioPlayer();
+
+  final _effectsPlayer = AudioPlayer();
+  final _loopPlayer = AudioPlayer();
 
   Timer? _holdTimer;
   double _progress = 0;
@@ -40,27 +43,50 @@ class _PunchButtonState extends State<PunchButton>
 
   late AnimationController _resetController;
 
-  Future<void> _playButtonDownSound() async =>
-      _player.play(AssetSource(AudioPaths.buttonDown.substring(7)));
+  String _prepareAudioPath(String path) =>
+      path.startsWith('assets/') ? path.substring(7) : path;
+
+  Future<void> _playButtonDownSound() async => _effectsPlayer.play(
+    AssetSource(_prepareAudioPath(AudioPaths.buttonDown)),
+  );
 
   Future<void> _playButtonUpSound() async =>
-      _player.play(AssetSource(AudioPaths.buttonUp.substring(7)));
+      _effectsPlayer.play(AssetSource(_prepareAudioPath(AudioPaths.buttonUp)));
+
+  Future<void> _playPushingSound() async =>
+      _loopPlayer.play(AssetSource(_prepareAudioPath(AudioPaths.pushing)));
+
+  Future<void> _playScrollingSound() async =>
+      _loopPlayer.play(AssetSource(_prepareAudioPath(AudioPaths.scrolling)));
+
+  Future<void> _vibrateScrolling() async {
+    if (await Vibration.hasVibrator()) {
+      await Vibration.vibrate(duration: 2000);
+    }
+  }
+
+  Future<void> _vibrateLong() async {
+    if (await Vibration.hasVibrator()) {
+      await Vibration.vibrate(duration: 300);
+    }
+  }
 
   @override
   void initState() {
     super.initState();
-    _resetController =
-        AnimationController(
-          vsync: this,
-          duration: const Duration(milliseconds: 400),
-        )..addListener(() {
-          setState(() {
-            _progress = _resetController.value;
-          });
-        });
+    _resetController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 400),
+    )..addListener(_updateProgressListener);
+  }
+
+  void _updateProgressListener() {
+    if (!mounted) return;
+    setState(() => _progress = _resetController.value);
   }
 
   void _startHold() {
+    if (!mounted) return;
     _resetController.stop();
     _progress = 0;
 
@@ -70,29 +96,46 @@ class _PunchButtonState extends State<PunchButton>
     _holdTimer?.cancel();
     _holdTimer = Timer.periodic(tick, (timer) async {
       elapsed += tick.inMilliseconds;
+      if (!mounted) {
+        timer.cancel();
+        return;
+      }
+
       setState(() {
         _progress = (elapsed / _holdDuration.inMilliseconds).clamp(0.0, 1.0);
       });
 
       if (_progress >= 1) {
         timer.cancel();
-        widget.onPressed?.call();
-        await Future.delayed(const Duration(milliseconds: 500), _cancelHold);
+        await _playPushingSound();
+        await _vibrateLong();
+        await Future.delayed(
+          const Duration(milliseconds: 500),
+          widget.onPressed?.call,
+        );
+        if (mounted) {
+          Future.delayed(const Duration(milliseconds: 500), _cancelHold);
+        }
       }
     });
   }
 
   void _cancelHold() {
     _holdTimer?.cancel();
+    if (!mounted) return;
+    _loopPlayer.stop();
     _resetController.value = _progress;
     _resetController.reverse(from: _progress);
   }
 
   @override
   void dispose() {
-    _cancelHold();
-    _player.dispose();
-    _resetController.dispose();
+    _holdTimer?.cancel();
+    _effectsPlayer.dispose();
+    _loopPlayer.dispose();
+    _resetController
+      ..removeListener(_updateProgressListener)
+      ..dispose();
     super.dispose();
   }
 
@@ -104,20 +147,23 @@ class _PunchButtonState extends State<PunchButton>
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       child: GestureDetector(
-        onTapDown: (_) {
-          _playButtonDownSound();
-          setState(() => _position = 0);
+        onTapDown: (_) async {
+          await _playButtonDownSound();
+          await _playScrollingSound();
+          await _vibrateScrolling();
+          if (mounted) setState(() => _position = 0);
           _startHold();
         },
         onTapUp: (_) async {
           await _playButtonUpSound();
-          setState(() => _position = _basePosition);
+          await Vibration.cancel();
+          if (mounted) setState(() => _position = _basePosition);
           if (_progress < 1) {
             _cancelHold();
           }
         },
         onTapCancel: () {
-          setState(() => _position = _basePosition);
+          if (mounted) setState(() => _position = _basePosition);
           _cancelHold();
         },
         child: SizedBox(
@@ -150,7 +196,6 @@ class _PunchButtonState extends State<PunchButton>
                         borderRadius: borderRadius,
                       ),
                     ),
-
                     ClipRRect(
                       borderRadius: borderRadius,
                       child: Align(
@@ -163,7 +208,6 @@ class _PunchButtonState extends State<PunchButton>
                         ),
                       ),
                     ),
-
                     ClipRRect(
                       borderRadius: borderRadius,
                       child: Transform.translate(
@@ -175,7 +219,6 @@ class _PunchButtonState extends State<PunchButton>
                         ),
                       ),
                     ),
-
                     ClipRRect(
                       borderRadius: borderRadius,
                       child: Align(

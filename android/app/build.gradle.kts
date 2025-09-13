@@ -10,19 +10,6 @@ android {
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
-    productFlavors {
-        prod {
-            dimension "flavor-type"
-            applicationId "com.marciano.secret_hitler_companion"
-            resValue "string", "app_name", "Secret Hitler Companion"
-        }
-        qa {
-            dimension "flavor-type"
-            applicationId "com.marciano.secret_hitler_companion_qa"
-            resValue "string", "app_name", "[QA] Secret Hitler Companion"
-        }
-    }
-
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
@@ -55,3 +42,5 @@ android {
 flutter {
     source = "../.."
 }
+
+apply { from("flavors.gradle.kts") }
