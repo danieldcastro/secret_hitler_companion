@@ -71,6 +71,12 @@ class _PunchButtonState extends State<PunchButton>
     }
   }
 
+  Future<void> _cancelVibration() async {
+    if (await Vibration.hasVibrator()) {
+      await Vibration.cancel();
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -122,6 +128,7 @@ class _PunchButtonState extends State<PunchButton>
 
   void _cancelHold() {
     _holdTimer?.cancel();
+    _cancelVibration();
     if (!mounted) return;
     _loopPlayer.stop();
     _resetController.value = _progress;
@@ -156,7 +163,7 @@ class _PunchButtonState extends State<PunchButton>
         },
         onTapUp: (_) async {
           await _playButtonUpSound();
-          await Vibration.cancel();
+          await _cancelVibration();
           if (mounted) setState(() => _position = _basePosition);
           if (_progress < 1) {
             _cancelHold();

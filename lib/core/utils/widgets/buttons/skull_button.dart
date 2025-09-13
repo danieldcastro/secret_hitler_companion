@@ -9,8 +9,8 @@ class SkullButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => PunchButton(
-    height: 100,
-    width: 100,
+    height: 130,
+    width: 130,
     onPressed: onPressed,
     child: (hasPunch) => Padding(
       padding: const EdgeInsets.all(10),
