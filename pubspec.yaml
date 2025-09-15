@@ -73,6 +73,12 @@ flutter:
           weight: 700
           style: normal  
 
+    - family: Special Elite
+      fonts:
+        - asset: assets/fonts/special_elite/SpecialElite-Regular.ttf
+          weight: 400
+          style: normal      
+
 melos:
   useRootAsPackage: true
   
