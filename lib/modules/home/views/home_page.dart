@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:secret_hitler_companion/core/themes/app_colors.dart';
-import 'package:secret_hitler_companion/core/themes/app_text_styles.dart';
 import 'package:secret_hitler_companion/core/utils/extensions/context_extensions.dart';
 import 'package:secret_hitler_companion/core/utils/widgets/buttons/skull_button.dart';
 import 'package:secret_hitler_companion/core/utils/widgets/logo_widget.dart';
+import 'package:secret_hitler_companion/core/utils/widgets/paper_widget.dart';
 import 'package:secret_hitler_companion/modules/home/bloc/home_bloc.dart';
 
 class HomePage extends StatelessWidget {
@@ -14,32 +13,27 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) => Scaffold(
     body: Center(
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(20, 20, 20, 40),
+        padding: const EdgeInsets.only(top: 20, bottom: 40),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Expanded(
               child: Container(
                 constraints: const BoxConstraints(maxWidth: 400),
-                padding: const EdgeInsets.all(20),
+                padding: const EdgeInsets.fromLTRB(40, 40, 40, 20),
                 child: LogoWidget(fontSize: 80),
               ),
             ),
             Column(
               spacing: 40,
               children: [
-                ConstrainedBox(
-                  constraints: const BoxConstraints(maxWidth: 200),
-                  child: Text(
-                    context.loc.holdButtonMessage,
-                    textAlign: TextAlign.center,
-                    style: AppTextStyles.titleMedium(
-                      color: AppColors.beige,
-                      fontWeight: FontWeight.w700,
-                    ),
+                PaperWidget(title: context.loc.holdButtonMessage),
+                FittedBox(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: SkullButton(onPressed: bloc.navigateToQuantity),
                   ),
                 ),
-                FittedBox(child: SkullButton(onPressed: bloc.navigateToRoster)),
               ],
             ),
           ],

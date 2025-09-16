@@ -7,5 +7,9 @@
   "voterNameHint": "Nome do votante",
   "@voterNameHint": {
     "description": "Label de nome do votante"
+  },
+  "voterQuantityPageTitle": "Arraste para definir a quantidade de votantes",
+  "@voterQuantityPageTitle": {
+    "description": "Título da página de quantidade de votantes"
   }
 }

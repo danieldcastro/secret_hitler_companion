@@ -13,4 +13,7 @@ class SEn extends S {
 
   @override
   String get voterNameHint => 'Voter Name';
+
+  @override
+  String get voterQuantityPageTitle => 'Drag to set the number of voters';
 }

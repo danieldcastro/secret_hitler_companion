@@ -39,7 +39,7 @@ class _PunchButtonState extends State<PunchButton>
 
   Timer? _holdTimer;
   double _progress = 0;
-  static const _holdDuration = Duration(seconds: 2);
+  static const _holdDuration = Duration(seconds: 1);
 
   late AnimationController _resetController;
 

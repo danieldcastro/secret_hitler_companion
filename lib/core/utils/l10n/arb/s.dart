@@ -109,6 +109,12 @@ abstract class S {
   /// In en, this message translates to:
   /// **'Voter Name'**
   String get voterNameHint;
+
+  /// Voter Quantity Page Title
+  ///
+  /// In en, this message translates to:
+  /// **'Drag to set the number of voters'**
+  String get voterQuantityPageTitle;
 }
 
 class _SDelegate extends LocalizationsDelegate<S> {

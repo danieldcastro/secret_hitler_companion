@@ -6,4 +6,8 @@ class AudioPaths {
   static const String buttonDown = '$_assetsPath/button_down.mp3';
   static const String scrolling = '$_assetsPath/scrolling.mp3';
   static const String pushing = '$_assetsPath/pushing.mp3';
+  static const String phoneDialUp = '$_assetsPath/phone_dial_up.mp3';
+  static const String phoneDialDown = '$_assetsPath/phone_dial_down.mp3';
+  static const String phoneDialScrolling =
+      '$_assetsPath/phone_dial_scrolling.mp3';
 }
