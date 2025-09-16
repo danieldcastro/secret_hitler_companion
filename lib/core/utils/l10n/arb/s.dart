@@ -103,6 +103,12 @@ abstract class S {
   /// In en, this message translates to:
   /// **'Tap and hold to start the assembly'**
   String get holdButtonMessage;
+
+  /// Voter Name Label
+  ///
+  /// In en, this message translates to:
+  /// **'Voter Name'**
+  String get voterNameHint;
 }
 
 class _SDelegate extends LocalizationsDelegate<S> {

@@ -1,6 +1,11 @@
 {
+  "@@locale": "en",
   "holdButtonMessage": "Tap and hold to start the assembly",
   "@holdButtonMessage": {
     "description": "Hold Button Message"
+  },
+  "voterNameHint": "Voter Name",
+  "@voterNameHint": {
+    "description": "Voter Name Label"
   }
 }

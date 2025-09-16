@@ -1,6 +1,11 @@
 {
+  "@@locale": "pt_BR",
   "holdButtonMessage": "Toque e segure para iniciar a assembleia",
   "@holdButtonMessage": {
     "description": "Mensagem do botão segurar"
+  },
+  "voterNameHint": "Nome do votante",
+  "@voterNameHint": {
+    "description": "Label de nome do votante"
   }
 }

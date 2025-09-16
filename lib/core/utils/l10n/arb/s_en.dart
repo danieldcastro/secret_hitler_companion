@@ -10,4 +10,7 @@ class SEn extends S {
 
   @override
   String get holdButtonMessage => 'Tap and hold to start the assembly';
+
+  @override
+  String get voterNameHint => 'Voter Name';
 }

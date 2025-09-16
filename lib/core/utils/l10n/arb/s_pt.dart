@@ -10,6 +10,9 @@ class SPt extends S {
 
   @override
   String get holdButtonMessage => 'Toque e segure para iniciar a assembleia';
+
+  @override
+  String get voterNameHint => 'Nome do votante';
 }
 
 /// The translations for Portuguese, as used in Brazil (`pt_BR`).
@@ -18,4 +21,7 @@ class SPtBr extends SPt {
 
   @override
   String get holdButtonMessage => 'Toque e segure para iniciar a assembleia';
+
+  @override
+  String get voterNameHint => 'Nome do votante';
 }
