@@ -15,8 +15,7 @@ class SPt extends S {
   String get voterNameHint => 'Nome do votante';
 
   @override
-  String get voterQuantityPageTitle =>
-      'Arraste para definir a quantidade de votantes';
+  String get voterQuantityPageTitle => 'Disque o número de votantes';
 }
 
 /// The translations for Portuguese, as used in Brazil (`pt_BR`).
@@ -30,6 +29,5 @@ class SPtBr extends SPt {
   String get voterNameHint => 'Nome do votante';
 
   @override
-  String get voterQuantityPageTitle =>
-      'Arraste para definir a quantidade de votantes';
+  String get voterQuantityPageTitle => 'Disque o número de votantes';
 }

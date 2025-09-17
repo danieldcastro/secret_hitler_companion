@@ -8,7 +8,7 @@
   "@voterNameHint": {
     "description": "Voter Name Label"
   },
-  "voterQuantityPageTitle": "Drag to set the number of voters",
+  "voterQuantityPageTitle": "Dial the number of voters",
   "@voterQuantityPageTitle": {
     "description": "Voter Quantity Page Title"
   }

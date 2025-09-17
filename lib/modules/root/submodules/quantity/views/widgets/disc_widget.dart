@@ -230,16 +230,29 @@ class _DiscWidgetState extends State<DiscWidget>
               color: AppColors.beige,
             ),
             child: Stack(
+              alignment: Alignment.center,
               children: [
                 // centro preto
-                Center(
-                  child: Container(
-                    width: 100,
-                    height: 100,
-                    decoration: const BoxDecoration(
-                      color: AppColors.black,
-                      shape: BoxShape.circle,
+                Positioned.fill(
+                  right: -6,
+                  bottom: -8,
+                  child: Center(
+                    child: Container(
+                      width: 120,
+                      height: 120,
+                      decoration: const BoxDecoration(
+                        color: Colors.black,
+                        shape: BoxShape.circle,
+                      ),
                     ),
+                  ),
+                ),
+                Container(
+                  width: 120,
+                  height: 120,
+                  decoration: const BoxDecoration(
+                    color: AppColors.black,
+                    shape: BoxShape.circle,
                   ),
                 ),
                 // furos numerados
@@ -254,25 +267,41 @@ class _DiscWidgetState extends State<DiscWidget>
                   return Positioned(
                     left: dx - 30,
                     top: dy - 30,
-                    child: AnimatedContainer(
-                      duration: const Duration(seconds: 1),
-                      width: 60,
-                      height: 60,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(color: AppColors.black, width: 2),
-                        color: _numberAfterDrag == number
-                            ? AppColors.black.withAlpha(30)
-                            : Colors.transparent,
-                      ),
-                      child: Center(
-                        child: Text(
-                          '$number',
-                          style: AppTextStyles.headlineSmall(
-                            fontFamily: FontFamilyEnum.body,
-                          ).copyWith(height: 1),
+                    child: Stack(
+                      children: [
+                        Container(
+                          width: 60,
+                          height: 60,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: AppColors.black.withAlpha(100),
+                          ),
                         ),
-                      ),
+                        Positioned(
+                          bottom: 1,
+                          child: AnimatedContainer(
+                            duration: Duration(milliseconds: 1500),
+                            width: 60,
+                            height: 52,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: _numberAfterDrag == number
+                                  ? AppColors.beige.withAlpha(100)
+                                  : AppColors.beige,
+                            ),
+                          ),
+                        ),
+                        Positioned.fill(
+                          top: 18,
+                          left: number == 10 ? 16 : 24,
+                          child: Text(
+                            '$number',
+                            style: AppTextStyles.headlineSmall(
+                              fontFamily: FontFamilyEnum.body,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   );
                 }),

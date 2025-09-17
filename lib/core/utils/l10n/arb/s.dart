@@ -113,7 +113,7 @@ abstract class S {
   /// Voter Quantity Page Title
   ///
   /// In en, this message translates to:
-  /// **'Drag to set the number of voters'**
+  /// **'Dial the number of voters'**
   String get voterQuantityPageTitle;
 }
 
