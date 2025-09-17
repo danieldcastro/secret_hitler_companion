@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:secret_hitler_companion/core/objects/enums/font_family_enum.dart';
 import 'package:secret_hitler_companion/core/themes/app_colors.dart';
 import 'package:secret_hitler_companion/core/themes/app_text_styles.dart';
-import 'package:secret_hitler_companion/core/utils/constants/paths/audio_paths.dart';
 import 'package:secret_hitler_companion/core/utils/constants/paths/image_paths.dart';
 
 class DiscWidget extends StatefulWidget {
@@ -63,15 +62,16 @@ class _DiscWidgetState extends State<DiscWidget>
       path.startsWith('assets/') ? path.substring(7) : path;
 
   Future<void> _playDialUpSound() async =>
-      _dialPlayer.play(AssetSource(_prepareAudioPath(AudioPaths.phoneDialUp)));
+      {}; /*  _dialPlayer.play(AssetSource(_prepareAudioPath(AudioPaths.phoneDialUp))); */
 
-  Future<void> _playDialDownSound() async => _dialPlayer.play(
+  Future<void> _playDialDownSound() async => {}; /* _dialPlayer.play(
     AssetSource(_prepareAudioPath(AudioPaths.phoneDialDown)),
-  );
+  ); */
 
-  Future<void> _playDialScrollingSound() async => _dialPlayer.play(
-    AssetSource(_prepareAudioPath(AudioPaths.phoneDialScrolling)),
+  Future<void> _playDialScrollingSound() async => {}; /* _dialPlayer.play(
+    AssetSource(_prepareAudioPath(AudioPaths.phoneDialScrolling)), 
   );
+    */
 
   double _calculateAngle(Offset position, Offset center) {
     final dx = position.dx - center.dx;
@@ -218,96 +218,99 @@ class _DiscWidgetState extends State<DiscWidget>
             }
           }
         },
-        child: AnimatedBuilder(
-          animation: _controller,
-          builder: (_, child) =>
-              Transform.rotate(angle: _rotation.value, child: child),
-          child: Container(
-            width: widget.dimension,
-            height: widget.dimension,
-            decoration: const BoxDecoration(
-              shape: BoxShape.circle,
-              color: AppColors.beige,
-            ),
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                // centro preto
-                Positioned.fill(
-                  right: -6,
-                  bottom: -8,
-                  child: Center(
-                    child: Container(
-                      width: 120,
-                      height: 120,
-                      decoration: const BoxDecoration(
-                        color: Colors.black,
-                        shape: BoxShape.circle,
-                      ),
-                    ),
-                  ),
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            AnimatedBuilder(
+              animation: _controller,
+              builder: (_, child) =>
+                  Transform.rotate(angle: _rotation.value, child: child),
+              child: Container(
+                width: widget.dimension,
+                height: widget.dimension,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppColors.beige,
                 ),
-                Container(
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    ...widget.numbers.map((number) {
+                      final angle = _getHoleAngle(number);
+
+                      const radius = 110.0;
+                      final center = widget.dimension / 2;
+                      final dx = center + radius * cos(angle);
+                      final dy = center + radius * sin(angle);
+
+                      return Positioned(
+                        left: dx - 30,
+                        top: dy - 30,
+                        child: Stack(
+                          children: [
+                            Container(
+                              width: 60,
+                              height: 60,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: AppColors.black.withAlpha(100),
+                              ),
+                            ),
+                            Positioned(
+                              bottom: 1,
+                              child: AnimatedContainer(
+                                duration: Duration(milliseconds: 1500),
+                                width: 60,
+                                height: 52,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: _numberAfterDrag == number
+                                      ? AppColors.beige.withAlpha(100)
+                                      : AppColors.beige,
+                                ),
+                              ),
+                            ),
+                            Positioned.fill(
+                              top: 18,
+                              left: number == 10 ? 16 : 24,
+                              child: Text(
+                                '$number',
+                                style: AppTextStyles.headlineSmall(
+                                  fontFamily: FontFamilyEnum.body,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    }),
+                  ],
+                ),
+              ),
+            ),
+            Positioned.fill(
+              right: -6,
+              bottom: -8,
+              child: Center(
+                child: Container(
                   width: 120,
                   height: 120,
                   decoration: const BoxDecoration(
-                    color: AppColors.black,
+                    color: Colors.black,
                     shape: BoxShape.circle,
                   ),
                 ),
-                // furos numerados
-                ...widget.numbers.map((number) {
-                  final angle = _getHoleAngle(number);
-
-                  const radius = 110.0;
-                  final center = widget.dimension / 2;
-                  final dx = center + radius * cos(angle);
-                  final dy = center + radius * sin(angle);
-
-                  return Positioned(
-                    left: dx - 30,
-                    top: dy - 30,
-                    child: Stack(
-                      children: [
-                        Container(
-                          width: 60,
-                          height: 60,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: AppColors.black.withAlpha(100),
-                          ),
-                        ),
-                        Positioned(
-                          bottom: 1,
-                          child: AnimatedContainer(
-                            duration: Duration(milliseconds: 1500),
-                            width: 60,
-                            height: 52,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: _numberAfterDrag == number
-                                  ? AppColors.beige.withAlpha(100)
-                                  : AppColors.beige,
-                            ),
-                          ),
-                        ),
-                        Positioned.fill(
-                          top: 18,
-                          left: number == 10 ? 16 : 24,
-                          child: Text(
-                            '$number',
-                            style: AppTextStyles.headlineSmall(
-                              fontFamily: FontFamilyEnum.body,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                }),
-              ],
+              ),
             ),
-          ),
+            Container(
+              width: 120,
+              height: 120,
+              decoration: const BoxDecoration(
+                color: AppColors.black,
+                shape: BoxShape.circle,
+              ),
+            ),
+          ],
         ),
       ),
       // finger stop

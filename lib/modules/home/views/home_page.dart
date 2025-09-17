@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:secret_hitler_companion/core/utils/extensions/context_extensions.dart';
 import 'package:secret_hitler_companion/core/utils/widgets/buttons/skull_button.dart';
-import 'package:secret_hitler_companion/core/utils/widgets/logo_widget.dart';
-import 'package:secret_hitler_companion/core/utils/widgets/paper_widget.dart';
+import 'package:secret_hitler_companion/core/utils/widgets/images/logo_widget.dart';
+import 'package:secret_hitler_companion/core/utils/widgets/images/paper_widget.dart';
 import 'package:secret_hitler_companion/modules/home/bloc/home_bloc.dart';
 
 class HomePage extends StatelessWidget {

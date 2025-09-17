@@ -18,7 +18,7 @@ class PaperWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Container(
-    height: 140,
+    height: height,
     width: width ?? double.infinity,
     constraints: BoxConstraints(maxWidth: 500),
     decoration: BoxDecoration(
@@ -33,7 +33,7 @@ class PaperWidget extends StatelessWidget {
         padding: contentPadding,
         child: Text(
           title,
-          maxLines: 3,
+          maxLines: 2,
           textAlign: TextAlign.center,
           style: AppTextStyles.titleMedium(
             color: AppColors.black,
