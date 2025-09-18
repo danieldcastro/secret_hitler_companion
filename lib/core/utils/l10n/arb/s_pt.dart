@@ -16,6 +16,21 @@ class SPt extends S {
 
   @override
   String get voterQuantityPageTitle => 'Disque o número de votantes';
+
+  @override
+  String get voterLabel => 'Votante';
+
+  @override
+  String get fascistLabel => 'Fascista';
+
+  @override
+  String get liberalLabel => 'Liberal';
+
+  @override
+  String get liberalsLabel => 'Liberais';
+
+  @override
+  String get hitlerLabel => 'Hitler';
 }
 
 /// The translations for Portuguese, as used in Brazil (`pt_BR`).
@@ -30,4 +45,19 @@ class SPtBr extends SPt {
 
   @override
   String get voterQuantityPageTitle => 'Disque o número de votantes';
+
+  @override
+  String get voterLabel => 'Votante';
+
+  @override
+  String get fascistLabel => 'Fascista';
+
+  @override
+  String get liberalLabel => 'Liberal';
+
+  @override
+  String get liberalsLabel => 'Liberais';
+
+  @override
+  String get hitlerLabel => 'Hitler';
 }

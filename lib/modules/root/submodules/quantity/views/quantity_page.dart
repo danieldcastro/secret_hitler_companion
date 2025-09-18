@@ -28,7 +28,7 @@ class _QuantityPageState extends State<QuantityPage> {
         children: [
           PaperWidget(
             title: context.loc.voterQuantityPageTitle,
-            height: 100,
+            height: 120,
             contentPadding: const EdgeInsets.symmetric(horizontal: 20),
           ),
           const SizedBox(height: 40),
@@ -41,7 +41,7 @@ class _QuantityPageState extends State<QuantityPage> {
                   maxWidth: double.infinity,
                   maxHeight: double.infinity,
                   child: Transform.scale(
-                    scale: 0.8,
+                    scale: 0.9,
                     child: Stack(
                       clipBehavior: Clip.none,
                       alignment: Alignment.center,
@@ -78,26 +78,19 @@ class _QuantityPageState extends State<QuantityPage> {
               ),
             ),
           ),
-          const SizedBox(height: 60),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.only(left: 20, right: 20, bottom: 20),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                mainAxisSize: MainAxisSize.min,
-                spacing: 10,
-                children: [
-                  FittedBox(
-                    child: SizedBox(
-                      width: 350,
-                      height: 100,
-                      child: QuantityBookWidget(controller: controller),
-                    ),
-                  ),
-                  FittedBox(child: SkullButton(onPressed: () {})),
-                ],
+          Padding(
+            padding: const EdgeInsets.only(left: 20, right: 20, bottom: 20),
+            child: FittedBox(
+              child: SizedBox(
+                width: 350,
+                height: 100,
+                child: QuantityBookWidget(controller: controller),
               ),
             ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 20, right: 20, bottom: 20),
+            child: FittedBox(child: SkullButton(onPressed: () {})),
           ),
         ],
       ),

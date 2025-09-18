@@ -10,4 +10,5 @@ class AudioPaths {
   static const String phoneDialDown = '$_assetsPath/phone_dial_down.mp3';
   static const String phoneDialScrolling =
       '$_assetsPath/phone_dial_scrolling.mp3';
+  static const String pageFlip = '$_assetsPath/page_flip.mp3';
 }

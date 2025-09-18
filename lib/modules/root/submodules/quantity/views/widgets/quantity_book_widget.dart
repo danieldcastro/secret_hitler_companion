@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_fy/utils/extensions/string_extensions/string_extensions.dart';
 import 'package:secret_hitler_companion/core/themes/app_colors.dart';
 import 'package:secret_hitler_companion/core/themes/app_text_styles.dart';
+import 'package:secret_hitler_companion/core/utils/extensions/context_extensions.dart';
 import 'package:secret_hitler_companion/core/utils/helpers/game_setup.dart';
 import 'package:secret_hitler_companion/core/utils/widgets/book/book_controller.dart';
 import 'package:secret_hitler_companion/core/utils/widgets/book/book_page_widget.dart';
@@ -11,29 +13,36 @@ class QuantityBookWidget extends StatelessWidget {
 
   const QuantityBookWidget({required this.controller, super.key});
 
-  BookPageWidget _buildPlayerCountPage(int playerCount) => BookPageWidget(
-    child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        const SizedBox(height: 6),
+  Widget _buildTextColumn(
+    List<String> lines, {
+    CrossAxisAlignment align = CrossAxisAlignment.center,
+  }) => Column(
+    mainAxisAlignment: MainAxisAlignment.center,
+    crossAxisAlignment: align,
+    children: [
+      const SizedBox(height: 6),
+      for (var i = 0; i < lines.length; i++) ...[
         _buildPageLineDivider(),
-        _buildDescriptionPageText('$playerCount'),
-        _buildPageLineDivider(),
-        _buildDescriptionPageText('votantes'),
-        _buildPageLineDivider(),
-        const SizedBox(height: 15),
-        _buildPageLineDivider(),
+        _buildDescriptionPageText(lines[i]),
       ],
-    ),
+      _buildPageLineDivider(),
+    ],
   );
 
-  BookPageWidget _buildDetailsPage(int playerCount) {
-    final fascistCount = GameSetup.fascistCount(
-      GameSetup.gameSetups.firstWhere((setup) => setup.length == playerCount),
+  BookPageWidget _buildPlayerCountPage(BuildContext context, int playerCount) =>
+      BookPageWidget(
+        child: _buildTextColumn([
+          '$playerCount',
+          context.loc.voterLabel.toLowerCase().pluralize(playerCount),
+        ]),
+      );
+
+  BookPageWidget _buildDetailsPage(BuildContext context, int playerCount) {
+    final setup = GameSetup.gameSetups.firstWhere(
+      (s) => s.length == playerCount,
     );
-    final liberalCount = GameSetup.liberalCount(
-      GameSetup.gameSetups.firstWhere((setup) => setup.length == playerCount),
-    );
+    final fascistCount = GameSetup.fascistCount(setup);
+    final liberalCount = GameSetup.liberalCount(setup);
 
     return BookPageWidget(
       child: Row(
@@ -41,23 +50,18 @@ class QuantityBookWidget extends StatelessWidget {
           Container(
             height: 80,
             width: 2,
-            color: AppColors.black.withAlpha(100),
+            decoration: BoxDecoration(
+              color: AppColors.black.withAlpha(50),
+              borderRadius: BorderRadius.circular(2),
+            ),
           ),
           Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(height: 6),
-                _buildPageLineDivider(),
-                _buildDescriptionPageText('$liberalCount liberais'),
-                _buildPageLineDivider(),
-                _buildDescriptionPageText('$fascistCount Fascistas'),
-                _buildPageLineDivider(),
-                _buildDescriptionPageText('1 Hitler'),
-                _buildPageLineDivider(),
-              ],
-            ),
+            child: _buildTextColumn([
+              '$liberalCount ${context.loc.liberalsLabel.toLowerCase()}',
+              '${fascistCount - 1} ${context.loc.fascistLabel.toLowerCase()}'
+                  .pluralize(fascistCount - 1),
+              '1 ${context.loc.hitlerLabel}',
+            ], align: CrossAxisAlignment.start),
           ),
         ],
       ),
@@ -84,19 +88,19 @@ class QuantityBookWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final pages = <List<BookPageWidget>>[];
     final setups = GameSetup.gameSetups;
-
-    pages.add([_buildBlankPage(), _buildPlayerCountPage(setups[0].length)]);
+    final pages = <List<BookPageWidget>>[
+      [_buildBlankPage(), _buildPlayerCountPage(context, setups[0].length)],
+    ];
 
     for (int i = 0; i < setups.length; i++) {
       final currentPlayerCount = setups[i].length;
       final hasNext = i + 1 < setups.length;
 
       pages.add([
-        _buildDetailsPage(currentPlayerCount),
+        _buildDetailsPage(context, currentPlayerCount),
         hasNext
-            ? _buildPlayerCountPage(setups[i + 1].length)
+            ? _buildPlayerCountPage(context, setups[i + 1].length)
             : _buildBlankPage(),
       ]);
     }

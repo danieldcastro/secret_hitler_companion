@@ -4,7 +4,8 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:secret_hitler_companion/core/themes/app_colors.dart';
 import 'package:secret_hitler_companion/core/utils/constants/paths/audio_paths.dart';
-import 'package:vibration/vibration.dart';
+import 'package:secret_hitler_companion/core/utils/mixins/audio_mixin.dart';
+import 'package:secret_hitler_companion/core/utils/mixins/vibrator_mixin.dart';
 
 class PunchButton extends StatefulWidget {
   final VoidCallback? onPressed;
@@ -29,7 +30,7 @@ class PunchButton extends StatefulWidget {
 }
 
 class _PunchButtonState extends State<PunchButton>
-    with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin, VibratorMixin, AudioMixin {
   static const double _shadowHeight = _basePosition;
   static const double _basePosition = 10;
   double _position = _basePosition;
@@ -43,38 +44,28 @@ class _PunchButtonState extends State<PunchButton>
 
   late AnimationController _resetController;
 
-  String _prepareAudioPath(String path) =>
-      path.startsWith('assets/') ? path.substring(7) : path;
-
-  Future<void> _playButtonDownSound() async => _effectsPlayer.play(
-    AssetSource(_prepareAudioPath(AudioPaths.buttonDown)),
-  );
+  Future<void> _playButtonDownSound() async =>
+      playAudio(_effectsPlayer, AudioPaths.buttonDown);
 
   Future<void> _playButtonUpSound() async =>
-      _effectsPlayer.play(AssetSource(_prepareAudioPath(AudioPaths.buttonUp)));
+      playAudio(_effectsPlayer, AudioPaths.buttonUp);
 
   Future<void> _playPushingSound() async =>
-      _loopPlayer.play(AssetSource(_prepareAudioPath(AudioPaths.pushing)));
+      playAudio(_loopPlayer, AudioPaths.pushing);
 
   Future<void> _playScrollingSound() async =>
-      _loopPlayer.play(AssetSource(_prepareAudioPath(AudioPaths.scrolling)));
+      playAudio(_loopPlayer, AudioPaths.scrolling);
 
   Future<void> _vibrateScrolling() async {
-    if (await Vibration.hasVibrator()) {
-      await Vibration.vibrate(duration: 2000);
-    }
+    await vibrate(2000);
   }
 
   Future<void> _vibrateLong() async {
-    if (await Vibration.hasVibrator()) {
-      await Vibration.vibrate(duration: 300);
-    }
+    await vibrate(300);
   }
 
   Future<void> _cancelVibration() async {
-    if (await Vibration.hasVibrator()) {
-      await Vibration.cancel();
-    }
+    await cancelVibration();
   }
 
   @override

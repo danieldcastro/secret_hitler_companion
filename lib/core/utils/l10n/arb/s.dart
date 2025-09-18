@@ -115,6 +115,36 @@ abstract class S {
   /// In en, this message translates to:
   /// **'Dial the number of voters'**
   String get voterQuantityPageTitle;
+
+  /// Voter Label
+  ///
+  /// In en, this message translates to:
+  /// **'Voter'**
+  String get voterLabel;
+
+  /// Fascist Label
+  ///
+  /// In en, this message translates to:
+  /// **'Fascist'**
+  String get fascistLabel;
+
+  /// Liberal Label
+  ///
+  /// In en, this message translates to:
+  /// **'Liberal'**
+  String get liberalLabel;
+
+  /// Label de liberals
+  ///
+  /// In en, this message translates to:
+  /// **'Liberals'**
+  String get liberalsLabel;
+
+  /// Hitler Label
+  ///
+  /// In en, this message translates to:
+  /// **'Hitler'**
+  String get hitlerLabel;
 }
 
 class _SDelegate extends LocalizationsDelegate<S> {

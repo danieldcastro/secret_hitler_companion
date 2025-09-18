@@ -16,4 +16,19 @@ class SEn extends S {
 
   @override
   String get voterQuantityPageTitle => 'Dial the number of voters';
+
+  @override
+  String get voterLabel => 'Voter';
+
+  @override
+  String get fascistLabel => 'Fascist';
+
+  @override
+  String get liberalLabel => 'Liberal';
+
+  @override
+  String get liberalsLabel => 'Liberals';
+
+  @override
+  String get hitlerLabel => 'Hitler';
 }

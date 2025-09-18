@@ -5,7 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:secret_hitler_companion/core/objects/enums/font_family_enum.dart';
 import 'package:secret_hitler_companion/core/themes/app_colors.dart';
 import 'package:secret_hitler_companion/core/themes/app_text_styles.dart';
+import 'package:secret_hitler_companion/core/utils/constants/paths/audio_paths.dart';
 import 'package:secret_hitler_companion/core/utils/constants/paths/image_paths.dart';
+import 'package:secret_hitler_companion/core/utils/mixins/audio_mixin.dart';
+import 'package:secret_hitler_companion/core/utils/mixins/vibrator_mixin.dart';
 
 class DiscWidget extends StatefulWidget {
   final double dimension;
@@ -26,9 +29,10 @@ class DiscWidget extends StatefulWidget {
 }
 
 class _DiscWidgetState extends State<DiscWidget>
-    with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin, VibratorMixin, AudioMixin {
   late AnimationController _controller;
   late Animation<double> _rotation;
+  DateTime? lastVibrationTime;
 
   double _currentAngle = 0;
   double? _lastAngle;
@@ -55,23 +59,18 @@ class _DiscWidgetState extends State<DiscWidget>
   @override
   void dispose() {
     _controller.dispose();
+    _dialPlayer.dispose();
     super.dispose();
   }
 
-  String _prepareAudioPath(String path) =>
-      path.startsWith('assets/') ? path.substring(7) : path;
-
   Future<void> _playDialUpSound() async =>
-      {}; /*  _dialPlayer.play(AssetSource(_prepareAudioPath(AudioPaths.phoneDialUp))); */
+      playAudio(_dialPlayer, AudioPaths.phoneDialUp);
 
-  Future<void> _playDialDownSound() async => {}; /* _dialPlayer.play(
-    AssetSource(_prepareAudioPath(AudioPaths.phoneDialDown)),
-  ); */
+  Future<void> _playDialDownSound() async =>
+      playAudio(_dialPlayer, AudioPaths.phoneDialDown);
 
-  Future<void> _playDialScrollingSound() async => {}; /* _dialPlayer.play(
-    AssetSource(_prepareAudioPath(AudioPaths.phoneDialScrolling)), 
-  );
-    */
+  Future<void> _playDialScrollingSound() async =>
+      playAudio(_dialPlayer, AudioPaths.phoneDialScrolling, volume: 0.5);
 
   double _calculateAngle(Offset position, Offset center) {
     final dx = position.dx - center.dx;
@@ -163,6 +162,7 @@ class _DiscWidgetState extends State<DiscWidget>
         onPanStart: (details) {
           _controller.stop();
           _playDialDownSound();
+          vibrate(100);
           final center = Offset(widget.dimension / 2, widget.dimension / 2);
           _lastAngle = _calculateAngle(details.localPosition, center);
 
@@ -187,6 +187,13 @@ class _DiscWidgetState extends State<DiscWidget>
             double angleDiff = currentTouchAngle - _lastAngle!;
             angleDiff = _normalizeAngleDifference(angleDiff);
 
+            final now = DateTime.now();
+            if (lastVibrationTime == null ||
+                now.difference(lastVibrationTime ?? DateTime.now()) >
+                    const Duration(milliseconds: 50)) {
+              vibrate(100);
+              lastVibrationTime = now;
+            }
             setState(() {
               final double maxAngleForNumber = _calculateMaxAngleForNumber();
               final double newAngle = _currentAngle + angleDiff;
@@ -197,11 +204,12 @@ class _DiscWidgetState extends State<DiscWidget>
 
           if (_currentAngle == _calculateMaxAngleForNumber()) {
             _playDialUpSound();
+            cancelVibration();
           }
 
           _lastAngle = currentTouchAngle;
         },
-        onPanEnd: (_) {
+        onPanEnd: (_) async {
           if (!_isDragging) return;
 
           _lastAngle = null;
@@ -209,10 +217,9 @@ class _DiscWidgetState extends State<DiscWidget>
 
           _animateBack(_currentAngle);
           if (_currentAngle == _calculateMaxAngleForNumber()) {
-            setState(() {
-              _numberAfterDrag = _currentNumber;
-            });
-            _playDialScrollingSound();
+            setState(() => _numberAfterDrag = _currentNumber);
+            await _playDialScrollingSound();
+            await vibrate(1400);
             if (_numberAfterDrag != null) {
               widget.onNumberSelected(_numberAfterDrag!);
             }

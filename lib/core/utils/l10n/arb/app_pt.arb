@@ -11,5 +11,25 @@
   "voterQuantityPageTitle": "Disque o número de votantes",
   "@voterQuantityPageTitle": {
     "description": "Título da página de quantidade de votantes"
+  },
+  "voterLabel": "Votante",
+  "@voterLabel": {
+    "description": "Label de votante"
+  },
+  "fascistLabel": "Fascista",
+  "@fascistLabel": {
+    "description": "Label de fascista"
+  },
+  "liberalLabel": "Liberal",
+  "@liberalLabel": {
+    "description": "Label de liberal"
+  },
+  "liberalsLabel": "Liberais",
+  "@liberalsLabel": {
+    "description": "Label de liberais"
+  },
+  "hitlerLabel": "Hitler",
+  "@hitlerLabel": {
+    "description": "Label de Hitler"
   }
 }
