@@ -7,6 +7,10 @@ class RosterBloc extends Cubit<RosterState> {
   final RootBloc rootBloc;
   RosterBloc(this.rootBloc) : super(RosterState.empty());
 
+  void getRootVoters() {
+    emit(state.copyWith(voters: rootBloc.state.voters));
+  }
+
   void updateVoters(List<VoterEntity> voters) {
     emit(state.copyWith(voters: voters));
   }

@@ -113,7 +113,7 @@ class _BookWidgetState extends State<BookWidget>
     if (!_isJumping) {
       final request = widget.controller.takeRequest();
       if (request != null && _animatingPage == null) {
-        playPooledAudio('pageFlip', AudioPaths.pageFlip);
+        playAudio('pageFlip', AudioPaths.pageFlip);
         if (request.type == BookRequestType.next) {
           _nextPage();
         } else if (request.type == BookRequestType.previous) {

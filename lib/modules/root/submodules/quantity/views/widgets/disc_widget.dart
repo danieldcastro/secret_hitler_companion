@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -38,6 +39,7 @@ class _DiscWidgetState extends State<DiscWidget>
   int? _currentNumber;
   int? _numberAfterDrag;
   bool _isDragging = false;
+  bool _isPlayingUpSound = false;
 
   double? _startHoleAngle;
   final double _fingerStopAngle = 0.48; // posição fixa do stop
@@ -51,6 +53,10 @@ class _DiscWidgetState extends State<DiscWidget>
     );
     _rotation = AlwaysStoppedAnimation(0);
     _numberAfterDrag = widget.initialNumber;
+    scheduleMicrotask(() async {
+      await createPool('dialUp', AudioPaths.phoneDialUp);
+      await createPool('dialDown', AudioPaths.phoneDialDown);
+    });
   }
 
   @override
@@ -60,11 +66,9 @@ class _DiscWidgetState extends State<DiscWidget>
     super.dispose();
   }
 
-  Future<void> _playDialUpSound() async =>
-      playAudio('dialUp', AudioPaths.phoneDialUp);
+  Future<void> _playDialUpSound() async => playPooledAudio('dialUp');
 
-  Future<void> _playDialDownSound() async =>
-      playPooledAudio('dialDown', AudioPaths.phoneDialDown);
+  Future<void> _playDialDownSound() async => playPooledAudio('dialDown');
 
   Future<void> _playDialScrollingSound() async =>
       playAudio('scroll', AudioPaths.phoneDialScrolling, volume: 0.5);
@@ -199,9 +203,11 @@ class _DiscWidgetState extends State<DiscWidget>
             });
           }
 
-          if (_currentAngle == _calculateMaxAngleForNumber()) {
+          if (_currentAngle >= (_calculateMaxAngleForNumber() * 0.95) &&
+              !_isPlayingUpSound) {
             _playDialUpSound();
             cancelVibration();
+            _isPlayingUpSound = true;
           }
 
           _lastAngle = currentTouchAngle;
@@ -213,10 +219,11 @@ class _DiscWidgetState extends State<DiscWidget>
           _isDragging = false;
 
           _animateBack(_currentAngle);
-          if (_currentAngle == _calculateMaxAngleForNumber()) {
+          if (_currentAngle >= (_calculateMaxAngleForNumber() * 0.95)) {
             setState(() => _numberAfterDrag = _currentNumber);
             await _playDialScrollingSound();
             await vibrate(1400);
+            _isPlayingUpSound = false;
             if (_numberAfterDrag != null) {
               widget.onNumberSelected(_numberAfterDrag!);
             }

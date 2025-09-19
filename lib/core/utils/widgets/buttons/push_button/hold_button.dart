@@ -43,23 +43,15 @@ class _HoldButtonState extends State<HoldButton>
 
   static const _holdDuration = Duration(seconds: 1);
 
-  Future<void> _playButtonDownSound() async =>
-      playPooledAudio('buttonDown', AudioPaths.buttonDown);
-  Future<void> _playButtonUpSound() async =>
-      playPooledAudio('buttonUp', AudioPaths.buttonUp);
-  Future<void> _playScrollingSound() async =>
-      playPooledAudio('scrolling', AudioPaths.scrolling);
-  Future<void> _playPushingSound() async =>
-      playAudio('pushing', AudioPaths.pushing);
-  Future<void> _stopScrollingSound() async => stopPooledAudio('scrolling');
-
-  Future<void> _vibrateScrolling() async => vibrate(2000);
-  Future<void> _vibrateLong() async => vibrate(300);
-  Future<void> _cancelVibration() async => cancelVibration();
-
   @override
   void initState() {
     super.initState();
+    scheduleMicrotask(() async {
+      await createPool('buttonDown', AudioPaths.buttonDown);
+      await createPool('buttonUp', AudioPaths.buttonUp);
+      await createPool('scrolling', AudioPaths.scrolling);
+      await createPool('pushing', AudioPaths.pushing);
+    });
     _resetController =
         AnimationController(
           vsync: this,
@@ -69,6 +61,16 @@ class _HoldButtonState extends State<HoldButton>
           setState(() => _progress = _resetController.value);
         });
   }
+
+  Future<void> _playButtonDownSound() async => playPooledAudio('buttonDown');
+  Future<void> _playButtonUpSound() async => playPooledAudio('buttonUp');
+  Future<void> _playScrollingSound() async => playPooledAudio('scrolling');
+  Future<void> _playPushingSound() async => playPooledAudio('pushing');
+  Future<void> _stopScrollingSound() async => stopPooledAudio('scrolling');
+
+  Future<void> _vibrateScrolling() async => vibrate(2000);
+  Future<void> _vibrateLong() async => vibrate(300);
+  Future<void> _cancelVibration() async => cancelVibration();
 
   void _startHold() {
     _resetController.stop();

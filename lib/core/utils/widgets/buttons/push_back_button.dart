@@ -17,7 +17,7 @@ class PushBackButton extends StatelessWidget {
     child: Padding(
       padding: const EdgeInsets.all(8.0),
       child: Text(
-        context.loc.backLabel,
+        context.loc.backLabel.toUpperCase(),
         style: AppTextStyles.bodyMedium(
           color: AppColors.beige,
         ).copyWith(height: 1.7),

@@ -2,68 +2,93 @@ import 'package:audioplayers/audioplayers.dart';
 
 mixin AudioMixin {
   final Map<String, AudioPlayer> _players = {};
-  final Map<String, AudioPool> _pools = {};
-  final Map<String, Future<void> Function()?> _poolStops = {};
+  final Map<String, PlayerState> _playerStates = {};
 
+  final Map<String, AudioPool> _pools = {};
+  final Map<String, Future<void> Function()> _poolStops = {};
+
+  /// Prepara caminho de asset
   String _prepareAudioPath(String path) =>
       path.startsWith('assets/') ? path.substring(7) : path;
 
-  /// Para sons normais (com AudioPlayer)
+  // =====================
+  // AudioPlayer (normal)
+  // =====================
   Future<void> playAudio(
     String key,
     String path, {
     PlayerMode mode = PlayerMode.lowLatency,
     double volume = 1.0,
+    bool loop = false,
+    bool preventIfPlaying = false,
   }) async {
     var player = _players[key];
     if (player == null) {
       player = AudioPlayer();
       _players[key] = player;
+      player.onPlayerStateChanged.listen((state) {
+        _playerStates[key] = state;
+      });
     }
+
+    if (preventIfPlaying && _playerStates[key] == PlayerState.playing) return;
 
     await player.stop();
     await player.setVolume(volume);
+    await player.setReleaseMode(loop ? ReleaseMode.loop : ReleaseMode.stop);
     await player.play(AssetSource(_prepareAudioPath(path)), mode: mode);
   }
 
-  /// Para sons curtos/repetitivos (com AudioPool)
-  Future<void> playPooledAudio(
-    String key,
-    String path, {
-    int maxPlayers = 3,
-    double volume = 1.0,
-  }) async {
-    var pool = _pools[key];
-    if (pool == null) {
-      pool = await AudioPool.create(
-        source: AssetSource(_prepareAudioPath(path)),
-        maxPlayers: maxPlayers,
-      );
-      _pools[key] = pool;
-    }
-
-    final stopFn = await pool.start(volume: volume);
-    _poolStops[key] = stopFn;
-  }
-
-  /// Para parar um som normal (AudioPlayer)
   Future<void> stopAudio(String key) async {
     final player = _players[key];
     if (player != null) {
-      await player.stop();
+      try {
+        await player.stop();
+        _playerStates[key] = PlayerState.stopped;
+      } catch (_) {}
     }
   }
 
-  /// Para parar um som em pool
+  // =====================
+  // AudioPool (curtos/repetitivos)
+  // =====================
+  /// Pré-carrega o pool (melhor fazer no initState)
+  Future<void> createPool(String key, String path, {int maxPlayers = 3}) async {
+    if (_pools.containsKey(key)) return;
+    final pool = await AudioPool.create(
+      source: AssetSource(_prepareAudioPath(path)),
+      maxPlayers: maxPlayers,
+    );
+    _pools[key] = pool;
+  }
+
+  /// Toca o áudio do pool (pode ser chamado várias vezes rapidamente)
+  Future<void> playPooledAudio(String key, {double volume = 1.0}) async {
+    final pool = _pools[key];
+    if (pool == null) return;
+
+    final stopFn = await pool.start(volume: volume);
+
+    // Substitui qualquer stopFn anterior (automático)
+    _poolStops[key] = () async {
+      await stopFn();
+      if (_poolStops[key] == stopFn) {
+        _poolStops.remove(key);
+      }
+    };
+  }
+
+  /// Para manualmente
   Future<void> stopPooledAudio(String key) async {
     final stopFn = _poolStops[key];
     if (stopFn != null) {
       await stopFn();
-      _poolStops.remove(key);
     }
   }
 
-  /// Libera tudo
+  // =====================
+  // Dispose tudo
+  // =====================
   Future<void> disposeAudios() async {
     for (final player in _players.values) {
       await player.dispose();
@@ -72,6 +97,7 @@ mixin AudioMixin {
       await pool.dispose();
     }
     _players.clear();
+    _playerStates.clear();
     _pools.clear();
     _poolStops.clear();
   }

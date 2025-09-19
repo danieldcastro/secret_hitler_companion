@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:secret_hitler_companion/core/themes/app_colors.dart';
 import 'package:secret_hitler_companion/core/utils/constants/paths/image_paths.dart';
+import 'package:secret_hitler_companion/core/utils/helpers/globals.dart';
 import 'package:secret_hitler_companion/core/utils/widgets/buttons/push_back_button.dart';
 import 'package:secret_hitler_companion/modules/root/submodules/roster/bloc/roster_bloc.dart';
 import 'package:secret_hitler_companion/modules/root/submodules/roster/bloc/roster_state.dart';
@@ -24,6 +25,12 @@ class _RosterPageState extends State<RosterPage> {
       _defaultPaperHeight * (votersCount + 1);
 
   final List<TextEditingController> _controllers = [];
+
+  @override
+  void initState() {
+    super.initState();
+    widget.bloc.getRootVoters();
+  }
 
   @override
   void dispose() {
@@ -52,7 +59,7 @@ class _RosterPageState extends State<RosterPage> {
     floatingActionButton: SafeArea(
       child: Padding(
         padding: const EdgeInsets.only(top: 10),
-        child: PushBackButton(onPressed: () {}),
+        child: PushBackButton(onPressed: Globals.nav.pop),
       ),
     ),
     body: BlocBuilder<RosterBloc, RosterState>(
