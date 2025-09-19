@@ -31,7 +31,7 @@ class HomePage extends StatelessWidget {
                 FittedBox(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: SkullButton(onPressed: bloc.navigateToQuantity),
+                    child: SkullButton(onPressed: bloc.goToQuantityPage),
                   ),
                 ),
               ],

@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:secret_hitler_companion/core/themes/app_colors.dart';
 import 'package:secret_hitler_companion/core/utils/constants/paths/image_paths.dart';
-import 'package:secret_hitler_companion/modules/root/bloc/root_bloc.dart';
-import 'package:secret_hitler_companion/modules/root/bloc/root_state.dart';
+import 'package:secret_hitler_companion/core/utils/widgets/buttons/push_back_button.dart';
 import 'package:secret_hitler_companion/modules/root/submodules/roster/bloc/roster_bloc.dart';
+import 'package:secret_hitler_companion/modules/root/submodules/roster/bloc/roster_state.dart';
 import 'package:secret_hitler_companion/modules/root/submodules/roster/views/widgets/roster_text_field.dart';
 
 class RosterPage extends StatefulWidget {
-  final RosterBloc rosterBloc;
-  const RosterPage({required this.rosterBloc, super.key});
+  final RosterBloc bloc;
+  const RosterPage({required this.bloc, super.key});
 
   @override
   State<RosterPage> createState() => _RosterPageState();
@@ -21,69 +21,42 @@ class _RosterPageState extends State<RosterPage> {
   static const double _defaultPaperHeight = 40;
 
   double _calculatePaperHeight(int votersCount) =>
-      (_defaultPaperHeight * (votersCount + 1)) + 40;
-
-  RootBloc get _rootBloc => widget.rosterBloc.rootBloc;
+      _defaultPaperHeight * (votersCount + 1);
 
   final List<TextEditingController> _controllers = [];
-  final TextEditingController _newVoterController = TextEditingController();
-  final FocusNode _newVoterFocusNode = FocusNode();
-  int _previousVoterCount = 0;
 
   @override
   void dispose() {
     for (final controller in _controllers) {
       controller.dispose();
     }
-    _newVoterController.dispose();
-    _newVoterFocusNode.dispose();
     super.dispose();
   }
 
   void _syncControllers(List<String> names) {
-    final diff = names.length - _controllers.length;
-
-    if (diff > 0) {
-      for (int i = 0; i < diff; i++) {
-        _controllers.add(TextEditingController());
-      }
-    } else if (diff < 0) {
-      for (int i = 0; i < -diff; i++) {
-        _controllers.removeLast().dispose();
-      }
+    for (int i = 0; i < names.length; i++) {
+      _controllers.add(TextEditingController());
     }
 
     for (int i = 0; i < names.length; i++) {
       final controller = _controllers[i];
       if (controller.text != names[i]) {
-        controller.value = TextEditingValue(
-          text: names[i],
-          selection: TextSelection.fromPosition(
-            TextPosition(offset: names[i].length),
-          ),
-        );
+        controller.value = TextEditingValue(text: names[i]);
       }
-    }
-
-    if (names.length > _previousVoterCount) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        _newVoterFocusNode.requestFocus();
-      });
-    }
-    _previousVoterCount = names.length;
-  }
-
-  void _addVoter(String name) {
-    if (name.trim().isNotEmpty) {
-      _rootBloc.addVoterByName(name);
-      _newVoterController.clear();
     }
   }
 
   @override
   Widget build(BuildContext context) => Scaffold(
-    body: BlocBuilder<RootBloc, RootState>(
-      bloc: _rootBloc,
+    floatingActionButtonLocation: FloatingActionButtonLocation.startTop,
+    floatingActionButton: SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.only(top: 10),
+        child: PushBackButton(onPressed: () {}),
+      ),
+    ),
+    body: BlocBuilder<RosterBloc, RosterState>(
+      bloc: widget.bloc,
       builder: (context, rootState) {
         final names = rootState.voters.map((voter) => voter.name).toList();
         final paperHeight = _calculatePaperHeight(names.length);
@@ -92,6 +65,7 @@ class _RosterPageState extends State<RosterPage> {
 
         return Stack(
           alignment: Alignment.topCenter,
+          fit: StackFit.expand,
           children: [
             _buildBackgroundPaperContainer(paperHeight),
             _buildTypewriterImage(),
@@ -124,7 +98,7 @@ class _RosterPageState extends State<RosterPage> {
       height: paperHeight,
       decoration: BoxDecoration(
         color: AppColors.black,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(8),
       ),
     ),
   );
@@ -138,28 +112,23 @@ class _RosterPageState extends State<RosterPage> {
           height: paperHeight - 8,
           decoration: BoxDecoration(
             color: AppColors.paper,
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(8),
           ),
           child: Padding(
             padding: const EdgeInsets.fromLTRB(20, 25, 20, 20),
             child: SingleChildScrollView(
               child: Column(
                 spacing: 20,
-                children: [
-                  ...names.mapIndexed(
-                    (index, name) => RosterTextField(
-                      key: ValueKey('voter_$index'),
-                      controller: _controllers[index],
-                      onChanged: (name) =>
-                          _rootBloc.updateVoterName(index, name),
-                    ),
-                  ),
-                  RosterTextField(
-                    controller: _newVoterController,
-                    focusNode: _newVoterFocusNode,
-                    onChanged: _addVoter,
-                  ),
-                ],
+                children: names
+                    .mapIndexed(
+                      (index, name) => RosterTextField(
+                        key: ValueKey('voter_$index'),
+                        controller: _controllers[index],
+                        onChanged: (name) =>
+                            widget.bloc.updateVoterName(index, name),
+                      ),
+                    )
+                    .toList(),
               ),
             ),
           ),

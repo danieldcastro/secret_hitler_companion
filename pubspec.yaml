@@ -23,6 +23,7 @@ dependencies:
     sdk: flutter
   flutter_modular: ^6.4.1
   intl: ^0.20.2
+  lucide_icons: ^0.257.0
   nilts: ^0.24.0
   vibration: ^3.1.3
 

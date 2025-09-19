@@ -5,18 +5,20 @@ import 'package:secret_hitler_companion/core/utils/helpers/game_setup.dart';
 import 'package:secret_hitler_companion/core/utils/widgets/book/book_controller.dart';
 import 'package:secret_hitler_companion/core/utils/widgets/buttons/skull_button.dart';
 import 'package:secret_hitler_companion/core/utils/widgets/images/paper_widget.dart';
+import 'package:secret_hitler_companion/modules/root/submodules/quantity/bloc/quantity_bloc.dart';
 import 'package:secret_hitler_companion/modules/root/submodules/quantity/views/widgets/disc_widget.dart';
 import 'package:secret_hitler_companion/modules/root/submodules/quantity/views/widgets/quantity_book_widget.dart';
 
 class QuantityPage extends StatefulWidget {
-  const QuantityPage({super.key});
+  final QuantityBloc bloc;
+  const QuantityPage({required this.bloc, super.key});
 
   @override
   State<QuantityPage> createState() => _QuantityPageState();
 }
 
 class _QuantityPageState extends State<QuantityPage> {
-  final int _numberAfterDrag = 5; // valor inicial
+  int _numberAfterDrag = 5; // valor inicial
 
   final controller = BookController(initialPage: 1);
 
@@ -69,6 +71,7 @@ class _QuantityPageState extends State<QuantityPage> {
                           ).reversed.toList(),
                           onNumberSelected: (value) {
                             controller.goToPage(value - 4);
+                            _numberAfterDrag = value;
                           },
                         ),
                       ],
@@ -89,8 +92,14 @@ class _QuantityPageState extends State<QuantityPage> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(left: 20, right: 20, bottom: 20),
-            child: FittedBox(child: SkullButton(onPressed: () {})),
+            padding: const EdgeInsets.only(left: 20, right: 20, bottom: 40),
+            child: FittedBox(
+              child: SkullButton(
+                onPressed: () => widget.bloc.handleSubmit(
+                  GameSetup.getSetup(_numberAfterDrag),
+                ),
+              ),
+            ),
           ),
         ],
       ),

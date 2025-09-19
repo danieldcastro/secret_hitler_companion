@@ -31,5 +31,9 @@
   "hitlerLabel": "Hitler",
   "@hitlerLabel": {
     "description": "Label de Hitler"
+  },
+  "backLabel": "Voltar",
+  "@backLabel": { 
+    "description": "Label de voltar"
   }
 }

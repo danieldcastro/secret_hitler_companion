@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:secret_hitler_companion/core/themes/app_colors.dart';
 import 'package:secret_hitler_companion/core/utils/constants/paths/image_paths.dart';
-import 'package:secret_hitler_companion/core/utils/widgets/buttons/punch_button.dart';
+import 'package:secret_hitler_companion/core/utils/widgets/buttons/push_button/hold_button.dart';
 
 class SkullButton extends StatelessWidget {
   final VoidCallback? onPressed;
   const SkullButton({required this.onPressed, super.key});
 
   @override
-  Widget build(BuildContext context) => PunchButton(
+  Widget build(BuildContext context) => HoldButton(
     height: 130,
     width: 130,
     onPressed: onPressed,

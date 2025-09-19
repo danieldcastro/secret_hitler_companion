@@ -145,6 +145,12 @@ abstract class S {
   /// In en, this message translates to:
   /// **'Hitler'**
   String get hitlerLabel;
+
+  /// Back Label
+  ///
+  /// In en, this message translates to:
+  /// **'Back'**
+  String get backLabel;
 }
 
 class _SDelegate extends LocalizationsDelegate<S> {

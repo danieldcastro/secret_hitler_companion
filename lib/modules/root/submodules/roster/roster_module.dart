@@ -17,10 +17,7 @@ class RosterModule extends Module {
 
   @override
   void routes(RouteManager r) {
-    r.child(
-      AppRoutes.initial,
-      child: (_) => RosterPage(rosterBloc: Modular.get()),
-    );
+    r.child(AppRoutes.initial, child: (_) => RosterPage(bloc: Modular.get()));
     super.routes(r);
   }
 }

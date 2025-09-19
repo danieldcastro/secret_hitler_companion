@@ -6,7 +6,7 @@ import 'package:secret_hitler_companion/modules/home/bloc/home_state.dart';
 class HomeBloc extends Cubit<HomeState> {
   HomeBloc() : super(HomeState());
 
-  void navigateToQuantity() {
+  void goToQuantityPage() {
     Globals.nav.pushReplacementNamed(NestedRoutes.quantity);
   }
 }

@@ -31,6 +31,9 @@ class SPt extends S {
 
   @override
   String get hitlerLabel => 'Hitler';
+
+  @override
+  String get backLabel => 'Voltar';
 }
 
 /// The translations for Portuguese, as used in Brazil (`pt_BR`).
@@ -60,4 +63,7 @@ class SPtBr extends SPt {
 
   @override
   String get hitlerLabel => 'Hitler';
+
+  @override
+  String get backLabel => 'Voltar';
 }

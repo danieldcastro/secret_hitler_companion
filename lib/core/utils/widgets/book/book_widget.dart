@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:secret_hitler_companion/core/utils/constants/paths/audio_paths.dart';
 import 'package:secret_hitler_companion/core/utils/mixins/audio_mixin.dart';
@@ -31,7 +30,6 @@ class _BookWidgetState extends State<BookWidget>
   int? _animatingPage;
   bool _animatingForward = true;
   late List<AnimationController> _controllers;
-  final _pageFlipPlayer = AudioPlayer();
 
   bool _isJumping = false;
   int? _jumpTarget;
@@ -115,7 +113,7 @@ class _BookWidgetState extends State<BookWidget>
     if (!_isJumping) {
       final request = widget.controller.takeRequest();
       if (request != null && _animatingPage == null) {
-        playAudio(_pageFlipPlayer, AudioPaths.pageFlip);
+        playPooledAudio('pageFlip', AudioPaths.pageFlip);
         if (request.type == BookRequestType.next) {
           _nextPage();
         } else if (request.type == BookRequestType.previous) {
@@ -248,7 +246,7 @@ class _BookWidgetState extends State<BookWidget>
 
   @override
   void dispose() {
-    _pageFlipPlayer.dispose();
+    disposeAudios();
     widget.controller.removeListener(_onControllerUpdate);
     for (final c in _controllers) {
       c.dispose();

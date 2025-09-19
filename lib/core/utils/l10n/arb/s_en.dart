@@ -31,4 +31,7 @@ class SEn extends S {
 
   @override
   String get hitlerLabel => 'Hitler';
+
+  @override
+  String get backLabel => 'Back';
 }

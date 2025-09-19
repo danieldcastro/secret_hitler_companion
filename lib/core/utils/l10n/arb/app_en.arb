@@ -31,5 +31,9 @@
   "hitlerLabel": "Hitler",
   "@hitlerLabel": {
     "description": "Hitler Label"
+  },
+  "backLabel": "Back",
+  "@backLabel": { 
+    "description": "Back Label"
   }
 }

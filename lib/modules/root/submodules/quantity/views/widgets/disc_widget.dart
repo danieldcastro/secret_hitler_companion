@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:secret_hitler_companion/core/objects/enums/font_family_enum.dart';
 import 'package:secret_hitler_companion/core/themes/app_colors.dart';
@@ -43,8 +42,6 @@ class _DiscWidgetState extends State<DiscWidget>
   double? _startHoleAngle;
   final double _fingerStopAngle = 0.48; // posição fixa do stop
 
-  final _dialPlayer = AudioPlayer();
-
   @override
   void initState() {
     super.initState();
@@ -59,18 +56,18 @@ class _DiscWidgetState extends State<DiscWidget>
   @override
   void dispose() {
     _controller.dispose();
-    _dialPlayer.dispose();
+    disposeAudios();
     super.dispose();
   }
 
   Future<void> _playDialUpSound() async =>
-      playAudio(_dialPlayer, AudioPaths.phoneDialUp);
+      playAudio('dialUp', AudioPaths.phoneDialUp);
 
   Future<void> _playDialDownSound() async =>
-      playAudio(_dialPlayer, AudioPaths.phoneDialDown);
+      playPooledAudio('dialDown', AudioPaths.phoneDialDown);
 
   Future<void> _playDialScrollingSound() async =>
-      playAudio(_dialPlayer, AudioPaths.phoneDialScrolling, volume: 0.5);
+      playAudio('scroll', AudioPaths.phoneDialScrolling, volume: 0.5);
 
   double _calculateAngle(Offset position, Offset center) {
     final dx = position.dx - center.dx;

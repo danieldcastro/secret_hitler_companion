@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:secret_hitler_companion/core/themes/app_text_styles.dart';
 import 'package:secret_hitler_companion/core/utils/extensions/context_extensions.dart';
 
@@ -24,6 +25,9 @@ class RosterTextField extends StatelessWidget {
     textInputAction: TextInputAction.newline,
     keyboardType: TextInputType.name,
     textCapitalization: TextCapitalization.characters,
+    inputFormatters: [
+      FilteringTextInputFormatter.deny(RegExp(r'\s')), // não aceita espaços
+    ],
     decoration: InputDecoration(
       hintText: context.loc.voterNameHint.toUpperCase(),
     ),
