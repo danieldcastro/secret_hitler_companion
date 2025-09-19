@@ -206,7 +206,7 @@ class _DiscWidgetState extends State<DiscWidget>
           if (_currentAngle >= (_calculateMaxAngleForNumber() * 0.95) &&
               !_isPlayingUpSound) {
             _playDialUpSound();
-            cancelVibration();
+
             _isPlayingUpSound = true;
           }
 
@@ -222,6 +222,7 @@ class _DiscWidgetState extends State<DiscWidget>
           if (_currentAngle >= (_calculateMaxAngleForNumber() * 0.95)) {
             setState(() => _numberAfterDrag = _currentNumber);
             await _playDialScrollingSound();
+            await cancelVibration();
             await vibrate(1400);
             _isPlayingUpSound = false;
             if (_numberAfterDrag != null) {

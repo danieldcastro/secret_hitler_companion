@@ -1,11 +1,13 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_fy/utils/fy_sizes.dart';
 import 'package:secret_hitler_companion/core/routes/app_routes.dart';
 import 'package:secret_hitler_companion/core/themes/app_colors.dart';
 import 'package:secret_hitler_companion/core/utils/constants/paths/image_paths.dart';
 import 'package:secret_hitler_companion/core/utils/helpers/globals.dart';
 import 'package:secret_hitler_companion/core/utils/widgets/app_scaffold.dart';
+import 'package:secret_hitler_companion/core/utils/widgets/buttons/skull_button.dart';
 import 'package:secret_hitler_companion/modules/root/submodules/roster/bloc/roster_bloc.dart';
 import 'package:secret_hitler_companion/modules/root/submodules/roster/bloc/roster_state.dart';
 import 'package:secret_hitler_companion/modules/root/submodules/roster/views/widgets/roster_text_field.dart';
@@ -22,8 +24,11 @@ class _RosterPageState extends State<RosterPage> {
   static const double _paperWidth = 300;
   static const double _defaultPaperHeight = 40;
 
-  double _calculatePaperHeight(int votersCount) =>
-      _defaultPaperHeight * (votersCount + 1);
+  double _calculatePaperHeight(int votersCount) {
+    final height = _defaultPaperHeight * (votersCount + 1);
+    final maxHeight = FySizes.height(context) - 300;
+    return height.clamp(0, maxHeight);
+  }
 
   final List<TextEditingController> _controllers = [];
 
@@ -65,13 +70,23 @@ class _RosterPageState extends State<RosterPage> {
 
         _syncControllers(names);
 
-        return Stack(
-          alignment: Alignment.topCenter,
-          fit: StackFit.expand,
+        return Column(
           children: [
-            _buildBackgroundPaperContainer(paperHeight),
-            _buildTypewriterImage(),
-            _buildPaperContainer(names, paperHeight),
+            Expanded(
+              child: Stack(
+                alignment: Alignment.topCenter,
+                fit: StackFit.expand,
+                children: [
+                  _buildBackgroundPaperContainer(paperHeight),
+                  _buildTypewriterImage(),
+                  _buildPaperContainer(names, paperHeight),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 20, 20, 40),
+              child: SkullButton(onPressed: () {}),
+            ),
           ],
         );
       },
