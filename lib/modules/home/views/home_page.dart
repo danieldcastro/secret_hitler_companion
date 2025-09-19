@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:secret_hitler_companion/core/utils/extensions/context_extensions.dart';
+import 'package:secret_hitler_companion/core/utils/widgets/app_scaffold.dart';
 import 'package:secret_hitler_companion/core/utils/widgets/buttons/skull_button.dart';
 import 'package:secret_hitler_companion/core/utils/widgets/images/logo_widget.dart';
 import 'package:secret_hitler_companion/core/utils/widgets/images/paper_widget.dart';
@@ -10,7 +11,7 @@ class HomePage extends StatelessWidget {
   const HomePage({required this.bloc, super.key});
 
   @override
-  Widget build(BuildContext context) => Scaffold(
+  Widget build(BuildContext context) => AppScaffold(
     body: Center(
       child: Padding(
         padding: const EdgeInsets.only(top: 20, bottom: 40),

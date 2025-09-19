@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:secret_hitler_companion/core/utils/constants/paths/image_paths.dart';
 import 'package:secret_hitler_companion/core/utils/extensions/context_extensions.dart';
 import 'package:secret_hitler_companion/core/utils/helpers/game_setup.dart';
+import 'package:secret_hitler_companion/core/utils/widgets/app_scaffold.dart';
 import 'package:secret_hitler_companion/core/utils/widgets/book/book_controller.dart';
 import 'package:secret_hitler_companion/core/utils/widgets/buttons/skull_button.dart';
 import 'package:secret_hitler_companion/core/utils/widgets/images/paper_widget.dart';
@@ -23,7 +24,7 @@ class _QuantityPageState extends State<QuantityPage> {
   final controller = BookController(initialPage: 1);
 
   @override
-  Widget build(BuildContext context) => Scaffold(
+  Widget build(BuildContext context) => AppScaffold(
     body: Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

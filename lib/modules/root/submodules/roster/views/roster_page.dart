@@ -1,10 +1,11 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:secret_hitler_companion/core/routes/app_routes.dart';
 import 'package:secret_hitler_companion/core/themes/app_colors.dart';
 import 'package:secret_hitler_companion/core/utils/constants/paths/image_paths.dart';
 import 'package:secret_hitler_companion/core/utils/helpers/globals.dart';
-import 'package:secret_hitler_companion/core/utils/widgets/buttons/push_back_button.dart';
+import 'package:secret_hitler_companion/core/utils/widgets/app_scaffold.dart';
 import 'package:secret_hitler_companion/modules/root/submodules/roster/bloc/roster_bloc.dart';
 import 'package:secret_hitler_companion/modules/root/submodules/roster/bloc/roster_state.dart';
 import 'package:secret_hitler_companion/modules/root/submodules/roster/views/widgets/roster_text_field.dart';
@@ -54,14 +55,8 @@ class _RosterPageState extends State<RosterPage> {
   }
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-    floatingActionButtonLocation: FloatingActionButtonLocation.startTop,
-    floatingActionButton: SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.only(top: 10),
-        child: PushBackButton(onPressed: Globals.nav.pop),
-      ),
-    ),
+  Widget build(BuildContext context) => AppScaffold(
+    onBack: () => Globals.nav.navigate(NestedRoutes.quantity),
     body: BlocBuilder<RosterBloc, RosterState>(
       bloc: widget.bloc,
       builder: (context, rootState) {

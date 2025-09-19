@@ -40,6 +40,6 @@ class NavImpl implements INav {
   }) => Modular.to.pushReplacementNamed<T, R>(routeName, arguments: arguments);
 
   @override
-  void popAllAndPushNamed(String routeName, {Object? arguments}) =>
+  void navigate(String routeName, {Object? arguments}) =>
       Modular.to.navigate(routeName);
 }
