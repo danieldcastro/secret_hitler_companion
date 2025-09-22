@@ -8,6 +8,7 @@ import 'package:secret_hitler_companion/core/utils/constants/paths/image_paths.d
 import 'package:secret_hitler_companion/core/utils/helpers/globals.dart';
 import 'package:secret_hitler_companion/core/utils/widgets/app_scaffold.dart';
 import 'package:secret_hitler_companion/core/utils/widgets/buttons/skull_button.dart';
+import 'package:secret_hitler_companion/core/utils/widgets/images/paper_widget.dart';
 import 'package:secret_hitler_companion/modules/root/submodules/roster/bloc/roster_bloc.dart';
 import 'package:secret_hitler_companion/modules/root/submodules/roster/bloc/roster_state.dart';
 import 'package:secret_hitler_companion/modules/root/submodules/roster/views/widgets/roster_text_field.dart';
@@ -21,8 +22,8 @@ class RosterPage extends StatefulWidget {
 }
 
 class _RosterPageState extends State<RosterPage> {
-  static const double _paperWidth = 300;
-  static const double _defaultPaperHeight = 40;
+  static const double _paperWidth = 190;
+  static const double _defaultPaperHeight = 31;
 
   double _calculatePaperHeight(int votersCount) {
     final height = _defaultPaperHeight * (votersCount + 1);
@@ -64,9 +65,10 @@ class _RosterPageState extends State<RosterPage> {
     onBack: () => Globals.nav.navigate(NestedRoutes.quantity),
     body: BlocBuilder<RosterBloc, RosterState>(
       bloc: widget.bloc,
-      builder: (context, rootState) {
-        final names = rootState.voters.map((voter) => voter.name).toList();
+      builder: (context, state) {
+        final names = state.voters.map((voter) => voter.name).toList();
         final paperHeight = _calculatePaperHeight(names.length);
+        final allNamesFilled = names.every((name) => name.trim().isNotEmpty);
 
         _syncControllers(names);
 
@@ -78,14 +80,37 @@ class _RosterPageState extends State<RosterPage> {
                 fit: StackFit.expand,
                 children: [
                   _buildBackgroundPaperContainer(paperHeight),
+                  _buildTypewriterShadow(),
                   _buildTypewriterImage(),
                   _buildPaperContainer(names, paperHeight),
                 ],
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(20, 20, 20, 40),
-              child: SkullButton(onPressed: () {}),
+            Stack(
+              alignment: Alignment.center,
+              children: [
+                AnimatedSlide(
+                  offset: allNamesFilled ? Offset.zero : Offset(0, 1),
+                  curve: Curves.elasticInOut,
+                  duration: const Duration(milliseconds: 2000),
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 20, 20, 40),
+                    child: SkullButton(onPressed: () {}),
+                  ),
+                ),
+
+                AnimatedSlide(
+                  offset: allNamesFilled ? Offset(0, 1) : Offset.zero,
+                  curve: Curves.elasticInOut,
+                  duration: const Duration(milliseconds: 2000),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 25),
+                    child: PaperWidget(
+                      title: 'Registre todos os votantes para continuar',
+                    ),
+                  ),
+                ),
+              ],
             ),
           ],
         );
@@ -94,58 +119,74 @@ class _RosterPageState extends State<RosterPage> {
   );
 
   Widget _buildTypewriterImage() => Positioned(
-    top: -90,
+    bottom: 0,
     child: Padding(
-      padding: const EdgeInsets.fromLTRB(30, 20, 20, 20),
+      padding: const EdgeInsets.fromLTRB(0, 20, 20, 20),
       child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 250),
-        child: Transform.rotate(
-          angle: 180 * 3.14 / 180,
-          child: Image.asset(ImagePaths.typewriter),
-        ),
+        constraints: const BoxConstraints(maxWidth: 350, maxHeight: 150),
+        child: Image.asset(ImagePaths.typewriter, fit: BoxFit.fill),
+      ),
+    ),
+  );
+  Widget _buildTypewriterShadow() => Positioned(
+    bottom: 14,
+    child: Container(
+      width: 290,
+      height: 50,
+      decoration: BoxDecoration(
+        color: AppColors.black.withAlpha(50),
+        borderRadius: BorderRadius.circular(12),
       ),
     ),
   );
 
   Widget _buildBackgroundPaperContainer(double paperHeight) => Positioned(
-    top: 110,
+    bottom: 136,
     child: AnimatedContainer(
       duration: const Duration(milliseconds: 200),
       width: _paperWidth,
       height: paperHeight,
       decoration: BoxDecoration(
         color: AppColors.black,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(2),
       ),
     ),
   );
 
   Widget _buildPaperContainer(List<String> names, double paperHeight) =>
       Positioned(
-        top: 114,
+        bottom: 140,
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 200),
           width: _paperWidth - 8,
           height: paperHeight - 8,
           decoration: BoxDecoration(
             color: AppColors.paper,
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(2),
           ),
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(20, 25, 20, 20),
+            padding: const EdgeInsets.fromLTRB(10, 14, 10, 0),
             child: SingleChildScrollView(
               child: Column(
-                spacing: 20,
-                children: names
-                    .mapIndexed(
-                      (index, name) => RosterTextField(
+                children: [
+                  Divider(
+                    color: AppColors.black.withAlpha(100),
+                    thickness: 1,
+                    height: 0,
+                  ),
+                  const SizedBox(height: 15),
+                  ...names.mapIndexed(
+                    (index, name) => Padding(
+                      padding: const EdgeInsets.only(bottom: 15),
+                      child: RosterTextField(
                         key: ValueKey('voter_$index'),
                         controller: _controllers[index],
                         onChanged: (name) =>
                             widget.bloc.updateVoterName(index, name),
                       ),
-                    )
-                    .toList(),
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
