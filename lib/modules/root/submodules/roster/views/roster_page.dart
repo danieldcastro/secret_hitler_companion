@@ -39,7 +39,7 @@ class _RosterPageState extends State<RosterPage> with AudioMixin {
   @override
   void initState() {
     super.initState();
-    widget.bloc.getRootVoters();
+    widget.bloc.getStoreVoters();
   }
 
   @override
@@ -118,7 +118,10 @@ class _RosterPageState extends State<RosterPage> with AudioMixin {
               height: 10,
             ),
             Divider(color: AppColors.black, thickness: 5, height: 5),
-            RosterFooter(isAllNamesFilled: isAllNamesFilled),
+            RosterFooter(
+              isAllNamesFilled: isAllNamesFilled,
+              onSubmit: widget.bloc.updateStoreVoters,
+            ),
           ],
         );
       },

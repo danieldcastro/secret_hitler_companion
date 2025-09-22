@@ -6,7 +6,12 @@ import 'package:secret_hitler_companion/core/utils/widgets/images/paper_widget.d
 
 class RosterFooter extends StatelessWidget {
   final bool isAllNamesFilled;
-  const RosterFooter({required this.isAllNamesFilled, super.key});
+  final VoidCallback onSubmit;
+  const RosterFooter({
+    required this.isAllNamesFilled,
+    required this.onSubmit,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) => AnimatedSlide(
@@ -27,7 +32,7 @@ class RosterFooter extends StatelessWidget {
             duration: const Duration(milliseconds: 2000),
             child: Padding(
               padding: const EdgeInsets.fromLTRB(20, 20, 20, 40),
-              child: FittedBox(child: SkullButton(onPressed: () {})),
+              child: FittedBox(child: SkullButton(onPressed: onSubmit)),
             ),
           ),
 

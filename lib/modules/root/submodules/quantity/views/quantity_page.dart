@@ -19,9 +19,27 @@ class QuantityPage extends StatefulWidget {
 }
 
 class _QuantityPageState extends State<QuantityPage> {
-  int _numberAfterDrag = 5; // valor inicial
+  int _quantity = 5;
+  bool _loading = true;
 
   final controller = BookController(initialPage: 1);
+
+  @override
+  void initState() {
+    super.initState();
+    _loadInitialData();
+  }
+
+  Future<void> _loadInitialData() async {
+    final quantity = await widget.bloc.storeQuantity;
+    if (mounted) {
+      setState(() {
+        _quantity = quantity;
+        _loading = false;
+        controller.goToPage(quantity - 4);
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) => AppScaffold(
@@ -64,17 +82,18 @@ class _QuantityPageState extends State<QuantityPage> {
                             width: 400,
                           ),
                         ),
-                        DiscWidget(
-                          initialNumber: _numberAfterDrag,
-                          numbers: List.generate(
-                            GameSetup.setupsCount,
-                            (i) => 5 + i,
-                          ).reversed.toList(),
-                          onNumberSelected: (value) {
-                            controller.goToPage(value - 4);
-                            _numberAfterDrag = value;
-                          },
-                        ),
+                        if (!_loading)
+                          DiscWidget(
+                            initialNumber: _quantity,
+                            numbers: List.generate(
+                              GameSetup.setupsCount,
+                              (i) => 5 + i,
+                            ).reversed.toList(),
+                            onNumberSelected: (value) {
+                              controller.goToPage(value - 4);
+                              setState(() => _quantity = value);
+                            },
+                          ),
                       ],
                     ),
                   ),
@@ -96,9 +115,8 @@ class _QuantityPageState extends State<QuantityPage> {
             padding: const EdgeInsets.only(left: 20, right: 20, bottom: 40),
             child: FittedBox(
               child: SkullButton(
-                onPressed: () => widget.bloc.handleSubmit(
-                  GameSetup.getSetup(_numberAfterDrag),
-                ),
+                onPressed: () =>
+                    widget.bloc.handleSubmit(GameSetup.getSetup(_quantity)),
               ),
             ),
           ),

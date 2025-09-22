@@ -1,14 +1,14 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:secret_hitler_companion/core/objects/entities/voter_entity.dart';
-import 'package:secret_hitler_companion/modules/root/bloc/root_bloc.dart';
+import 'package:secret_hitler_companion/core/utils/stores/voter_store.dart';
 import 'package:secret_hitler_companion/modules/root/submodules/roster/bloc/roster_state.dart';
 
 class RosterBloc extends Cubit<RosterState> {
-  final RootBloc rootBloc;
-  RosterBloc(this.rootBloc) : super(RosterState.empty());
+  final VoterStore _voterStore;
+  RosterBloc(this._voterStore) : super(RosterState.empty());
 
-  void getRootVoters() {
-    emit(state.copyWith(voters: rootBloc.state.voters));
+  Future<void> getStoreVoters() async {
+    emit(state.copyWith(voters: await _voterStore.voters));
   }
 
   void updateVoters(List<VoterEntity> voters) {
@@ -23,7 +23,7 @@ class RosterBloc extends Cubit<RosterState> {
     updateVoters(updatedVoters);
   }
 
-  void updateRootVoters() {
-    rootBloc.updateVoters(state.voters);
+  void updateStoreVoters() {
+    _voterStore.updateVoters(state.voters);
   }
 }

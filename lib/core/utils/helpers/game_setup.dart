@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:secret_hitler_companion/core/objects/entities/fascist_voter_entity.dart';
 import 'package:secret_hitler_companion/core/objects/entities/liberal_voter_entity.dart';
 import 'package:secret_hitler_companion/core/objects/entities/voter_entity.dart';
@@ -31,20 +33,38 @@ class GameSetup {
       throw Exception('Número de jogadores inválido: $playerCount');
     }
 
-    final players = <VoterEntity>[];
+    return [
+      ...List.generate(config.liberals, (_) => LiberalVoterEntity.empty()),
+      ...List.generate(config.fascists, (_) => FascistVoterEntity.empty()),
+      ...List.generate(
+        config.hitler,
+        (_) => FascistVoterEntity.empty(isHitler: true),
+      ),
+    ];
+  }
 
-    for (int i = 0; i < config.liberals; i++) {
-      players.add(LiberalVoterEntity.empty());
+  static List<VoterEntity> assignRoles(List<VoterEntity> players) {
+    final playerCount = players.length;
+    final config = _config[playerCount];
+    if (config == null) {
+      throw ArgumentError('Número de jogadores inválido: $playerCount');
     }
 
-    for (int i = 0; i < config.fascists; i++) {
-      players.add(FascistVoterEntity.empty());
-    }
+    final indices = List<int>.generate(playerCount, (i) => i)
+      ..shuffle(Random());
+    final hitlers = indices.take(config.hitler).toSet();
+    final fascists = indices.skip(config.hitler).take(config.fascists).toSet();
 
-    for (int i = 0; i < config.hitler; i++) {
-      players.add(FascistVoterEntity.empty(isHitler: true));
-    }
+    return List<VoterEntity>.generate(playerCount, (i) {
+      final player = players[i];
 
-    return players;
+      if (hitlers.contains(i)) {
+        return FascistVoterEntity(name: player.name, isHitler: true);
+      }
+      if (fascists.contains(i)) {
+        return FascistVoterEntity(name: player.name, isHitler: false);
+      }
+      return LiberalVoterEntity(name: player.name);
+    });
   }
 }
