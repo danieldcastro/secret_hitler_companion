@@ -21,7 +21,7 @@ class RosterTextField extends StatelessWidget {
     controller: controller,
     focusNode: focusNode,
     cursorHeight: 20,
-    style: AppTextStyles.bodyMedium().copyWith(height: 1),
+    style: AppTextStyles.bodyLarge().copyWith(height: 1),
     maxLength: 15,
     textInputAction: TextInputAction.newline,
     keyboardType: TextInputType.name,
@@ -31,9 +31,7 @@ class RosterTextField extends StatelessWidget {
     ],
     decoration: InputDecoration(
       hintText: context.loc.voterNameHint.toUpperCase(),
-      hintStyle: AppTextStyles.bodyMedium(
-        color: AppColors.black.withAlpha(150),
-      ),
+      hintStyle: AppTextStyles.bodyLarge(color: AppColors.black.withAlpha(150)),
     ),
     onChanged: onChanged,
   );

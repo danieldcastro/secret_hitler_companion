@@ -23,7 +23,7 @@ class RosterPage extends StatefulWidget {
 
 class _RosterPageState extends State<RosterPage> {
   static const double _paperWidth = 190;
-  static const double _defaultPaperHeight = 31;
+  static const double _defaultPaperHeight = 32;
 
   double _calculatePaperHeight(int votersCount) {
     final height = _defaultPaperHeight * (votersCount + 1);
@@ -80,37 +80,46 @@ class _RosterPageState extends State<RosterPage> {
                 fit: StackFit.expand,
                 children: [
                   _buildBackgroundPaperContainer(paperHeight),
-                  _buildTypewriterShadow(),
                   _buildTypewriterImage(),
                   _buildPaperContainer(names, paperHeight),
                 ],
               ),
             ),
-            Stack(
-              alignment: Alignment.center,
-              children: [
-                AnimatedSlide(
-                  offset: allNamesFilled ? Offset.zero : Offset(0, 1),
-                  curve: Curves.elasticInOut,
-                  duration: const Duration(milliseconds: 2000),
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 20, 20, 40),
-                    child: SkullButton(onPressed: () {}),
-                  ),
-                ),
-
-                AnimatedSlide(
-                  offset: allNamesFilled ? Offset(0, 1) : Offset.zero,
-                  curve: Curves.elasticInOut,
-                  duration: const Duration(milliseconds: 2000),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 25),
-                    child: PaperWidget(
-                      title: 'Registre todos os votantes para continuar',
+            Divider(color: Color(0xffC9532B), thickness: 3, height: 0),
+            Divider(
+              color: Color(0xffC9532B).withAlpha(100),
+              thickness: 10,
+              height: 10,
+            ),
+            Divider(color: AppColors.black, thickness: 5, height: 5),
+            Container(
+              color: Color(0xffC9532B).withAlpha(100),
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  AnimatedSlide(
+                    offset: allNamesFilled ? Offset.zero : Offset(0, 1),
+                    curve: Curves.elasticInOut,
+                    duration: const Duration(milliseconds: 2000),
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(20, 20, 20, 40),
+                      child: SkullButton(onPressed: () {}),
                     ),
                   ),
-                ),
-              ],
+
+                  AnimatedSlide(
+                    offset: allNamesFilled ? Offset(0, 1) : Offset.zero,
+                    curve: Curves.elasticInOut,
+                    duration: const Duration(milliseconds: 2000),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 25),
+                      child: PaperWidget(
+                        title: 'Registre todos os votantes para continuar',
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ],
         );
@@ -119,36 +128,28 @@ class _RosterPageState extends State<RosterPage> {
   );
 
   Widget _buildTypewriterImage() => Positioned(
-    bottom: 0,
+    bottom: -2,
     child: Padding(
       padding: const EdgeInsets.fromLTRB(0, 20, 20, 20),
       child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 350, maxHeight: 150),
-        child: Image.asset(ImagePaths.typewriter, fit: BoxFit.fill),
-      ),
-    ),
-  );
-  Widget _buildTypewriterShadow() => Positioned(
-    bottom: 14,
-    child: Container(
-      width: 290,
-      height: 50,
-      decoration: BoxDecoration(
-        color: AppColors.black.withAlpha(50),
-        borderRadius: BorderRadius.circular(12),
+        constraints: const BoxConstraints(maxHeight: 200),
+        child: Image.asset(ImagePaths.table, fit: BoxFit.fill),
       ),
     ),
   );
 
   Widget _buildBackgroundPaperContainer(double paperHeight) => Positioned(
     bottom: 136,
-    child: AnimatedContainer(
-      duration: const Duration(milliseconds: 200),
-      width: _paperWidth,
-      height: paperHeight,
-      decoration: BoxDecoration(
-        color: AppColors.black,
-        borderRadius: BorderRadius.circular(2),
+    child: Transform.rotate(
+      angle: -0.01,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        width: _paperWidth,
+        height: paperHeight,
+        decoration: BoxDecoration(
+          color: AppColors.black,
+          borderRadius: BorderRadius.circular(2),
+        ),
       ),
     ),
   );
@@ -156,37 +157,40 @@ class _RosterPageState extends State<RosterPage> {
   Widget _buildPaperContainer(List<String> names, double paperHeight) =>
       Positioned(
         bottom: 140,
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 200),
-          width: _paperWidth - 8,
-          height: paperHeight - 8,
-          decoration: BoxDecoration(
-            color: AppColors.paper,
-            borderRadius: BorderRadius.circular(2),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(10, 14, 10, 0),
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  Divider(
-                    color: AppColors.black.withAlpha(100),
-                    thickness: 1,
-                    height: 0,
-                  ),
-                  const SizedBox(height: 15),
-                  ...names.mapIndexed(
-                    (index, name) => Padding(
-                      padding: const EdgeInsets.only(bottom: 15),
-                      child: RosterTextField(
-                        key: ValueKey('voter_$index'),
-                        controller: _controllers[index],
-                        onChanged: (name) =>
-                            widget.bloc.updateVoterName(index, name),
+        child: Transform.rotate(
+          angle: -0.01,
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
+            width: _paperWidth - 8,
+            height: paperHeight - 8,
+            decoration: BoxDecoration(
+              color: AppColors.paper,
+              borderRadius: BorderRadius.circular(2),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(10, 14, 10, 0),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Divider(
+                      color: AppColors.black.withAlpha(100),
+                      thickness: 1,
+                      height: 0,
+                    ),
+                    const SizedBox(height: 15),
+                    ...names.mapIndexed(
+                      (index, name) => Padding(
+                        padding: const EdgeInsets.only(bottom: 15),
+                        child: RosterTextField(
+                          key: ValueKey('voter_$index'),
+                          controller: _controllers[index],
+                          onChanged: (name) =>
+                              widget.bloc.updateVoterName(index, name),
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
