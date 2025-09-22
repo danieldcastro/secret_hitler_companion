@@ -4,10 +4,6 @@
   "@holdButtonMessage": {
     "description": "Hold Button Message"
   },
-  "voterNameHint": "Voter Name",
-  "@voterNameHint": {
-    "description": "Voter Name Label"
-  },
   "voterQuantityPageTitle": "Dial the number of voters",
   "@voterQuantityPageTitle": {
     "description": "Voter Quantity Page Title"
@@ -35,5 +31,9 @@
   "backLabel": "Back",
   "@backLabel": { 
     "description": "Back Label"
+  },
+  "rosterPageMessage": "Register all voters to continue",
+  "@rosterPageMessage": { 
+    "description": "Roster Page Message"
   }
 }

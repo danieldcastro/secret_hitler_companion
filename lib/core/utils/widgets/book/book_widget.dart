@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:secret_hitler_companion/core/objects/enums/audio_key_enum.dart';
 import 'package:secret_hitler_companion/core/utils/constants/paths/audio_paths.dart';
 import 'package:secret_hitler_companion/core/utils/mixins/audio_mixin.dart';
 import 'package:secret_hitler_companion/core/utils/widgets/book/book_controller.dart';
@@ -113,7 +114,7 @@ class _BookWidgetState extends State<BookWidget>
     if (!_isJumping) {
       final request = widget.controller.takeRequest();
       if (request != null && _animatingPage == null) {
-        playAudio('pageFlip', AudioPaths.pageFlip);
+        playAudio(AudioKeyEnum.pageFlip, AudioPaths.pageFlip);
         if (request.type == BookRequestType.next) {
           _nextPage();
         } else if (request.type == BookRequestType.previous) {

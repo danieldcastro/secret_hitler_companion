@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:secret_hitler_companion/core/objects/enums/audio_key_enum.dart';
 import 'package:secret_hitler_companion/core/themes/app_colors.dart';
 import 'package:secret_hitler_companion/core/utils/constants/paths/audio_paths.dart';
 import 'package:secret_hitler_companion/core/utils/mixins/audio_mixin.dart';
@@ -35,10 +36,10 @@ class _PushButtonState extends State<PushButton>
   double _position = _basePosition;
 
   Future<void> _playButtonDownSound() async =>
-      playAudio('buttonDown', AudioPaths.buttonDown);
+      playAudio(AudioKeyEnum.buttonDown, AudioPaths.buttonDown);
 
   Future<void> _playButtonUpSound() async =>
-      playAudio('buttonUp', AudioPaths.buttonUp);
+      playAudio(AudioKeyEnum.buttonUp, AudioPaths.buttonUp);
 
   @override
   void dispose() {

@@ -12,9 +12,6 @@ class SPt extends S {
   String get holdButtonMessage => 'Toque e segure para iniciar a assembleia';
 
   @override
-  String get voterNameHint => 'Nome do votante';
-
-  @override
   String get voterQuantityPageTitle => 'Disque o número de votantes';
 
   @override
@@ -34,6 +31,9 @@ class SPt extends S {
 
   @override
   String get backLabel => 'Voltar';
+
+  @override
+  String get rosterPageMessage => 'Registre todos os votantes para continuar';
 }
 
 /// The translations for Portuguese, as used in Brazil (`pt_BR`).
@@ -44,9 +44,6 @@ class SPtBr extends SPt {
   String get holdButtonMessage => 'Toque e segure para iniciar a assembleia';
 
   @override
-  String get voterNameHint => 'Nome do votante';
-
-  @override
   String get voterQuantityPageTitle => 'Disque o número de votantes';
 
   @override
@@ -66,4 +63,7 @@ class SPtBr extends SPt {
 
   @override
   String get backLabel => 'Voltar';
+
+  @override
+  String get rosterPageMessage => 'Registre todos os votantes para continuar';
 }

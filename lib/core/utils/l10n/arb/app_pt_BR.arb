@@ -4,10 +4,6 @@
   "@holdButtonMessage": {
     "description": "Mensagem do botão segurar"
   },
-  "voterNameHint": "Nome do votante",
-  "@voterNameHint": {
-    "description": "Label de nome do votante"
-  },
   "voterQuantityPageTitle": "Disque o número de votantes",
   "@voterQuantityPageTitle": {
     "description": "Título da página de quantidade de votantes"
@@ -35,5 +31,10 @@
   "backLabel": "Voltar",
   "@backLabel": { 
     "description": "Label de voltar"
+  },
+  "rosterPageMessage": "Registre todos os votantes para continuar",
+  "@rosterPageMessage": {
+    "description": "Mensagem da página de registro"
   }
+
 }

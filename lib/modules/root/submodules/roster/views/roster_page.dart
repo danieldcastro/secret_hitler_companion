@@ -2,15 +2,17 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_fy/utils/fy_sizes.dart';
+import 'package:secret_hitler_companion/core/objects/enums/audio_key_enum.dart';
 import 'package:secret_hitler_companion/core/routes/app_routes.dart';
 import 'package:secret_hitler_companion/core/themes/app_colors.dart';
+import 'package:secret_hitler_companion/core/utils/constants/paths/audio_paths.dart';
 import 'package:secret_hitler_companion/core/utils/constants/paths/image_paths.dart';
 import 'package:secret_hitler_companion/core/utils/helpers/globals.dart';
+import 'package:secret_hitler_companion/core/utils/mixins/audio_mixin.dart';
 import 'package:secret_hitler_companion/core/utils/widgets/app_scaffold.dart';
-import 'package:secret_hitler_companion/core/utils/widgets/buttons/skull_button.dart';
-import 'package:secret_hitler_companion/core/utils/widgets/images/paper_widget.dart';
 import 'package:secret_hitler_companion/modules/root/submodules/roster/bloc/roster_bloc.dart';
 import 'package:secret_hitler_companion/modules/root/submodules/roster/bloc/roster_state.dart';
+import 'package:secret_hitler_companion/modules/root/submodules/roster/views/widgets/roster_footer.dart';
 import 'package:secret_hitler_companion/modules/root/submodules/roster/views/widgets/roster_text_field.dart';
 
 class RosterPage extends StatefulWidget {
@@ -21,17 +23,18 @@ class RosterPage extends StatefulWidget {
   State<RosterPage> createState() => _RosterPageState();
 }
 
-class _RosterPageState extends State<RosterPage> {
+class _RosterPageState extends State<RosterPage> with AudioMixin {
   static const double _paperWidth = 190;
-  static const double _defaultPaperHeight = 32;
+  static const double _defaultPaperHeight = 36;
 
   double _calculatePaperHeight(int votersCount) {
     final height = _defaultPaperHeight * (votersCount + 1);
-    final maxHeight = FySizes.height(context) - 300;
+    final maxHeight = FySizes.height(context) - 400;
     return height.clamp(0, maxHeight);
   }
 
   final List<TextEditingController> _controllers = [];
+  final List<FocusNode> _focusNodes = [];
 
   @override
   void initState() {
@@ -44,19 +47,42 @@ class _RosterPageState extends State<RosterPage> {
     for (final controller in _controllers) {
       controller.dispose();
     }
+    for (final focusNode in _focusNodes) {
+      focusNode.dispose();
+    }
     super.dispose();
   }
 
   void _syncControllers(List<String> names) {
-    for (int i = 0; i < names.length; i++) {
-      _controllers.add(TextEditingController());
-    }
-
-    for (int i = 0; i < names.length; i++) {
-      final controller = _controllers[i];
-      if (controller.text != names[i]) {
-        controller.value = TextEditingValue(text: names[i]);
+    if (_controllers.isEmpty) {
+      for (int i = 0; i < names.length; i++) {
+        _controllers.add(TextEditingController());
+        _focusNodes.add(FocusNode());
       }
+
+      for (int i = 0; i < names.length; i++) {
+        final controller = _controllers[i];
+        if (controller.text != names[i]) {
+          controller.value = TextEditingValue(text: names[i]);
+        }
+      }
+    }
+  }
+
+  Future<void> _playBellSound() async =>
+      playAudio(AudioKeyEnum.bell, AudioPaths.bell);
+
+  void _onTapTypewriter() {
+    if (_focusNodes.any((node) => node.hasFocus)) return;
+    _playBellSound();
+    final firstControllerEmpty = _controllers.firstWhereOrNull(
+      (c) => c.text.isEmpty,
+    );
+    final indexOfController = _controllers.indexOf(
+      firstControllerEmpty ?? _controllers.last,
+    );
+    if (indexOfController != -1) {
+      _focusNodes[indexOfController].requestFocus();
     }
   }
 
@@ -68,7 +94,7 @@ class _RosterPageState extends State<RosterPage> {
       builder: (context, state) {
         final names = state.voters.map((voter) => voter.name).toList();
         final paperHeight = _calculatePaperHeight(names.length);
-        final allNamesFilled = names.every((name) => name.trim().isNotEmpty);
+        final isAllNamesFilled = names.every((name) => name.trim().isNotEmpty);
 
         _syncControllers(names);
 
@@ -92,35 +118,7 @@ class _RosterPageState extends State<RosterPage> {
               height: 10,
             ),
             Divider(color: AppColors.black, thickness: 5, height: 5),
-            Container(
-              color: Color(0xffC9532B).withAlpha(100),
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  AnimatedSlide(
-                    offset: allNamesFilled ? Offset.zero : Offset(0, 1),
-                    curve: Curves.elasticInOut,
-                    duration: const Duration(milliseconds: 2000),
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(20, 20, 20, 40),
-                      child: SkullButton(onPressed: () {}),
-                    ),
-                  ),
-
-                  AnimatedSlide(
-                    offset: allNamesFilled ? Offset(0, 1) : Offset.zero,
-                    curve: Curves.elasticInOut,
-                    duration: const Duration(milliseconds: 2000),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 25),
-                      child: PaperWidget(
-                        title: 'Registre todos os votantes para continuar',
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            RosterFooter(isAllNamesFilled: isAllNamesFilled),
           ],
         );
       },
@@ -131,9 +129,15 @@ class _RosterPageState extends State<RosterPage> {
     bottom: -2,
     child: Padding(
       padding: const EdgeInsets.fromLTRB(0, 20, 20, 20),
-      child: ConstrainedBox(
-        constraints: const BoxConstraints(maxHeight: 200),
-        child: Image.asset(ImagePaths.table, fit: BoxFit.fill),
+      child: MouseRegion(
+        cursor: SystemMouseCursors.click,
+        child: GestureDetector(
+          onTap: _onTapTypewriter,
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxHeight: 200),
+            child: Image.asset(ImagePaths.table, fit: BoxFit.fill),
+          ),
+        ),
       ),
     ),
   );
@@ -183,6 +187,8 @@ class _RosterPageState extends State<RosterPage> {
                         padding: const EdgeInsets.only(bottom: 15),
                         child: RosterTextField(
                           key: ValueKey('voter_$index'),
+                          focusNode: _focusNodes[index],
+                          index: index,
                           controller: _controllers[index],
                           onChanged: (name) =>
                               widget.bloc.updateVoterName(index, name),

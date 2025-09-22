@@ -104,12 +104,6 @@ abstract class S {
   /// **'Tap and hold to start the assembly'**
   String get holdButtonMessage;
 
-  /// Voter Name Label
-  ///
-  /// In en, this message translates to:
-  /// **'Voter Name'**
-  String get voterNameHint;
-
   /// Voter Quantity Page Title
   ///
   /// In en, this message translates to:
@@ -151,6 +145,12 @@ abstract class S {
   /// In en, this message translates to:
   /// **'Back'**
   String get backLabel;
+
+  /// Roster Page Message
+  ///
+  /// In en, this message translates to:
+  /// **'Register all voters to continue'**
+  String get rosterPageMessage;
 }
 
 class _SDelegate extends LocalizationsDelegate<S> {

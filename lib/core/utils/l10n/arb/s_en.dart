@@ -12,9 +12,6 @@ class SEn extends S {
   String get holdButtonMessage => 'Tap and hold to start the assembly';
 
   @override
-  String get voterNameHint => 'Voter Name';
-
-  @override
   String get voterQuantityPageTitle => 'Dial the number of voters';
 
   @override
@@ -34,4 +31,7 @@ class SEn extends S {
 
   @override
   String get backLabel => 'Back';
+
+  @override
+  String get rosterPageMessage => 'Register all voters to continue';
 }

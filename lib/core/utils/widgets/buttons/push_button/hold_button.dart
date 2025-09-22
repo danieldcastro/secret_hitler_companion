@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:secret_hitler_companion/core/objects/enums/audio_key_enum.dart';
 import 'package:secret_hitler_companion/core/themes/app_colors.dart';
 import 'package:secret_hitler_companion/core/utils/constants/paths/audio_paths.dart';
 import 'package:secret_hitler_companion/core/utils/mixins/audio_mixin.dart';
@@ -47,10 +48,10 @@ class _HoldButtonState extends State<HoldButton>
   void initState() {
     super.initState();
     scheduleMicrotask(() async {
-      await createPool('buttonDown', AudioPaths.buttonDown);
-      await createPool('buttonUp', AudioPaths.buttonUp);
-      await createPool('scrolling', AudioPaths.scrolling);
-      await createPool('pushing', AudioPaths.pushing);
+      await createPool(AudioKeyEnum.buttonDown, AudioPaths.buttonDown);
+      await createPool(AudioKeyEnum.buttonUp, AudioPaths.buttonUp);
+      await createPool(AudioKeyEnum.scrolling, AudioPaths.scrolling);
+      await createPool(AudioKeyEnum.pushing, AudioPaths.pushing);
     });
     _resetController =
         AnimationController(
@@ -62,11 +63,16 @@ class _HoldButtonState extends State<HoldButton>
         });
   }
 
-  Future<void> _playButtonDownSound() async => playPooledAudio('buttonDown');
-  Future<void> _playButtonUpSound() async => playPooledAudio('buttonUp');
-  Future<void> _playScrollingSound() async => playPooledAudio('scrolling');
-  Future<void> _playPushingSound() async => playPooledAudio('pushing');
-  Future<void> _stopScrollingSound() async => stopPooledAudio('scrolling');
+  Future<void> _playButtonDownSound() async =>
+      playPooledAudio(AudioKeyEnum.buttonDown);
+  Future<void> _playButtonUpSound() async =>
+      playPooledAudio(AudioKeyEnum.buttonUp);
+  Future<void> _playScrollingSound() async =>
+      playPooledAudio(AudioKeyEnum.scrolling);
+  Future<void> _playPushingSound() async =>
+      playPooledAudio(AudioKeyEnum.pushing);
+  Future<void> _stopScrollingSound() async =>
+      stopPooledAudio(AudioKeyEnum.scrolling);
 
   Future<void> _vibrateScrolling() async => vibrate(2000);
   Future<void> _vibrateLong() async => vibrate(300);

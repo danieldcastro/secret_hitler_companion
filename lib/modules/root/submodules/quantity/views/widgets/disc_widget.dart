@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:secret_hitler_companion/core/objects/enums/audio_key_enum.dart';
 import 'package:secret_hitler_companion/core/objects/enums/font_family_enum.dart';
 import 'package:secret_hitler_companion/core/themes/app_colors.dart';
 import 'package:secret_hitler_companion/core/themes/app_text_styles.dart';
@@ -54,8 +55,8 @@ class _DiscWidgetState extends State<DiscWidget>
     _rotation = AlwaysStoppedAnimation(0);
     _numberAfterDrag = widget.initialNumber;
     scheduleMicrotask(() async {
-      await createPool('dialUp', AudioPaths.phoneDialUp);
-      await createPool('dialDown', AudioPaths.phoneDialDown);
+      await createPool(AudioKeyEnum.dialUp, AudioPaths.phoneDialUp);
+      await createPool(AudioKeyEnum.dialDown, AudioPaths.phoneDialDown);
     });
   }
 
@@ -66,12 +67,16 @@ class _DiscWidgetState extends State<DiscWidget>
     super.dispose();
   }
 
-  Future<void> _playDialUpSound() async => playPooledAudio('dialUp');
+  Future<void> _playDialUpSound() async => playPooledAudio(AudioKeyEnum.dialUp);
 
-  Future<void> _playDialDownSound() async => playPooledAudio('dialDown');
+  Future<void> _playDialDownSound() async =>
+      playPooledAudio(AudioKeyEnum.dialDown);
 
-  Future<void> _playDialScrollingSound() async =>
-      playAudio('scroll', AudioPaths.phoneDialScrolling, volume: 0.5);
+  Future<void> _playDialScrollingSound() async => playAudio(
+    AudioKeyEnum.scroll,
+    AudioPaths.phoneDialScrolling,
+    volume: 0.5,
+  );
 
   double _calculateAngle(Offset position, Offset center) {
     final dx = position.dx - center.dx;
