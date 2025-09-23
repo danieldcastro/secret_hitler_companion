@@ -49,7 +49,7 @@ class _RosterTextFieldState extends State<RosterTextField>
 
   @override
   Widget build(BuildContext context) => TextFormField(
-    onTapOutside: (_) => widget.focusNode?.unfocus(),
+    // onTapOutside: (_) => widget.focusNode?.unfocus(),
     controller: widget.controller,
     focusNode: widget.focusNode,
     cursorHeight: 20,

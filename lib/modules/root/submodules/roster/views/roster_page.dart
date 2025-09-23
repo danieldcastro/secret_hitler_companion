@@ -73,7 +73,10 @@ class _RosterPageState extends State<RosterPage> with AudioMixin {
       playAudio(AudioKeyEnum.bell, AudioPaths.bell);
 
   void _onTapTypewriter() {
-    if (_focusNodes.any((node) => node.hasFocus)) return;
+    if (_focusNodes.any((node) => node.hasFocus)) {
+      _focusNodes.firstWhere((node) => node.hasFocus).unfocus();
+      return;
+    }
     _playBellSound();
     final firstControllerEmpty = _controllers.firstWhereOrNull(
       (c) => c.text.isEmpty,
