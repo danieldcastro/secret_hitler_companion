@@ -74,7 +74,7 @@ class _HoldButtonState extends State<HoldButton>
   Future<void> _stopScrollingSound() async =>
       stopPooledAudio(AudioKeyEnum.scrolling);
 
-  Future<void> _vibrateScrolling() async => vibrate(2000);
+  Future<void> _vibrateScrolling() async => vibrate(1000);
   Future<void> _vibrateLong() async => vibrate(300);
   Future<void> _cancelVibration() async => cancelVibration();
 
