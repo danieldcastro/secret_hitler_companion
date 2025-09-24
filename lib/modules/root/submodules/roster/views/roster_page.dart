@@ -91,6 +91,7 @@ class _RosterPageState extends State<RosterPage> with AudioMixin {
 
   @override
   Widget build(BuildContext context) => AppScaffold(
+    showBackButton: true,
     onBack: () => Globals.nav.navigate(NestedRoutes.quantity),
     body: BlocBuilder<RosterBloc, RosterState>(
       bloc: widget.bloc,
@@ -104,14 +105,19 @@ class _RosterPageState extends State<RosterPage> with AudioMixin {
         return Column(
           children: [
             Expanded(
-              child: Stack(
-                alignment: Alignment.topCenter,
-                fit: StackFit.expand,
-                children: [
-                  _buildBackgroundPaperContainer(paperHeight),
-                  _buildTypewriterImage(),
-                  _buildPaperContainer(names, paperHeight),
-                ],
+              child: TapRegion(
+                onTapOutside: (event) => _focusNodes
+                    .firstWhereOrNull((node) => node.hasFocus)
+                    ?.unfocus(),
+                child: Stack(
+                  alignment: Alignment.topCenter,
+                  fit: StackFit.expand,
+                  children: [
+                    _buildBackgroundPaperContainer(paperHeight),
+                    _buildTypewriterImage(),
+                    _buildPaperContainer(names, paperHeight),
+                  ],
+                ),
               ),
             ),
             Divider(color: Color(0xffC9532B), thickness: 3, height: 0),
@@ -192,6 +198,7 @@ class _RosterPageState extends State<RosterPage> with AudioMixin {
                       (index, name) => Padding(
                         padding: const EdgeInsets.only(bottom: 15),
                         child: RosterTextField(
+                          isLast: index == names.length - 1,
                           key: ValueKey('voter_$index'),
                           focusNode: _focusNodes[index],
                           index: index,

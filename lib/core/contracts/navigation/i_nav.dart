@@ -20,4 +20,5 @@ abstract class INav {
     Object? arguments,
   });
   void navigate(String routeName, {Object? arguments});
+  String get currentRoute;
 }

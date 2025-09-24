@@ -4,8 +4,14 @@ import 'package:secret_hitler_companion/core/utils/widgets/buttons/push_back_but
 
 class AppScaffold extends StatefulWidget {
   final VoidCallback? onBack;
+  final bool showBackButton;
   final Widget body;
-  const AppScaffold({required this.body, this.onBack, super.key});
+  const AppScaffold({
+    required this.body,
+    this.onBack,
+    this.showBackButton = false,
+    super.key,
+  });
 
   @override
   State<AppScaffold> createState() => _AppScaffoldState();
@@ -37,14 +43,14 @@ class _AppScaffoldState extends State<AppScaffold> {
     },
     child: Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.startTop,
-      floatingActionButton: widget.onBack == null
-          ? null
-          : SafeArea(
+      floatingActionButton: widget.showBackButton
+          ? SafeArea(
               child: Padding(
                 padding: const EdgeInsets.only(top: 10),
                 child: PushBackButton(onPressed: _handlePop),
               ),
-            ),
+            )
+          : null,
       body: widget.body,
     ),
   );

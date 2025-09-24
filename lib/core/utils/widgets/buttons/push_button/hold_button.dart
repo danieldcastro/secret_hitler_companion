@@ -147,7 +147,7 @@ class _HoldButtonState extends State<HoldButton>
       },
       onTapCancel: () {
         if (mounted) setState(() => _position = _basePosition);
-        _cancelHold();
+        if (_progress < 1) _cancelHold();
       },
       child: PushVisualButton(
         height: widget.height,

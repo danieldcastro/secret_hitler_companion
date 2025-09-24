@@ -42,4 +42,7 @@ class NavImpl implements INav {
   @override
   void navigate(String routeName, {Object? arguments}) =>
       Modular.to.navigate(routeName);
+
+  @override
+  String get currentRoute => Modular.to.path;
 }

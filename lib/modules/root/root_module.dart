@@ -20,7 +20,7 @@ class RootModule extends Module {
   void routes(RouteManager r) {
     r.child(
       AppRoutes.initial,
-      child: (_) => RootPage(),
+      child: (_) => RootPage(bloc: Modular.get()),
       children: [
         _buildChild(AppRoutes.quantity, QuantityModule()),
         _buildChild(AppRoutes.roster, RosterModule()),

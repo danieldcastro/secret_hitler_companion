@@ -59,8 +59,8 @@ class _QuantityPageState extends State<QuantityPage> {
               child: SizedBox.square(
                 dimension: 310 * 0.7,
                 child: OverflowBox(
-                  maxWidth: double.infinity,
-                  maxHeight: double.infinity,
+                  maxWidth: double.maxFinite,
+                  maxHeight: double.maxFinite,
                   child: Transform.scale(
                     scale: 0.9,
                     child: Stack(
