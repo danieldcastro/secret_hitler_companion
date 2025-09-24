@@ -3,6 +3,7 @@ import 'package:secret_hitler_companion/core/dependencies/core_module.dart';
 import 'package:secret_hitler_companion/core/routes/app_routes.dart';
 import 'package:secret_hitler_companion/modules/root/bloc/root_bloc.dart';
 import 'package:secret_hitler_companion/modules/root/submodules/quantity/quantity_module.dart';
+import 'package:secret_hitler_companion/modules/root/submodules/role/role_module.dart';
 import 'package:secret_hitler_companion/modules/root/submodules/roster/roster_module.dart';
 import 'package:secret_hitler_companion/modules/root/views/root_page.dart';
 
@@ -24,6 +25,7 @@ class RootModule extends Module {
       children: [
         _buildChild(AppRoutes.quantity, QuantityModule()),
         _buildChild(AppRoutes.roster, RosterModule()),
+        _buildChild(AppRoutes.role, RoleModule()),
       ],
     );
     super.routes(r);

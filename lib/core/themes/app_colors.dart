@@ -9,4 +9,6 @@ class AppColors {
   static const Color beige = Color(0xFFFDE1C0);
   static const Color peach = Color(0xFFF8AD90);
   static const Color coral = Color(0xFFE9775B);
+  static const Color darkPropRed = Color(0xFFB8431C);
+  static const Color lightPropRed = Color(0xffC9532B);
 }

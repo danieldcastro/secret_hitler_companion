@@ -7,12 +7,14 @@ import 'package:secret_hitler_companion/core/routes/app_routes.dart';
 import 'package:secret_hitler_companion/core/themes/app_colors.dart';
 import 'package:secret_hitler_companion/core/utils/constants/paths/audio_paths.dart';
 import 'package:secret_hitler_companion/core/utils/constants/paths/image_paths.dart';
+import 'package:secret_hitler_companion/core/utils/extensions/context_extensions.dart';
 import 'package:secret_hitler_companion/core/utils/helpers/globals.dart';
 import 'package:secret_hitler_companion/core/utils/mixins/audio_mixin.dart';
 import 'package:secret_hitler_companion/core/utils/widgets/app_scaffold.dart';
+import 'package:secret_hitler_companion/core/utils/widgets/footer_widget.dart';
+import 'package:secret_hitler_companion/core/utils/widgets/table_edge_widget.dart';
 import 'package:secret_hitler_companion/modules/root/submodules/roster/bloc/roster_bloc.dart';
 import 'package:secret_hitler_companion/modules/root/submodules/roster/bloc/roster_state.dart';
-import 'package:secret_hitler_companion/modules/root/submodules/roster/views/widgets/roster_footer.dart';
 import 'package:secret_hitler_companion/modules/root/submodules/roster/views/widgets/roster_text_field.dart';
 
 class RosterPage extends StatefulWidget {
@@ -120,16 +122,12 @@ class _RosterPageState extends State<RosterPage> with AudioMixin {
                 ),
               ),
             ),
-            Divider(color: Color(0xffC9532B), thickness: 3, height: 0),
-            Divider(
-              color: Color(0xffC9532B).withAlpha(100),
-              thickness: 10,
-              height: 10,
-            ),
-            Divider(color: AppColors.black, thickness: 5, height: 5),
-            RosterFooter(
-              isAllNamesFilled: isAllNamesFilled,
-              onSubmit: widget.bloc.updateStoreVoters,
+            TableEdgeWidget(),
+            FooterWidget(
+              showButton: isAllNamesFilled,
+              onTap: widget.bloc.handleSubmit,
+              backgroundColor: AppColors.darkPropRed,
+              message: context.loc.rosterPageMessage,
             ),
           ],
         );

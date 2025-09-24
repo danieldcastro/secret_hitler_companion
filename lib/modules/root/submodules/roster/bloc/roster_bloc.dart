@@ -1,5 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:secret_hitler_companion/core/objects/entities/voter_entity.dart';
+import 'package:secret_hitler_companion/core/routes/app_routes.dart';
+import 'package:secret_hitler_companion/core/utils/helpers/globals.dart';
 import 'package:secret_hitler_companion/core/utils/stores/voter_store.dart';
 import 'package:secret_hitler_companion/modules/root/submodules/roster/bloc/roster_state.dart';
 
@@ -23,7 +25,12 @@ class RosterBloc extends Cubit<RosterState> {
     updateVoters(updatedVoters);
   }
 
-  void updateStoreVoters() {
+  void _updateStoreVoters() {
     _voterStore.updateVoters(state.voters);
+  }
+
+  void handleSubmit() {
+    _updateStoreVoters();
+    Globals.nav.navigate(NestedRoutes.role);
   }
 }

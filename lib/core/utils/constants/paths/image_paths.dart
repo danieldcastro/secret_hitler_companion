@@ -9,4 +9,5 @@ class ImagePaths {
   static const String phoneCable = '$_assetsPath/phone_cable.png';
   static const String phoneHandset = '$_assetsPath/phone_handset.png';
   static const String table = '$_assetsPath/table.png';
+  static const String straightEnvelope = '$_assetsPath/straight_envelope.png';
 }

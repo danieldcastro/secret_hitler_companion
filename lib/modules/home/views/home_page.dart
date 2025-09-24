@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:secret_hitler_companion/core/utils/extensions/context_extensions.dart';
 import 'package:secret_hitler_companion/core/utils/widgets/app_scaffold.dart';
-import 'package:secret_hitler_companion/core/utils/widgets/buttons/skull_button.dart';
+import 'package:secret_hitler_companion/core/utils/widgets/footer_widget.dart';
 import 'package:secret_hitler_companion/core/utils/widgets/images/logo_widget.dart';
 import 'package:secret_hitler_companion/core/utils/widgets/images/paper_widget.dart';
 import 'package:secret_hitler_companion/modules/home/bloc/home_bloc.dart';
@@ -14,7 +14,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) => AppScaffold(
     body: Center(
       child: Padding(
-        padding: const EdgeInsets.only(top: 20, bottom: 40),
+        padding: const EdgeInsets.only(top: 20),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -29,12 +29,7 @@ class HomePage extends StatelessWidget {
               spacing: 40,
               children: [
                 PaperWidget(title: context.loc.holdButtonMessage),
-                FittedBox(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: SkullButton(onPressed: bloc.goToQuantityPage),
-                  ),
-                ),
+                FooterWidget(onTap: bloc.goToQuantityPage),
               ],
             ),
           ],

@@ -8,6 +8,7 @@ class RootBloc extends Cubit<RootState> {
 
   void handlePop() => switch (Globals.nav.currentRoute) {
     NestedRoutes.roster => Globals.nav.navigate(NestedRoutes.quantity),
+    NestedRoutes.role => Globals.nav.navigate(NestedRoutes.roster),
     _ => null,
   };
 }

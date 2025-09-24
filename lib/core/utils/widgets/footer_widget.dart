@@ -1,48 +1,53 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
-import 'package:secret_hitler_companion/core/utils/extensions/context_extensions.dart';
 import 'package:secret_hitler_companion/core/utils/widgets/buttons/skull_button.dart';
 import 'package:secret_hitler_companion/core/utils/widgets/images/paper_widget.dart';
 
-class RosterFooter extends StatelessWidget {
-  final bool isAllNamesFilled;
-  final VoidCallback onSubmit;
-  const RosterFooter({
-    required this.isAllNamesFilled,
-    required this.onSubmit,
+class FooterWidget extends StatelessWidget {
+  final bool showButton;
+  final VoidCallback onTap;
+  final String message;
+  final Color backgroundColor;
+  const FooterWidget({
+    required this.onTap,
+    this.showButton = true,
+    this.message = '',
+    this.backgroundColor = Colors.transparent,
     super.key,
   });
 
   @override
   Widget build(BuildContext context) => AnimatedSlide(
-    offset: KeyboardVisibilityProvider.isKeyboardVisible(context)
+    offset:
+        message.isNotEmpty &&
+            KeyboardVisibilityProvider.isKeyboardVisible(context)
         ? Offset(0, 1)
         : Offset.zero,
     duration: const Duration(milliseconds: 300),
     child: AnimatedContainer(
       duration: const Duration(milliseconds: 500),
       height: KeyboardVisibilityProvider.isKeyboardVisible(context) ? 0 : 200,
-      color: Color(0xFFB8431C),
+      color: backgroundColor,
       child: Stack(
         alignment: Alignment.center,
         children: [
           AnimatedSlide(
-            offset: isAllNamesFilled ? Offset.zero : Offset(0, 1),
+            offset: showButton ? Offset.zero : Offset(0, 1),
             curve: Curves.elasticInOut,
             duration: const Duration(milliseconds: 2000),
             child: Padding(
               padding: const EdgeInsets.fromLTRB(20, 20, 20, 40),
-              child: FittedBox(child: SkullButton(onPressed: onSubmit)),
+              child: FittedBox(child: SkullButton(onPressed: onTap)),
             ),
           ),
 
           AnimatedSlide(
-            offset: isAllNamesFilled ? Offset(0, 1) : Offset.zero,
+            offset: showButton ? Offset(0, 1.1) : Offset.zero,
             curve: Curves.elasticInOut,
             duration: const Duration(milliseconds: 2000),
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 25),
-              child: PaperWidget(title: context.loc.rosterPageMessage),
+              child: PaperWidget(title: message),
             ),
           ),
         ],
