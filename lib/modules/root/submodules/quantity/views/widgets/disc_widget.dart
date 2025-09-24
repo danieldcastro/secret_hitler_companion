@@ -43,7 +43,7 @@ class _DiscWidgetState extends State<DiscWidget>
   bool _isPlayingUpSound = false;
 
   double? _startHoleAngle;
-  final double _fingerStopAngle = 0.48; // posição fixa do stop
+  final double _fingerStopAngle = 0.48; // fixed stop position
 
   @override
   void initState() {
