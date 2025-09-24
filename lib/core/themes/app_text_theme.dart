@@ -4,7 +4,7 @@ import 'package:secret_hitler_companion/core/themes/app_text_styles.dart';
 class AppTextTheme {
   AppTextTheme._();
 
-  static TextTheme get primary => TextTheme(
+  static TextTheme get light => TextTheme(
     displayLarge: AppTextStyles.displayLarge(),
     displayMedium: AppTextStyles.displayMedium(),
     displaySmall: AppTextStyles.displaySmall(),

@@ -1,8 +1,10 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:secret_hitler_companion/core/contracts/navigation/i_nav.dart';
+import 'package:secret_hitler_companion/core/contracts/storage/i_storage.dart';
 
 class Globals {
   Globals._();
 
   static INav get nav => Modular.get<INav>();
+  static IStorage get storage => Modular.get<IStorage>();
 }

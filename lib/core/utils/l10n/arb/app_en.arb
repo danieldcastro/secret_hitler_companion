@@ -1,6 +1,39 @@
 {
+  "@@locale": "en",
   "holdButtonMessage": "Tap and hold to start the assembly",
   "@holdButtonMessage": {
     "description": "Hold Button Message"
+  },
+  "voterQuantityPageTitle": "Dial the number of voters",
+  "@voterQuantityPageTitle": {
+    "description": "Voter Quantity Page Title"
+  },
+  "voterLabel": "Voter",
+  "@voterLabel": {
+    "description": "Voter Label"
+  },
+  "fascistLabel": "Fascist",
+  "@fascistLabel": {
+    "description": "Fascist Label"
+  },
+  "liberalLabel": "Liberal",
+  "@liberalLabel": {
+    "description": "Liberal Label"
+  },
+  "liberalsLabel": "Liberals",
+  "@liberalsLabel": {
+    "description": "Label de liberals"
+  },
+  "hitlerLabel": "Hitler",
+  "@hitlerLabel": {
+    "description": "Hitler Label"
+  },
+  "backLabel": "Back",
+  "@backLabel": { 
+    "description": "Back Label"
+  },
+  "rosterPageMessage": "Register all voters to continue",
+  "@rosterPageMessage": { 
+    "description": "Roster Page Message"
   }
 }

@@ -1,6 +1,6 @@
 enum FontFamilyEnum {
   display('Eskapade Fraktur'),
-  body('Playpen Sans');
+  body('Special Elite');
 
   final String value;
   const FontFamilyEnum(this.value);

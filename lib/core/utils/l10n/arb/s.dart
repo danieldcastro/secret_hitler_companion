@@ -103,6 +103,54 @@ abstract class S {
   /// In en, this message translates to:
   /// **'Tap and hold to start the assembly'**
   String get holdButtonMessage;
+
+  /// Voter Quantity Page Title
+  ///
+  /// In en, this message translates to:
+  /// **'Dial the number of voters'**
+  String get voterQuantityPageTitle;
+
+  /// Voter Label
+  ///
+  /// In en, this message translates to:
+  /// **'Voter'**
+  String get voterLabel;
+
+  /// Fascist Label
+  ///
+  /// In en, this message translates to:
+  /// **'Fascist'**
+  String get fascistLabel;
+
+  /// Liberal Label
+  ///
+  /// In en, this message translates to:
+  /// **'Liberal'**
+  String get liberalLabel;
+
+  /// Label de liberals
+  ///
+  /// In en, this message translates to:
+  /// **'Liberals'**
+  String get liberalsLabel;
+
+  /// Hitler Label
+  ///
+  /// In en, this message translates to:
+  /// **'Hitler'**
+  String get hitlerLabel;
+
+  /// Back Label
+  ///
+  /// In en, this message translates to:
+  /// **'Back'**
+  String get backLabel;
+
+  /// Roster Page Message
+  ///
+  /// In en, this message translates to:
+  /// **'Register all voters to continue'**
+  String get rosterPageMessage;
 }
 
 class _SDelegate extends LocalizationsDelegate<S> {

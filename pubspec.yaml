@@ -10,15 +10,24 @@ environment:
 
 dependencies:
   audioplayers: ^6.5.1
+  collection: ^1.19.1
   cupertino_icons: ^1.0.8
   flutter:
     sdk: flutter
   flutter_bloc: ^9.1.1
+  flutter_fy:
+    git:
+      url: https://github.com/danieldcastro/flutter_fy.git
+      ref: 0.1.11
+  flutter_keyboard_visibility: ^6.0.0
   flutter_localizations:
     sdk: flutter
   flutter_modular: ^6.4.1
   intl: ^0.20.2
+  lucide_icons: ^0.257.0
   nilts: ^0.24.0
+  shared_preferences: ^2.5.3
+  vibration: ^3.1.3
 
 dev_dependencies:
   flutter_lints: ^5.0.0
@@ -70,16 +79,16 @@ flutter:
           style: normal
         - asset: assets/fonts/playpen_sans/PlaypenSans-Bold.ttf
           weight: 700
-          style: normal  
+          style: normal
+
+    - family: Special Elite
+      fonts:
+        - asset: assets/fonts/special_elite/SpecialElite-Regular.ttf
+          weight: 400
+          style: normal
 
 melos:
   useRootAsPackage: true
-  
-  env:
-    PROD_FLAGS: "--release --flavor prod --dart-define env=prod --dart-define-from-file env/env_prod.json"
-    QA_FLAGS: "--release --flavor qa --dart-define env=qa --dart-define-from-file env/env_qa.json"
-    PROD_FLAGS_IOS: "--release --flavor pro --dart-define env=prod --dart-define-from-file=env/env_prod.json"
-    QA_FLAGS_IOS: "--release --flavor dev --dart-define env=qa --dart-define-from-file=env/env_qa.json"
 
   scripts:
     clean:
@@ -117,32 +126,32 @@ melos:
 
     bundleProd:
       description: Build AppBundle produção
-      run: flutter build appbundle $PROD_FLAGS
-
-    bundleQa:
-      description: Build AppBundle QA
-      run: flutter build appbundle $QA_FLAGS
+      run: flutter build appbundle --release --flavor prod --dart-define env=prod --dart-define-from-file=env/env_prod.json
 
     apkProd:
       description: Build APK produção
-      run: flutter build apk $PROD_FLAGS
-
-    apkQa:
-      description: Build APK QA
-      run: flutter build apk $QA_FLAGS
+      run: flutter build apk --release --flavor prod --dart-define env=prod --dart-define-from-file=env/env_prod.json
 
     iosProd:
       description: Build iOS produção
-      run: flutter build ios $PROD_FLAGS_IOS
-
-    iosQa:
-      description: Build iOS QA
-      run: flutter build ios $QA_FLAGS_IOS
+      run: flutter build ios --release --flavor prod --dart-define env=prod --dart-define-from-file=env/env_prod.json
 
     ipaProd:
       description: Build IPA produção
-      run: flutter build ipa $PROD_FLAGS_IOS
+      run: flutter build ipa --release --flavor prod --dart-define env=prod --dart-define-from-file=env/env_prod.json
+
+    bundleQa:
+      description: Build AppBundle QA
+      run: flutter build appbundle --release --flavor qa --dart-define env=qa --dart-define-from-file=env/env_qa.json
+
+    apkQa:
+      description: Build APK QA
+      run: flutter build apk --release --flavor qa --dart-define env=qa --dart-define-from-file=env/env_qa.json
+
+    iosQa:
+      description: Build iOS QA
+      run: flutter build ios --release --flavor qa --dart-define env=qa --dart-define-from-file=env/env_qa.json
 
     ipaQa:
       description: Build IPA QA
-      run: flutter build ipa $QA_FLAGS_IOS
+      run: flutter build ipa --release --flavor qa --dart-define env=qa --dart-define-from-file=env/env_qa.json
