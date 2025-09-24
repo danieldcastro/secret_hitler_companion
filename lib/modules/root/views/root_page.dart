@@ -8,9 +8,6 @@ class RootPage extends StatelessWidget {
   const RootPage({required this.bloc, super.key});
 
   @override
-  Widget build(BuildContext context) => AppScaffold(
-    onBack: bloc.handlePop,
-    showBackButton: false,
-    body: RouterOutlet(),
-  );
+  Widget build(BuildContext context) =>
+      AppScaffold(onBack: bloc.handlePop, body: RouterOutlet());
 }
