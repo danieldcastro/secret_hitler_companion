@@ -8,7 +8,6 @@ mixin AudioMixin {
   final Map<AudioKeyEnum, AudioPool> _pools = {};
   final Map<AudioKeyEnum, Future<void> Function()> _poolStops = {};
 
-  /// Prepara caminho de asset
   String _prepareAudioPath(String path) =>
       path.startsWith('assets/') ? path.substring(7) : path;
 
@@ -51,9 +50,9 @@ mixin AudioMixin {
   }
 
   // =====================
-  // AudioPool (curtos/repetitivos)
+  // AudioPool (short/repetitive)
   // =====================
-  /// Pré-carrega o pool (melhor fazer no initState)
+  /// Pre-loads the pool (better to do in initState)
   Future<void> createPool(
     AudioKeyEnum key,
     String path, {

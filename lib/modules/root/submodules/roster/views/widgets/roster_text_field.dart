@@ -63,7 +63,7 @@ class _RosterTextFieldState extends State<RosterTextField>
     keyboardType: TextInputType.name,
     textCapitalization: TextCapitalization.characters,
     inputFormatters: [
-      FilteringTextInputFormatter.deny(RegExp(r'\s')), // não aceita espaços
+      FilteringTextInputFormatter.deny(RegExp(r'\s')), // does not accept spaces
     ],
     decoration: InputDecoration(
       hintText: '${context.loc.voterLabel.toUpperCase()} ${widget.index + 1}',

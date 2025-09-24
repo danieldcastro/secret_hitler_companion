@@ -8,7 +8,6 @@ import 'package:secret_hitler_companion/core/utils/mixins/audio_mixin.dart';
 import 'package:secret_hitler_companion/core/utils/mixins/vibrator_mixin.dart';
 import 'package:secret_hitler_companion/core/utils/widgets/buttons/push_button/push_visual_button.dart';
 
-@override
 class HoldButton extends StatefulWidget {
   final VoidCallback? onPressed;
   final Color backgroundColor;
