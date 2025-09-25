@@ -8,4 +8,8 @@ class RoleBloc extends Cubit<RoleState> {
   RoleBloc(this._voterStore) : super(RoleState.empty());
 
   Future<List<VoterEntity>> get storeVoters => _voterStore.voters;
+
+  void toggleTearPreview() {
+    emit(RoleState(showTearPreview: !state.showTearPreview));
+  }
 }

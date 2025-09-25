@@ -1,5 +1,6 @@
 class RoleState {
-  const RoleState();
+  final bool showTearPreview;
+  const RoleState({required this.showTearPreview});
 
-  factory RoleState.empty() => RoleState();
+  factory RoleState.empty() => RoleState(showTearPreview: false);
 }
