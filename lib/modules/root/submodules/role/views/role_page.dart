@@ -20,6 +20,7 @@ enum InteractionState {
   waitingForMatch, // Fósforo aparece, usuário deve arrastá-lo
   draggingMatch, // Usuário está arrastando o fósforo
   showingFire, // Animação de fogo sendo exibida
+  transitioning, // Animação de transição (escala pequena -> pulo)
   complete, // Sequência completa
 }
 
@@ -37,6 +38,11 @@ class _RolePageState extends State<RolePage> with TickerProviderStateMixin {
   late Animation<double> _scaleAnimation;
   late Animation<double> _perspectiveAnimation;
   late Animation<Offset> _offsetAnimation;
+
+  // Controller para a animação de transição do envelope
+  late AnimationController _transitionController;
+  late Animation<double> _transitionScaleAnimation;
+  late Animation<double> _transitionBounceAnimation;
 
   final double cardWidth = 50;
   final double cardHeight = 70;
@@ -88,11 +94,55 @@ class _RolePageState extends State<RolePage> with TickerProviderStateMixin {
       begin: Offset.zero,
       end: Offset.zero,
     ).animate(_animationController);
+
+    // Controller para animação de transição do envelope
+    _transitionController = AnimationController(
+      duration: Duration(milliseconds: 1200),
+      vsync: this,
+    );
+
+    // Animação de escala (diminui e depois aumenta com bounce)
+    _transitionScaleAnimation = TweenSequence<double>([
+      TweenSequenceItem(
+        tween: Tween<double>(
+          begin: 1.0,
+          end: 0.3,
+        ).chain(CurveTween(curve: Curves.easeInQuart)),
+        weight: 30.0,
+      ),
+      TweenSequenceItem(
+        tween: Tween<double>(
+          begin: 0.3,
+          end: 1.2,
+        ).chain(CurveTween(curve: Curves.elasticOut)),
+        weight: 70.0,
+      ),
+    ]).animate(_transitionController);
+
+    // Animação de bounce adicional para dar o efeito de "pulo"
+    _transitionBounceAnimation = TweenSequence<double>([
+      TweenSequenceItem(tween: ConstantTween<double>(0.0), weight: 30.0),
+      TweenSequenceItem(
+        tween: Tween<double>(
+          begin: 0.0,
+          end: -8.0,
+        ).chain(CurveTween(curve: Curves.easeOut)),
+        weight: 35.0,
+      ),
+      TweenSequenceItem(
+        tween: Tween<double>(
+          begin: -8.0,
+          end: 0.0,
+        ).chain(CurveTween(curve: Curves.bounceOut)),
+        weight: 35.0,
+      ),
+    ]).animate(_transitionController);
   }
 
   @override
   void dispose() {
     _animationController.dispose();
+    _transitionController.dispose();
     super.dispose();
   }
 
@@ -255,12 +305,21 @@ class _RolePageState extends State<RolePage> with TickerProviderStateMixin {
         }
       });
 
-      // Após a animação de fogo (assumindo duração de 3 segundos), completa o fluxo
-      Future.delayed(const Duration(milliseconds: 1000), () {
+      // Após a animação de fogo (assumindo duração de 2 segundos), inicia transição
+      Future.delayed(const Duration(milliseconds: 2000), () {
         if (mounted) {
           setState(() {
-            _currentState = InteractionState.complete;
+            _currentState = InteractionState.transitioning;
             _fireAnimationIndex = null;
+          });
+
+          // Inicia a animação de transição
+          _transitionController.forward().then((_) {
+            if (mounted) {
+              setState(() {
+                _currentState = InteractionState.complete;
+              });
+            }
           });
         }
       });
@@ -305,7 +364,8 @@ class _RolePageState extends State<RolePage> with TickerProviderStateMixin {
                 // Só permite desfoque se estiver no estado de seleção ou rasgo
                 if (focusedIndex != null &&
                     (_currentState == InteractionState.selectingEnvelope ||
-                        _currentState == InteractionState.tearingEnvelope)) {
+                        _currentState == InteractionState.tearingEnvelope ||
+                        _currentState == InteractionState.complete)) {
                   _focusOnCard(focusedIndex!, screenSize);
                 }
               },
@@ -353,24 +413,57 @@ class _RolePageState extends State<RolePage> with TickerProviderStateMixin {
                                           ),
                                         child: Stack(
                                           children: [
-                                            AnimatedContainer(
-                                              duration: Duration(
-                                                milliseconds: 400,
-                                              ),
-                                              width: cardWidth,
-                                              height: cardHeight,
-                                              child: EnvelopeTearWidget(
-                                                bloc: widget.bloc,
-                                                showBurnedEnvelope:
+                                            // Envelope com animação de transição
+                                            AnimatedBuilder(
+                                              animation: _transitionController,
+                                              builder: (context, child) {
+                                                // Aplica animações de transição apenas no envelope focado
+                                                final shouldAnimate =
                                                     focusedIndex == index &&
                                                     _currentState ==
                                                         InteractionState
-                                                            .complete,
-                                                onTearComplete:
-                                                    focusedIndex == index
-                                                    ? _onEnvelopeTearComplete
-                                                    : null,
-                                              ),
+                                                            .transitioning;
+
+                                                return Transform.translate(
+                                                  offset: shouldAnimate
+                                                      ? Offset(
+                                                          0,
+                                                          _transitionBounceAnimation
+                                                              .value,
+                                                        )
+                                                      : Offset.zero,
+                                                  child: Transform.scale(
+                                                    scale: shouldAnimate
+                                                        ? _transitionScaleAnimation
+                                                              .value
+                                                        : 1.0,
+                                                    child: AnimatedContainer(
+                                                      duration: Duration(
+                                                        milliseconds: 400,
+                                                      ),
+                                                      width: cardWidth,
+                                                      height: cardHeight,
+                                                      child: EnvelopeTearWidget(
+                                                        bloc: widget.bloc,
+                                                        showBurnedEnvelope:
+                                                            focusedIndex ==
+                                                                index &&
+                                                            (_currentState ==
+                                                                    InteractionState
+                                                                        .complete ||
+                                                                _currentState ==
+                                                                    InteractionState
+                                                                        .transitioning),
+                                                        onTearComplete:
+                                                            focusedIndex ==
+                                                                index
+                                                            ? _onEnvelopeTearComplete
+                                                            : null,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                );
+                                              },
                                             ),
                                             // Só mostra a animação de fogo no envelope correto
                                             if (_fireAnimationIndex == index &&
