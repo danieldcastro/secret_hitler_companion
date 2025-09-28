@@ -13,6 +13,16 @@ import 'package:secret_hitler_companion/core/utils/widgets/table_edge_widget.dar
 import 'package:secret_hitler_companion/modules/root/submodules/role/bloc/role_bloc.dart';
 import 'package:secret_hitler_companion/modules/root/submodules/role/views/widgets/envelope_tear_widget.dart';
 
+// Estados do fluxo de interação
+enum InteractionState {
+  selectingEnvelope, // Usuário pode selecionar um envelope
+  tearingEnvelope, // Usuário deve rasgar o envelope selecionado
+  waitingForMatch, // Fósforo aparece, usuário deve arrastá-lo
+  draggingMatch, // Usuário está arrastando o fósforo
+  showingFire, // Animação de fogo sendo exibida
+  complete, // Sequência completa
+}
+
 class RolePage extends StatefulWidget {
   final RoleBloc bloc;
   const RolePage({required this.bloc, super.key});
@@ -35,10 +45,15 @@ class _RolePageState extends State<RolePage> with TickerProviderStateMixin {
 
   late List<String> players;
 
-  bool _matchVisible = true; // controla se o fósforo some
+  // Estados do fluxo de interação
+  InteractionState _currentState = InteractionState.selectingEnvelope;
+  bool _matchVisible = false;
   Offset _matchOffset = Offset.zero;
   bool _isDragging = false;
   Offset _dragStartPosition = Offset.zero;
+  int?
+  _fireAnimationIndex; // Índice do envelope que deve mostrar a animação de fogo
+  bool _envelopeTorn = false; // Controla se o envelope foi rasgado
 
   @override
   void initState() {
@@ -107,15 +122,25 @@ class _RolePageState extends State<RolePage> with TickerProviderStateMixin {
   }
 
   void _focusOnCard(int index, Size screenSize) {
+    // Só permite focar se estiver no estado de seleção
+    if (_currentState != InteractionState.selectingEnvelope) return;
+
     final screenCenter = Offset(screenSize.width / 2, screenSize.height / 2);
     final positions = _generateCardPositions(screenSize);
 
     if (focusedIndex == index) {
-      if (mounted) setState(() => focusedIndex = null);
+      if (mounted) {
+        setState(() {
+          focusedIndex = null;
+          _currentState = InteractionState.selectingEnvelope;
+        });
+      }
       _animationController.reverse();
     } else {
       setState(() {
         focusedIndex = index;
+        _currentState = InteractionState.tearingEnvelope;
+        _envelopeTorn = false;
 
         final cardCenter = Offset(
           positions[index].dx + cardWidth / 2,
@@ -143,40 +168,65 @@ class _RolePageState extends State<RolePage> with TickerProviderStateMixin {
     }
   }
 
+  // Callback chamado quando o envelope é completamente rasgado
+  void _onEnvelopeTearComplete() {
+    if (_currentState == InteractionState.tearingEnvelope) {
+      setState(() {
+        _currentState = InteractionState.waitingForMatch;
+        _envelopeTorn = true;
+        _matchVisible = true;
+        _matchOffset = Offset(0, 100); // Começa fora da tela (abaixo)
+      });
+
+      // Anima o fósforo entrando na tela
+      Future.delayed(Duration(milliseconds: 300), () {
+        if (mounted) {
+          setState(() {
+            _matchOffset = Offset.zero; // Move para posição inicial
+          });
+        }
+      });
+    }
+  }
+
   void _onMatchPanStart(DragStartDetails details) {
+    if (_currentState != InteractionState.waitingForMatch) return;
+
     setState(() {
       _isDragging = true;
       _dragStartPosition = details.localPosition;
+      _currentState = InteractionState.draggingMatch;
     });
   }
 
   void _onMatchPanUpdate(DragUpdateDetails details) {
+    if (_currentState != InteractionState.draggingMatch) return;
+
     setState(() {
       _matchOffset = details.localPosition - _dragStartPosition;
     });
   }
 
   void _onMatchPanEnd(DragEndDetails details, Size screenSize) {
-    // Verifica se o fósforo foi solto sobre algum envelope
-    final positions = _generateCardPositions(screenSize);
-    bool droppedOnEnvelope = false;
+    if (_currentState != InteractionState.draggingMatch) return;
 
-    for (int i = 0; i < positions.length; i++) {
-      final cardPosition = positions[i];
+    // Verifica se o fósforo foi solto sobre o envelope focado
+    final positions = _generateCardPositions(screenSize);
+    bool droppedOnFocusedEnvelope = false;
+
+    if (focusedIndex != null) {
+      final cardPosition = positions[focusedIndex!];
       final matchCurrentPosition = Offset(
-        (positions[focusedIndex ?? 0].dx + cardWidth / 2) -
-            1.5 +
-            _matchOffset.dx,
-        positions[focusedIndex ?? 0].dy + cardHeight + 10 + _matchOffset.dy,
+        (positions[focusedIndex!].dx + cardWidth / 2) - 1.5 + _matchOffset.dx,
+        positions[focusedIndex!].dy + cardHeight + 10 + _matchOffset.dy,
       );
 
-      // Verifica se o fósforo está sobre o envelope
+      // Verifica se o fósforo está sobre o envelope focado
       if (matchCurrentPosition.dx >= cardPosition.dx &&
           matchCurrentPosition.dx <= cardPosition.dx + cardWidth &&
           matchCurrentPosition.dy >= cardPosition.dy &&
           matchCurrentPosition.dy <= cardPosition.dy + cardHeight) {
-        droppedOnEnvelope = true;
-        break;
+        droppedOnFocusedEnvelope = true;
       }
     }
 
@@ -184,24 +234,41 @@ class _RolePageState extends State<RolePage> with TickerProviderStateMixin {
       _isDragging = false;
     });
 
-    if (droppedOnEnvelope) {
-      // Se foi solto sobre envelope, faz o fósforo sair da tela para baixo
+    if (droppedOnFocusedEnvelope && focusedIndex != null) {
+      // Fósforo foi solto sobre o envelope correto
       setState(() {
-        _matchOffset = Offset(0, 40); // Move para fora da tela
+        _currentState = InteractionState.showingFire;
+        _fireAnimationIndex = focusedIndex;
+      });
+
+      // Faz o fósforo sair da tela
+      setState(() {
+        _matchOffset = Offset(0, 100); // Move para fora da tela
       });
 
       // Depois da animação de saída, desaparece
-      Future.delayed(const Duration(milliseconds: 2000), () {
+      Future.delayed(const Duration(milliseconds: 500), () {
         if (mounted) {
           setState(() {
             _matchVisible = false;
           });
         }
       });
+
+      // Após a animação de fogo (assumindo duração de 3 segundos), completa o fluxo
+      Future.delayed(const Duration(milliseconds: 1000), () {
+        if (mounted) {
+          setState(() {
+            _currentState = InteractionState.complete;
+            _fireAnimationIndex = null;
+          });
+        }
+      });
     } else {
-      // Se não foi solto sobre envelope, volta para posição inicial
+      // Se não foi solto sobre o envelope correto, volta para posição inicial
       setState(() {
         _matchOffset = Offset.zero;
+        _currentState = InteractionState.waitingForMatch;
       });
     }
   }
@@ -235,7 +302,10 @@ class _RolePageState extends State<RolePage> with TickerProviderStateMixin {
           Expanded(
             child: GestureDetector(
               onTap: () {
-                if (focusedIndex != null) {
+                // Só permite desfoque se estiver no estado de seleção ou rasgo
+                if (focusedIndex != null &&
+                    (_currentState == InteractionState.selectingEnvelope ||
+                        _currentState == InteractionState.tearingEnvelope)) {
                   _focusOnCard(focusedIndex!, screenSize);
                 }
               },
@@ -268,10 +338,10 @@ class _RolePageState extends State<RolePage> with TickerProviderStateMixin {
                                     duration: Duration(milliseconds: 300),
                                     child: GestureDetector(
                                       onTap: () {
-                                        if (focusedIndex == null ||
-                                            focusedIndex == index) {
+                                        if (_currentState ==
+                                            InteractionState
+                                                .selectingEnvelope) {
                                           _focusOnCard(index, screenSize);
-                                          widget.bloc.toggleTearPreview();
                                         }
                                       },
                                       child: Transform(
@@ -291,18 +361,30 @@ class _RolePageState extends State<RolePage> with TickerProviderStateMixin {
                                               height: cardHeight,
                                               child: EnvelopeTearWidget(
                                                 bloc: widget.bloc,
+                                                showBurnedEnvelope:
+                                                    focusedIndex == index &&
+                                                    _currentState ==
+                                                        InteractionState
+                                                            .complete,
+                                                onTearComplete:
+                                                    focusedIndex == index
+                                                    ? _onEnvelopeTearComplete
+                                                    : null,
                                               ),
                                             ),
-                                            Positioned(
-                                              bottom: 2,
-                                              child: Lottie.asset(
-                                                LottiePaths.flameFire,
-                                                animate: !_matchVisible,
-                                                width: cardWidth,
-                                                height: cardHeight,
-                                                repeat: false,
+                                            // Só mostra a animação de fogo no envelope correto
+                                            if (_fireAnimationIndex == index &&
+                                                _currentState ==
+                                                    InteractionState
+                                                        .showingFire)
+                                              Positioned(
+                                                child: Lottie.asset(
+                                                  LottiePaths.flameFire,
+                                                  width: cardWidth,
+                                                  height: cardHeight,
+                                                  repeat: false,
+                                                ),
                                               ),
-                                            ),
                                           ],
                                         ),
                                       ),
@@ -310,20 +392,20 @@ class _RolePageState extends State<RolePage> with TickerProviderStateMixin {
                                   ),
                                 );
                               }),
-                              // fósforo
-                              if (_matchVisible)
+                              // Fósforo - só aparece após envelope ser rasgado
+                              if (_matchVisible && focusedIndex != null)
                                 AnimatedPositioned(
                                   duration: _isDragging
                                       ? Duration.zero
                                       : const Duration(milliseconds: 600),
                                   curve: Curves.easeInBack,
                                   left:
-                                      (positions[focusedIndex ?? 0].dx +
+                                      (positions[focusedIndex!].dx +
                                           cardWidth / 2) -
                                       1.5 +
                                       _matchOffset.dx,
                                   top:
-                                      positions[focusedIndex ?? 0].dy +
+                                      positions[focusedIndex!].dy +
                                       cardHeight +
                                       10 +
                                       _matchOffset.dy,

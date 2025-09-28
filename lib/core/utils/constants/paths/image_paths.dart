@@ -12,4 +12,5 @@ class ImagePaths {
   static const String straightEnvelope = '$_assetsPath/straight_envelope.png';
   static const String tornEnvelope = '$_assetsPath/torn_envelope.png';
   static const String match = '$_assetsPath/match.png';
+  static const String burnedEnvelope = '$_assetsPath/burned_envelope.png';
 }

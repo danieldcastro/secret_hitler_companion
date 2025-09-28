@@ -4,12 +4,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:secret_hitler_companion/core/themes/app_colors.dart';
+import 'package:secret_hitler_companion/core/utils/constants/paths/image_paths.dart';
 import 'package:secret_hitler_companion/modules/root/submodules/role/bloc/role_bloc.dart';
 import 'package:secret_hitler_companion/modules/root/submodules/role/bloc/role_state.dart';
 
 class EnvelopeTearWidget extends StatefulWidget {
   final RoleBloc bloc;
-  const EnvelopeTearWidget({required this.bloc, super.key});
+  final VoidCallback?
+  onTearComplete; // Callback para quando o rasgo é completado
+  final bool showBurnedEnvelope;
+  const EnvelopeTearWidget({
+    required this.bloc,
+    required this.showBurnedEnvelope,
+    this.onTearComplete,
+    super.key,
+  });
 
   final double completeThreshold = 0.50;
   final double topRegionFraction = 0.32;
@@ -69,7 +78,8 @@ class _EnvelopeTearWidgetState extends State<EnvelopeTearWidget>
       }
 
       _triggerCompletionBounce();
-      () {}; //fazer algo ao completar rasgo
+      // Chama o callback quando o rasgo é completado
+      widget.onTearComplete?.call();
     }
   }
 
@@ -179,38 +189,46 @@ class _EnvelopeTearWidgetState extends State<EnvelopeTearWidget>
                       height: constraints.maxHeight / 2,
                     ),
                   ),
-                  Image.asset(
-                    'assets/images/straight_envelope.png',
-                    fit: BoxFit.contain,
-                    width: double.infinity,
-                    height: double.infinity,
-                  ),
-
-                  if (_progress == 1)
+                  if (!widget.showBurnedEnvelope) ...[
                     Image.asset(
-                      'assets/images/torn_envelope.png',
+                      ImagePaths.straightEnvelope,
                       fit: BoxFit.contain,
                       width: double.infinity,
                       height: double.infinity,
                     ),
-                  if (_progress > 0.1)
-                    ClipPath(
-                      clipper: _ProgressiveClipper(revealWidth: revealWidth),
-                      child: Image.asset(
-                        'assets/images/torn_envelope.png',
+
+                    if (_progress == 1)
+                      Image.asset(
+                        ImagePaths.tornEnvelope,
                         fit: BoxFit.contain,
                         width: double.infinity,
                         height: double.infinity,
                       ),
-                    ),
-
-                  if (_progress > 0.1 && _progress < 0.99)
-                    CustomPaint(
-                      size: Size(constraints.maxWidth, constraints.maxHeight),
-                      painter: _TornFlapEdgePainter(
-                        progress: _progress,
-                        topRegionFraction: widget.topRegionFraction,
+                    if (_progress > 0.1)
+                      ClipPath(
+                        clipper: _ProgressiveClipper(revealWidth: revealWidth),
+                        child: Image.asset(
+                          ImagePaths.tornEnvelope,
+                          fit: BoxFit.contain,
+                          width: double.infinity,
+                          height: double.infinity,
+                        ),
                       ),
+
+                    if (_progress > 0.1 && _progress < 0.99)
+                      CustomPaint(
+                        size: Size(constraints.maxWidth, constraints.maxHeight),
+                        painter: _TornFlapEdgePainter(
+                          progress: _progress,
+                          topRegionFraction: widget.topRegionFraction,
+                        ),
+                      ),
+                  ] else
+                    Image.asset(
+                      ImagePaths.burnedEnvelope,
+                      fit: BoxFit.contain,
+                      width: double.infinity,
+                      height: double.infinity,
                     ),
                 ],
               ),
