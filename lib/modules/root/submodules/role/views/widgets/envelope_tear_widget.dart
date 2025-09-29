@@ -78,8 +78,6 @@ class _EnvelopeTearWidgetState extends State<EnvelopeTearWidget>
       }
 
       _triggerCompletionBounce();
-      // Chama o callback quando o rasgo é completado
-      widget.onTearComplete?.call();
     }
   }
 
@@ -167,11 +165,10 @@ class _EnvelopeTearWidgetState extends State<EnvelopeTearWidget>
               },
               onVerticalDragEnd: (details) {
                 if (_isComplete) {
-                  // if (_revealOffset < -constraints.maxHeight * 0.25) {
-                  //   setState(() => _revealOffset = -constraints.maxHeight / 2);
-                  // } else {
-                  setState(() => _revealOffset = 0.0);
-                  // }
+                  if (_revealOffset < -constraints.maxHeight / 4) {
+                    widget.onTearComplete?.call();
+                    setState(() => _revealOffset = 0.0);
+                  }
                 }
               },
               child: Stack(
