@@ -90,6 +90,12 @@ flutter:
           weight: 400
           style: normal
 
+    - family: Yesteryear
+      fonts:
+        - asset: assets/fonts/yesteryear/Yesteryear-Regular.ttf
+          weight: 400
+          style: normal      
+
 melos:
   useRootAsPackage: true
 

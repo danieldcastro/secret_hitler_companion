@@ -43,8 +43,8 @@ class _RolePageState extends State<RolePage> with TickerProviderStateMixin {
   late Animation<double> _burnRotationAnimation;
   late Animation<Color?> _burnColorAnimation;
 
-  final double cardWidth = 50;
-  final double cardHeight = 70;
+  final double cardWidth = 70;
+  final double cardHeight = 90;
   final double spacing = 20;
   final double targetZoom = 5;
 
@@ -490,7 +490,12 @@ class _RolePageState extends State<RolePage> with TickerProviderStateMixin {
                                                             width: cardWidth,
                                                             height: cardHeight,
                                                             child: EnvelopeTearWidget(
+                                                              playerName:
+                                                                  playerName,
                                                               bloc: widget.bloc,
+                                                              flip:
+                                                                  focusedIndex ==
+                                                                  index,
                                                               showBurnedEnvelope:
                                                                   focusedIndex ==
                                                                       index &&
