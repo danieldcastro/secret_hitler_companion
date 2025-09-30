@@ -35,5 +35,27 @@
   "rosterPageMessage": "Register all voters to continue",
   "@rosterPageMessage": { 
     "description": "Roster Page Message"
+  },
+  "confidentialLabel": "Confidential",
+  "@confidentialLabel": {
+    "description": "Confidential Label"
+  },
+  "topSecretLabel": "Top Secret",
+  "@topSecretLabel": {
+    "description": "Top Secret Label"
+  },
+  "rolePageMessage": "Check your roles to start the voting",
+  "@rolePageMessage": {
+    "description": "Role Page Message"
+  },
+  "envelopeMessage": "Only the voter identified as {playerName} should open this envelope.",
+  "@envelopeMessage": { 
+    "description": "Envelope Message",
+    "placeholders": {
+      "playerName": {
+        "type": "String",
+        "example": "Martian"
+      }
+    }
   }
 }

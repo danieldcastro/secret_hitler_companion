@@ -6,21 +6,14 @@ import 'package:secret_hitler_companion/core/routes/app_routes.dart';
 import 'package:secret_hitler_companion/core/themes/app_colors.dart';
 import 'package:secret_hitler_companion/core/utils/constants/paths/image_paths.dart';
 import 'package:secret_hitler_companion/core/utils/constants/paths/lottie_paths.dart';
+import 'package:secret_hitler_companion/core/utils/extensions/context_extensions.dart';
 import 'package:secret_hitler_companion/core/utils/helpers/globals.dart';
 import 'package:secret_hitler_companion/core/utils/widgets/app_scaffold.dart';
 import 'package:secret_hitler_companion/core/utils/widgets/footer_widget.dart';
 import 'package:secret_hitler_companion/core/utils/widgets/table_edge_widget.dart';
 import 'package:secret_hitler_companion/modules/root/submodules/role/bloc/role_bloc.dart';
-import 'package:secret_hitler_companion/modules/root/submodules/role/views/widgets/envelope_tear_widget.dart';
-
-enum InteractionState {
-  selectingEnvelope,
-  tearingEnvelope,
-  waitingForMatch,
-  draggingMatch,
-  showingFire,
-  complete,
-}
+import 'package:secret_hitler_companion/modules/root/submodules/role/views/widgets/envelope_widget.dart';
+import 'package:secret_hitler_companion/modules/root/submodules/role/views/widgets/utils/envelope_interaction_state_enum.dart';
 
 class RolePage extends StatefulWidget {
   final RoleBloc bloc;
@@ -37,7 +30,6 @@ class _RolePageState extends State<RolePage> with TickerProviderStateMixin {
   late Animation<double> _perspectiveAnimation;
   late Animation<Offset> _offsetAnimation;
 
-  // Controller para animação de queimada
   late AnimationController _burnController;
   late Animation<double> _burnScaleAnimation;
   late Animation<double> _burnRotationAnimation;
@@ -50,13 +42,17 @@ class _RolePageState extends State<RolePage> with TickerProviderStateMixin {
 
   late List<String> players;
 
-  InteractionState _currentState = InteractionState.selectingEnvelope;
+  final Set<int> _burnedEnvelopes = {};
+
+  EnvelopeInteractionStateEnum _currentState =
+      EnvelopeInteractionStateEnum.selectingEnvelope;
   bool _matchVisible = false;
   Offset _matchOffset = Offset.zero;
   bool _isDragging = false;
   Offset _dragStartPosition = Offset.zero;
   int? _fireAnimationIndex;
-  bool _envelopeTorn = false;
+
+  bool canGoBack = true;
 
   @override
   void initState() {
@@ -92,15 +88,12 @@ class _RolePageState extends State<RolePage> with TickerProviderStateMixin {
       end: Offset.zero,
     ).animate(_animationController);
 
-    // Animação de queimada realista
     _burnController = AnimationController(
       duration: Duration(milliseconds: 1800),
       vsync: this,
     );
 
-    // Escala: encolhe gradualmente como papel queimando e depois retorna
     _burnScaleAnimation = TweenSequence<double>([
-      // Pequena expansão inicial (papel aquecendo)
       TweenSequenceItem(
         tween: Tween<double>(
           begin: 1.0,
@@ -108,7 +101,7 @@ class _RolePageState extends State<RolePage> with TickerProviderStateMixin {
         ).chain(CurveTween(curve: Curves.easeOut)),
         weight: 10,
       ),
-      // Encolhimento progressivo (queimando)
+
       TweenSequenceItem(
         tween: Tween<double>(
           begin: 1.05,
@@ -116,7 +109,7 @@ class _RolePageState extends State<RolePage> with TickerProviderStateMixin {
         ).chain(CurveTween(curve: Curves.easeIn)),
         weight: 30,
       ),
-      // Encolhimento mais rápido (consumido pelo fogo)
+
       TweenSequenceItem(
         tween: Tween<double>(
           begin: 0.75,
@@ -124,7 +117,7 @@ class _RolePageState extends State<RolePage> with TickerProviderStateMixin {
         ).chain(CurveTween(curve: Curves.easeInQuart)),
         weight: 30,
       ),
-      // Retorna para escala normal (mostra envelope queimado)
+
       TweenSequenceItem(
         tween: Tween<double>(
           begin: 0.3,
@@ -134,7 +127,6 @@ class _RolePageState extends State<RolePage> with TickerProviderStateMixin {
       ),
     ]).animate(_burnController);
 
-    // Rotação sutil para simular deformação do papel
     _burnRotationAnimation = TweenSequence<double>([
       TweenSequenceItem(
         tween: Tween<double>(begin: 0.0, end: 0.02),
@@ -150,26 +142,25 @@ class _RolePageState extends State<RolePage> with TickerProviderStateMixin {
       ),
     ]).animate(_burnController);
 
-    // Mudança de cor para simular carbonização
     _burnColorAnimation = TweenSequence<Color?>([
       TweenSequenceItem(
         tween: ColorTween(
-          begin: Colors.white.withOpacity(1.0),
-          end: Color(0xFFD4A574).withOpacity(0.9), // Marrom claro
+          begin: Colors.white.withValues(alpha: 1.0),
+          end: Color(0xFFD4A574).withValues(alpha: 0.9),
         ),
         weight: 20,
       ),
       TweenSequenceItem(
         tween: ColorTween(
-          begin: Color(0xFFD4A574).withOpacity(0.9),
-          end: Color(0xFF8B4513).withOpacity(0.7), // Marrom escuro
+          begin: Color(0xFFD4A574).withValues(alpha: 0.9),
+          end: Color(0xFF8B4513).withValues(alpha: 0.7),
         ),
         weight: 30,
       ),
       TweenSequenceItem(
         tween: ColorTween(
-          begin: Color(0xFF8B4513).withOpacity(0.7),
-          end: Color(0xFF1a1a1a).withOpacity(0.3), // Quase preto/cinza
+          begin: Color(0xFF8B4513).withValues(alpha: 0.7),
+          end: Color(0xFF1a1a1a).withValues(alpha: 0.3),
         ),
         weight: 50,
       ),
@@ -180,6 +171,7 @@ class _RolePageState extends State<RolePage> with TickerProviderStateMixin {
   void dispose() {
     _animationController.dispose();
     _burnController.dispose();
+    _burnedEnvelopes.clear();
     super.dispose();
   }
 
@@ -189,13 +181,6 @@ class _RolePageState extends State<RolePage> with TickerProviderStateMixin {
       1,
       players.length,
     );
-    for (int i = 0; i < players.length; i++) {
-      final int row = i ~/ cardsPerRow;
-      final int col = i % cardsPerRow;
-      final double x = col * (cardWidth + spacing);
-      final double y = row * (cardHeight + spacing);
-      positions.add(Offset(x, y));
-    }
 
     final int totalRows = (players.length / cardsPerRow).ceil();
     final double gridWidth = (cardsPerRow * (cardWidth + spacing)) - spacing;
@@ -204,6 +189,24 @@ class _RolePageState extends State<RolePage> with TickerProviderStateMixin {
       (screenSize.width - gridWidth) / 2,
       (screenSize.height - gridHeight) - 230,
     );
+    for (int i = 0; i < players.length; i++) {
+      final int row = i ~/ cardsPerRow;
+      final int col = i % cardsPerRow;
+
+      final int itemsInThisRow = (row == totalRows - 1)
+          ? players.length - row * cardsPerRow
+          : cardsPerRow;
+
+      final double rowWidth =
+          (itemsInThisRow * (cardWidth + spacing)) - spacing;
+
+      final double rowOffsetX = (gridWidth - rowWidth) / 2;
+
+      final double x = col * (cardWidth + spacing) + rowOffsetX;
+      final double y = row * (cardHeight + spacing);
+
+      positions.add(Offset(x, y));
+    }
 
     return positions.map((pos) => pos + centerOffset).toList();
   }
@@ -212,19 +215,18 @@ class _RolePageState extends State<RolePage> with TickerProviderStateMixin {
     final screenCenter = Offset(screenSize.width / 2, screenSize.height / 2);
     final positions = _generateCardPositions(screenSize);
 
-    if (focusedIndex == index) {
+    if (focusedIndex == index || _burnedEnvelopes.contains(index)) {
       if (mounted) {
         setState(() {
           focusedIndex = null;
-          _currentState = InteractionState.selectingEnvelope;
+          _currentState = EnvelopeInteractionStateEnum.selectingEnvelope;
         });
       }
       _animationController.reverse();
     } else {
       setState(() {
         focusedIndex = index;
-        _currentState = InteractionState.tearingEnvelope;
-        _envelopeTorn = false;
+        _currentState = EnvelopeInteractionStateEnum.tearingEnvelope;
 
         final cardCenter = Offset(
           positions[index].dx + cardWidth / 2,
@@ -252,11 +254,10 @@ class _RolePageState extends State<RolePage> with TickerProviderStateMixin {
     }
   }
 
-  void _onEnvelopeTearComplete() {
-    if (_currentState == InteractionState.tearingEnvelope) {
+  void _onEnvelopeShowCardComplete() {
+    if (_currentState == EnvelopeInteractionStateEnum.tearingEnvelope) {
       setState(() {
-        _currentState = InteractionState.waitingForMatch;
-        _envelopeTorn = true;
+        _currentState = EnvelopeInteractionStateEnum.waitingForMatch;
         _matchVisible = true;
         _matchOffset = Offset(0, 70);
       });
@@ -272,17 +273,17 @@ class _RolePageState extends State<RolePage> with TickerProviderStateMixin {
   }
 
   void _onMatchPanStart(DragStartDetails details) {
-    if (_currentState != InteractionState.waitingForMatch) return;
+    if (_currentState != EnvelopeInteractionStateEnum.waitingForMatch) return;
 
     setState(() {
       _isDragging = true;
       _dragStartPosition = details.localPosition;
-      _currentState = InteractionState.draggingMatch;
+      _currentState = EnvelopeInteractionStateEnum.draggingMatch;
     });
   }
 
   void _onMatchPanUpdate(DragUpdateDetails details) {
-    if (_currentState != InteractionState.draggingMatch) return;
+    if (_currentState != EnvelopeInteractionStateEnum.draggingMatch) return;
 
     setState(() {
       _matchOffset = details.localPosition - _dragStartPosition;
@@ -290,7 +291,7 @@ class _RolePageState extends State<RolePage> with TickerProviderStateMixin {
   }
 
   void _onMatchPanEnd(DragEndDetails details, Size screenSize) {
-    if (_currentState != InteractionState.draggingMatch) return;
+    if (_currentState != EnvelopeInteractionStateEnum.draggingMatch) return;
 
     final positions = _generateCardPositions(screenSize);
     bool droppedOnFocusedEnvelope = false;
@@ -316,36 +317,38 @@ class _RolePageState extends State<RolePage> with TickerProviderStateMixin {
 
     if (droppedOnFocusedEnvelope && focusedIndex != null) {
       setState(() {
-        _currentState = InteractionState.showingFire;
+        _currentState = EnvelopeInteractionStateEnum.showingFire;
         _fireAnimationIndex = focusedIndex;
       });
 
-      // Inicia animação de queimada
       _burnController.forward(from: 0);
 
       setState(() {
         _matchOffset = Offset(0, 70);
       });
 
-      // Esconde o fósforo
       Future.delayed(const Duration(milliseconds: 500), () {
         if (mounted) {
           setState(() => _matchVisible = false);
         }
       });
 
-      // Troca para envelope queimado no ponto de menor escala (70% da animação = 1260ms)
       Future.delayed(Duration(milliseconds: 1260), () {
         if (mounted) {
           setState(() {
-            _currentState = InteractionState.complete;
+            _currentState = EnvelopeInteractionStateEnum.complete;
+            _burnedEnvelopes.add(focusedIndex!);
           });
         }
+      });
+      Future.delayed(const Duration(milliseconds: 1800), () {
+        _focusOnCard(focusedIndex!, screenSize);
+        setState(() => canGoBack = true);
       });
     } else {
       setState(() {
         _matchOffset = Offset.zero;
-        _currentState = InteractionState.waitingForMatch;
+        _currentState = EnvelopeInteractionStateEnum.waitingForMatch;
       });
     }
   }
@@ -373,22 +376,27 @@ class _RolePageState extends State<RolePage> with TickerProviderStateMixin {
 
     return AppScaffold(
       onBack: () {
-        if (focusedIndex != null) {
-          _focusOnCard(focusedIndex!, screenSize);
-          return;
+        if (canGoBack) {
+          if (focusedIndex != null) {
+            _focusOnCard(focusedIndex!, screenSize);
+            return;
+          }
+          Globals.nav.navigate(NestedRoutes.roster);
         }
-        Globals.nav.navigate(NestedRoutes.roster);
       },
-      showBackButton: true,
+      showBackButton: canGoBack,
       body: Column(
         children: [
           Expanded(
             child: GestureDetector(
               onTap: () {
                 if (focusedIndex != null &&
-                    (_currentState == InteractionState.selectingEnvelope ||
-                        _currentState == InteractionState.tearingEnvelope ||
-                        _currentState == InteractionState.complete)) {
+                    (_currentState ==
+                            EnvelopeInteractionStateEnum.selectingEnvelope ||
+                        _currentState ==
+                            EnvelopeInteractionStateEnum.tearingEnvelope ||
+                        _currentState ==
+                            EnvelopeInteractionStateEnum.complete)) {
                   _focusOnCard(focusedIndex!, screenSize);
                 }
               },
@@ -413,7 +421,8 @@ class _RolePageState extends State<RolePage> with TickerProviderStateMixin {
                                     final isBurning =
                                         focusedIndex == index &&
                                         _currentState ==
-                                            InteractionState.showingFire;
+                                            EnvelopeInteractionStateEnum
+                                                .showingFire;
 
                                     return Positioned(
                                       left: position.dx,
@@ -428,7 +437,7 @@ class _RolePageState extends State<RolePage> with TickerProviderStateMixin {
                                         child: GestureDetector(
                                           onTap: () {
                                             if (_currentState ==
-                                                InteractionState
+                                                EnvelopeInteractionStateEnum
                                                     .selectingEnvelope) {
                                               _focusOnCard(index, screenSize);
                                             }
@@ -436,24 +445,22 @@ class _RolePageState extends State<RolePage> with TickerProviderStateMixin {
                                           child: Transform(
                                             alignment: Alignment.center,
                                             transform: Matrix4.identity()
-                                              ..setEntry(3, 2, 0.005)
+                                              ..setEntry(3, 2, 0.003)
                                               ..rotateX(
-                                                _perspectiveAnimation.value *
-                                                    1.9,
+                                                _perspectiveAnimation.value * 1,
                                               ),
                                             child: Stack(
                                               children: [
-                                                // Envelope com animações de queimada
                                                 AnimatedBuilder(
                                                   animation: _burnController,
                                                   builder: (context, child) {
                                                     final shouldApplyBurnAnimation =
                                                         focusedIndex == index &&
                                                         (_currentState ==
-                                                                InteractionState
+                                                                EnvelopeInteractionStateEnum
                                                                     .showingFire ||
                                                             _currentState ==
-                                                                InteractionState
+                                                                EnvelopeInteractionStateEnum
                                                                     .complete);
 
                                                     return Transform.scale(
@@ -489,7 +496,12 @@ class _RolePageState extends State<RolePage> with TickerProviderStateMixin {
                                                             ),
                                                             width: cardWidth,
                                                             height: cardHeight,
-                                                            child: EnvelopeTearWidget(
+                                                            child: EnvelopeWidget(
+                                                              onTearComplete:
+                                                                  () => setState(
+                                                                    () => canGoBack =
+                                                                        false,
+                                                                  ),
                                                               playerName:
                                                                   playerName,
                                                               bloc: widget.bloc,
@@ -497,15 +509,14 @@ class _RolePageState extends State<RolePage> with TickerProviderStateMixin {
                                                                   focusedIndex ==
                                                                   index,
                                                               showBurnedEnvelope:
-                                                                  focusedIndex ==
-                                                                      index &&
-                                                                  _currentState ==
-                                                                      InteractionState
-                                                                          .complete,
-                                                              onTearComplete:
+                                                                  _burnedEnvelopes
+                                                                      .contains(
+                                                                        index,
+                                                                      ),
+                                                              onShowCardComplete:
                                                                   focusedIndex ==
                                                                       index
-                                                                  ? _onEnvelopeTearComplete
+                                                                  ? _onEnvelopeShowCardComplete
                                                                   : null,
                                                             ),
                                                           ),
@@ -514,7 +525,7 @@ class _RolePageState extends State<RolePage> with TickerProviderStateMixin {
                                                     );
                                                   },
                                                 ),
-                                                // Animação de fogo
+
                                                 if (_fireAnimationIndex ==
                                                     index)
                                                   Positioned(
@@ -540,6 +551,9 @@ class _RolePageState extends State<RolePage> with TickerProviderStateMixin {
                                 TableEdgeWidget(),
                                 FooterWidget(
                                   onTap: () {},
+                                  showButton:
+                                      _burnedEnvelopes.length == players.length,
+                                  message: context.loc.rolePageMessage,
                                   backgroundColor: AppColors.darkPropRed,
                                 ),
                               ],

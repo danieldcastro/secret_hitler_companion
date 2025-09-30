@@ -151,6 +151,30 @@ abstract class S {
   /// In en, this message translates to:
   /// **'Register all voters to continue'**
   String get rosterPageMessage;
+
+  /// Confidential Label
+  ///
+  /// In en, this message translates to:
+  /// **'Confidential'**
+  String get confidentialLabel;
+
+  /// Top Secret Label
+  ///
+  /// In en, this message translates to:
+  /// **'Top Secret'**
+  String get topSecretLabel;
+
+  /// Role Page Message
+  ///
+  /// In en, this message translates to:
+  /// **'Check your roles to start the voting'**
+  String get rolePageMessage;
+
+  /// Envelope Message
+  ///
+  /// In en, this message translates to:
+  /// **'Only the voter identified as {playerName} should open this envelope.'**
+  String envelopeMessage(String playerName);
 }
 
 class _SDelegate extends LocalizationsDelegate<S> {

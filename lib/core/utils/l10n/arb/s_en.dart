@@ -34,4 +34,18 @@ class SEn extends S {
 
   @override
   String get rosterPageMessage => 'Register all voters to continue';
+
+  @override
+  String get confidentialLabel => 'Confidential';
+
+  @override
+  String get topSecretLabel => 'Top Secret';
+
+  @override
+  String get rolePageMessage => 'Check your roles to start the voting';
+
+  @override
+  String envelopeMessage(String playerName) {
+    return 'Only the voter identified as $playerName should open this envelope.';
+  }
 }

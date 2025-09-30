@@ -35,6 +35,27 @@
   "rosterPageMessage": "Registre todos os votantes para continuar",
   "@rosterPageMessage": {
     "description": "Mensagem da página de registro"
+  },
+  "confidentialLabel": "Confidencial",
+  "@confidentialLabel": {
+    "description": "Label de confidencial"
+  },
+  "topSecretLabel": "Super Secreto",
+  "@topSecretLabel": {
+    "description": "Label de super secreto"
+  },
+  "rolePageMessage": "Verifiquem seus papéis para iniciar as votações",
+  "@rolePageMessage": {
+    "description": "Mensagem da página de papéis"
+  },
+  "envelopeMessage": "Somente o votante identificado como {playerName} deve abrir este envelope.",
+  "@envelopeMessage": {
+    "description": "Mensagem do envelope",
+    "placeholders": {
+      "playerName": {
+        "type": "String",
+        "example": "Marciano"
+      }
+    }
   }
-
 }

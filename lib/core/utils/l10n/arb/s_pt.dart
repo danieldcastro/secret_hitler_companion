@@ -34,6 +34,21 @@ class SPt extends S {
 
   @override
   String get rosterPageMessage => 'Registre todos os votantes para continuar';
+
+  @override
+  String get confidentialLabel => 'Confidencial';
+
+  @override
+  String get topSecretLabel => 'Super Secreto';
+
+  @override
+  String get rolePageMessage =>
+      'Verifiquem seus papéis para iniciar as votações';
+
+  @override
+  String envelopeMessage(String playerName) {
+    return 'Somente o votante identificado como $playerName deve abrir este envelope.';
+  }
 }
 
 /// The translations for Portuguese, as used in Brazil (`pt_BR`).
@@ -66,4 +81,19 @@ class SPtBr extends SPt {
 
   @override
   String get rosterPageMessage => 'Registre todos os votantes para continuar';
+
+  @override
+  String get confidentialLabel => 'Confidencial';
+
+  @override
+  String get topSecretLabel => 'Super Secreto';
+
+  @override
+  String get rolePageMessage =>
+      'Verifiquem seus papéis para iniciar as votações';
+
+  @override
+  String envelopeMessage(String playerName) {
+    return 'Somente o votante identificado como $playerName deve abrir este envelope.';
+  }
 }
