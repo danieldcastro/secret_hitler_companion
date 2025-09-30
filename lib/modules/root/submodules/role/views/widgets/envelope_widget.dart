@@ -112,6 +112,7 @@ class _EnvelopeWidgetState extends State<EnvelopeWidget>
         HapticFeedback.lightImpact();
       }
       _triggerCompletionBounce();
+      widget.onTearComplete?.call();
     }
   }
 
