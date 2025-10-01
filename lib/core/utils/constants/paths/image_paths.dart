@@ -14,4 +14,5 @@ class ImagePaths {
   static const String match = '$_assetsPath/match.png';
   static const String burnedEnvelope = '$_assetsPath/burned_envelope.png';
   static const String backEnvelope = '$_assetsPath/back_envelope.png';
+  static const String woodTexture = '$_assetsPath/wood_texture.png';
 }

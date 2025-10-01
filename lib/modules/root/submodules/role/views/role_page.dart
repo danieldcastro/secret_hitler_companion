@@ -414,6 +414,15 @@ class _RolePageState extends State<RolePage> with TickerProviderStateMixin {
                             Expanded(
                               child: Stack(
                                 children: [
+                                  Align(
+                                    alignment: Alignment.bottomCenter,
+                                    child: Image.asset(
+                                      ImagePaths.woodTexture,
+                                      height: 200,
+                                      width: 500,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
                                   ...players.asMap().entries.map((entry) {
                                     final int index = entry.key;
                                     final String playerName = entry.value;

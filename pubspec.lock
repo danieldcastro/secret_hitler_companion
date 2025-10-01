@@ -354,8 +354,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "0.1.11"
-      resolved-ref: c619d3475edc931f22c9313ab3bb06346a91f476
+      ref: "0.1.12"
+      resolved-ref: c2da44f35dd7632cd5d06d6121d4aed8dc9d76c8
       url: "https://github.com/danieldcastro/flutter_fy.git"
     source: git
     version: "0.0.1"
@@ -566,22 +566,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.3.2"
-  lucide_icons:
+  lucide_icons_flutter:
     dependency: "direct main"
     description:
-      name: lucide_icons
-      sha256: ad24d0fd65707e48add30bebada7d90bff2a1bba0a72d6e9b19d44246b0e83c4
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.257.0"
-  lucide_icons_flutter:
-    dependency: transitive
-    description:
       name: lucide_icons_flutter
-      sha256: e3d13fa20325c7d70d055b0b6a120a07ea2be320df0dbef87cd2aa43ddfbd272
+      sha256: b413c4249c816a8dc34f445e57ce04cbfb0760ea8e39d11c688857c023d30c59
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.6"
+    version: "3.1.1"
   mask_text_input_formatter:
     dependency: transitive
     description:

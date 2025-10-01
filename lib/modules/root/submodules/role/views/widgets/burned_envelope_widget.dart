@@ -20,8 +20,8 @@ class BurnedEnvelopeWidget extends StatelessWidget {
         height: double.infinity,
       ),
       Positioned(
-        left: 9,
-        right: 8,
+        left: 7,
+        right: 4,
         top: 50,
         child: EnvelopeMessageWidget(playerName: playerName, isBurned: true),
       ),

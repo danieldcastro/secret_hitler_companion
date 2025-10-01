@@ -25,17 +25,11 @@ class EnvelopeMessageWidget extends StatelessWidget {
         spacing: 3,
         children: [
           const SizedBox(width: 1),
-          Icon(
-            Icons.warning_rounded,
-            size: isBurned ? 10 : 15,
-            color: AppColors.black,
-          ),
+          Icon(Icons.warning_rounded, size: 15, color: AppColors.black),
           Expanded(
             child: Text(
               context.loc.envelopeMessage(playerName),
-              style: AppTextStyles.labelSmall().copyWith(
-                fontSize: isBurned ? 3 : 4,
-              ),
+              style: AppTextStyles.labelSmall().copyWith(fontSize: 4),
             ),
           ),
         ],
