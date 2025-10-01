@@ -418,7 +418,7 @@ class _RolePageState extends State<RolePage> with TickerProviderStateMixin {
                                     alignment: Alignment.bottomCenter,
                                     child: Image.asset(
                                       ImagePaths.woodTexture,
-                                      height: 200,
+                                      height: 300,
                                       width: 500,
                                       fit: BoxFit.cover,
                                     ),
