@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:secret_hitler_companion/core/objects/entities/voter_entity.dart';
 import 'package:secret_hitler_companion/modules/root/submodules/role/bloc/role_bloc.dart';
 import 'package:secret_hitler_companion/modules/root/submodules/role/bloc/role_state.dart';
 import 'package:secret_hitler_companion/modules/root/submodules/role/views/widgets/back_envelope_widget.dart';
@@ -12,7 +13,7 @@ class EnvelopeWidget extends StatefulWidget {
   final RoleBloc bloc;
   final VoidCallback? onShowCardComplete;
   final bool showBurnedEnvelope;
-  final String playerName;
+  final VoterEntity voter;
   final bool flip;
   final VoidCallback? onTearComplete;
 
@@ -20,7 +21,7 @@ class EnvelopeWidget extends StatefulWidget {
     required this.bloc,
     required this.showBurnedEnvelope,
     required this.flip,
-    required this.playerName,
+    required this.voter,
     required this.onShowCardComplete,
     required this.onTearComplete,
     super.key,
@@ -228,7 +229,7 @@ class _EnvelopeWidgetState extends State<EnvelopeWidget>
                               ? 1.0
                               : 0.0, // esconde quando "vira"
                           child: BackEnvelopeWidget(
-                            playerName: widget.playerName,
+                            playerName: widget.voter.name,
                           ),
                         ),
                       ),
@@ -249,7 +250,7 @@ class _EnvelopeWidgetState extends State<EnvelopeWidget>
                           topRegionFraction: widget.topRegionFraction,
                           revealWidth: revealWidth,
                           constraints: constraints,
-                          playerName: widget.playerName,
+                          voter: widget.voter,
                           revealOffset: _revealOffset,
                           isTornComplete: _isComplete,
                         ),

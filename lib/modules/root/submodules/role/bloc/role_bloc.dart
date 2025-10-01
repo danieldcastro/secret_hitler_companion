@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:secret_hitler_companion/core/objects/entities/voter_entity.dart';
+import 'package:secret_hitler_companion/core/utils/helpers/game_setup.dart';
 import 'package:secret_hitler_companion/core/utils/stores/voter_store.dart';
 import 'package:secret_hitler_companion/modules/root/submodules/role/bloc/role_state.dart';
 import 'package:secret_hitler_companion/modules/root/submodules/role/views/widgets/utils/envelope_interaction_state_enum.dart';
@@ -34,7 +35,8 @@ class RoleBloc extends Cubit<RoleState> {
 
   Future<void> _loadPlayers() async {
     final voters = await _voterStore.voters;
-    emit(state.copyWith(players: voters));
+    final assignedVoters = GameSetup.assignRoles(voters);
+    emit(state.copyWith(players: assignedVoters));
   }
 
   void toggleTearPreview() {
@@ -295,7 +297,7 @@ class RoleBloc extends Cubit<RoleState> {
     } else {
       final cardCenter = Offset(
         positions[index].dx + cardWidth / 2,
-        positions[index].dy + cardHeight / 2,
+        positions[index].dy + (cardHeight / 2) - 10,
       );
 
       final targetOffset = Offset(

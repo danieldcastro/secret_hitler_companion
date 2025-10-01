@@ -48,4 +48,7 @@ class SEn extends S {
   String envelopeMessage(String playerName) {
     return 'Only the voter identified as $playerName should open this envelope.';
   }
+
+  @override
+  String get roleCardMessage => 'Your secret role';
 }

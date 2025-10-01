@@ -11,4 +11,6 @@ class AppColors {
   static const Color coral = Color(0xFFE9775B);
   static const Color darkPropRed = Color(0xFFB8431C);
   static const Color lightPropRed = Color(0xffC9532B);
+  static const Color blue = Color(0xFF4A90E2);
+  static const Color darkBlue = Color(0xFF2C3E70);
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:secret_hitler_companion/core/objects/entities/voter_entity.dart';
 import 'package:secret_hitler_companion/core/utils/constants/paths/lottie_paths.dart';
 import 'package:secret_hitler_companion/modules/root/submodules/role/bloc/role_bloc.dart';
 import 'package:secret_hitler_companion/modules/root/submodules/role/bloc/role_state.dart';
@@ -10,7 +11,7 @@ class RolePageEnvelopeCard extends StatelessWidget {
   final RoleBloc bloc;
   final RoleState state;
   final int index;
-  final String playerName;
+  final VoterEntity voter;
   final Size screenSize;
   final AnimationController animationController;
   final AnimationController burnController;
@@ -19,7 +20,7 @@ class RolePageEnvelopeCard extends StatelessWidget {
     required this.bloc,
     required this.state,
     required this.index,
-    required this.playerName,
+    required this.voter,
     required this.screenSize,
     required this.animationController,
     required this.burnController,
@@ -93,7 +94,7 @@ class RolePageEnvelopeCard extends StatelessWidget {
             height: bloc.cardHeight,
             child: EnvelopeWidget(
               onTearComplete: () => bloc.setCanGoBack(false),
-              playerName: playerName,
+              voter: voter,
               bloc: bloc,
               flip: isFocused,
               showBurnedEnvelope: state.burnedEnvelopes.contains(index),

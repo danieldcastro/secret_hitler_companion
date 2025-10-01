@@ -57,5 +57,9 @@
         "example": "Marciano"
       }
     }
+  },
+  "roleCardMessage": "Seu papel secreto",
+  "@roleCardMessage": {
+    "description": "Mensagem do cartão de papel"
   }
 }

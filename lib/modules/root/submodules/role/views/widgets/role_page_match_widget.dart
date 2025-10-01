@@ -16,11 +16,11 @@ class RolePageMatchWidget extends StatelessWidget {
       clipBehavior: Clip.none,
       children: [
         Positioned(
-          top: -20,
-          left: -11,
-          child: Lottie.asset(LottiePaths.fire, height: 25),
+          top: -25,
+          left: -16,
+          child: Lottie.asset(LottiePaths.fire, height: 35),
         ),
-        Image.asset(ImagePaths.match, height: 30),
+        Image.asset(ImagePaths.match, height: 40),
       ],
     ),
   );

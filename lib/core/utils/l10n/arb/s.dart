@@ -175,6 +175,12 @@ abstract class S {
   /// In en, this message translates to:
   /// **'Only the voter identified as {playerName} should open this envelope.'**
   String envelopeMessage(String playerName);
+
+  /// Role Card Message
+  ///
+  /// In en, this message translates to:
+  /// **'Your secret role'**
+  String get roleCardMessage;
 }
 
 class _SDelegate extends LocalizationsDelegate<S> {

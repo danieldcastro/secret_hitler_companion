@@ -45,6 +45,7 @@ flutter:
   assets:
     - assets/audios/
     - assets/images/
+    - assets/images/role_cards/
     - assets/lotties/
 
   fonts:

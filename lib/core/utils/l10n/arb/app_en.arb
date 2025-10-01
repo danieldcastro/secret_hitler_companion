@@ -57,5 +57,9 @@
         "example": "Martian"
       }
     }
+  },
+  "roleCardMessage": "Your secret role",
+  "@roleCardMessage": { 
+    "description": "Role Card Message"
   }
 }

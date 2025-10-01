@@ -49,6 +49,9 @@ class SPt extends S {
   String envelopeMessage(String playerName) {
     return 'Somente o votante identificado como $playerName deve abrir este envelope.';
   }
+
+  @override
+  String get roleCardMessage => 'Seu papel secreto';
 }
 
 /// The translations for Portuguese, as used in Brazil (`pt_BR`).
@@ -96,4 +99,7 @@ class SPtBr extends SPt {
   String envelopeMessage(String playerName) {
     return 'Somente o votante identificado como $playerName deve abrir este envelope.';
   }
+
+  @override
+  String get roleCardMessage => 'Seu papel secreto';
 }

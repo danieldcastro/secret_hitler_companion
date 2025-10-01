@@ -28,9 +28,9 @@ class RolePageCardStack extends StatelessWidget {
 
     return Stack(
       children: state.players.asMap().entries.map((entry) {
-        final int index = entry.key;
-        final String playerName = entry.value.name;
-        final Offset position = positions[index];
+        final index = entry.key;
+        final voter = entry.value;
+        final position = positions[index];
 
         return Positioned(
           left: position.dx,
@@ -39,7 +39,7 @@ class RolePageCardStack extends StatelessWidget {
             bloc: bloc,
             state: state,
             index: index,
-            playerName: playerName,
+            voter: voter,
             screenSize: screenSize,
             animationController: animationController,
             burnController: burnController,
