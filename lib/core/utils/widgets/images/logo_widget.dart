@@ -4,7 +4,16 @@ import 'package:secret_hitler_companion/core/themes/app_text_styles.dart';
 
 class LogoWidget extends StatelessWidget {
   final double fontSize;
-  const LogoWidget({super.key, this.fontSize = 50});
+  final Color? color;
+  final bool showSubtitle;
+  final bool showSecretLabel;
+  const LogoWidget({
+    super.key,
+    this.fontSize = 50,
+    this.color,
+    this.showSubtitle = true,
+    this.showSecretLabel = true,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -15,17 +24,24 @@ class LogoWidget extends StatelessWidget {
         height: 400 * scale,
         child: Stack(
           children: [
-            _buildCustomText('SECRET', scale, fontSize),
-            Positioned(
-              top: 120 * scale,
-              left: 0,
-              child: _buildCustomText('HITLER', scale, fontSize),
+            _buildCustomText(
+              showSecretLabel ? 'SECRET' : 'HITLER',
+              scale,
+              fontSize,
+              color,
             ),
-            Positioned(
-              top: 260 * scale,
-              left: 14,
-              child: _buildCustomText('Companion', scale, 30),
-            ),
+            if (showSecretLabel)
+              Positioned(
+                top: 120 * scale,
+                left: 0,
+                child: _buildCustomText('HITLER', scale, fontSize, color),
+              ),
+            if (showSubtitle)
+              Positioned(
+                top: 260 * scale,
+                left: 14,
+                child: _buildCustomText('Companion', scale, 30),
+              ),
           ],
         ),
       ),

@@ -6,6 +6,7 @@ import 'package:secret_hitler_companion/core/objects/enums/font_family_enum.dart
 import 'package:secret_hitler_companion/core/themes/app_colors.dart';
 import 'package:secret_hitler_companion/core/themes/app_text_styles.dart';
 import 'package:secret_hitler_companion/core/utils/extensions/context_extensions.dart';
+import 'package:secret_hitler_companion/core/utils/widgets/images/logo_widget.dart';
 import 'package:secret_hitler_companion/modules/root/submodules/role/views/widgets/utils/burned_edge_clipper.dart';
 
 class RoleCard extends StatelessWidget {
@@ -33,7 +34,8 @@ class RoleCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(4),
           image: DecorationImage(
             image: AssetImage(voter.cardImage),
-            fit: BoxFit.cover,
+            fit: BoxFit.fitWidth,
+            alignment: Alignment(2, -0.3),
           ),
         ),
         width: constraints.maxWidth - 7,
@@ -45,37 +47,64 @@ class RoleCard extends StatelessWidget {
             children: [
               FittedBox(
                 child: Text(
-                  'SEU PAPEL SECRETO',
+                  context.loc.roleCardMessage.toUpperCase(),
                   style: AppTextStyles.labelSmall().copyWith(fontSize: 5),
                 ),
               ),
-              FittedBox(
-                child: Stack(
-                  children: [
-                    Text(
-                      _getRoleName(context, voter),
-                      style: AppTextStyles.bodyMedium(
-                        fontFamily: FontFamilyEnum.display,
-                        fontWeight: FontWeight.w900,
-                        color: _getRoleColor(voter),
-                      ),
+              if (voter is FascistVoterEntity &&
+                  (voter as FascistVoterEntity).isHitler)
+                SizedBox(
+                  width: 50,
+                  height: 40,
+                  child: LogoWidget(
+                    color: AppColors.propRed,
+                    showSubtitle: false,
+                    showSecretLabel: false,
+                  ),
+                )
+              else
+                FittedBox(
+                  child: Transform.rotate(
+                    angle: -0.15,
+                    child: Stack(
+                      children: [
+                        Text(
+                          _getRoleName(context, voter),
+                          style:
+                              AppTextStyles.bodyMedium(
+                                fontFamily: FontFamilyEnum.display,
+                                fontWeight: FontWeight.w900,
+                                color: _getRoleColor(voter),
+                              ).copyWith(
+                                shadows: [
+                                  Shadow(
+                                    offset: Offset(
+                                      1,
+                                      1,
+                                    ), // deslocamento da sombra
+                                    blurRadius: 3, // desfoque
+                                    color: AppColors.black, // cor da sombra
+                                  ),
+                                ],
+                              ),
+                        ),
+                        Text(
+                          _getRoleName(context, voter),
+                          style:
+                              AppTextStyles.bodyMedium(
+                                fontFamily: FontFamilyEnum.display,
+                                fontWeight: FontWeight.w900,
+                              ).copyWith(
+                                foreground: Paint()
+                                  ..style = PaintingStyle.stroke
+                                  ..strokeWidth = 1
+                                  ..color = _getRoleStrokeColor(voter),
+                              ),
+                        ),
+                      ],
                     ),
-                    Text(
-                      _getRoleName(context, voter),
-                      style:
-                          AppTextStyles.bodyMedium(
-                            fontFamily: FontFamilyEnum.display,
-                            fontWeight: FontWeight.w900,
-                          ).copyWith(
-                            foreground: Paint()
-                              ..style = PaintingStyle.stroke
-                              ..strokeWidth = 1
-                              ..color = _getRoleStrokeColor(voter),
-                          ),
-                    ),
-                  ],
+                  ),
                 ),
-              ),
             ],
           ),
         ),
@@ -85,17 +114,17 @@ class RoleCard extends StatelessWidget {
 
   Color _getRoleColor(VoterEntity voter) {
     if (voter is FascistVoterEntity) {
-      return AppColors.lightPropRed;
+      return AppColors.darkPropRed;
     } else {
-      return AppColors.blue;
+      return AppColors.darkCyan;
     }
   }
 
   Color _getRoleStrokeColor(VoterEntity voter) {
     if (voter is FascistVoterEntity) {
-      return AppColors.darkPropRed;
+      return AppColors.propRed;
     } else {
-      return AppColors.darkBlue;
+      return AppColors.lightCyan;
     }
   }
 

@@ -206,13 +206,13 @@ class _EnvelopeWidgetState extends State<EnvelopeWidget>
                         0.0,
                       );
                     });
+                    if (_revealOffset < -constraints.maxHeight / 4) {
+                      widget.onShowCardComplete?.call();
+                    }
                   }
                 },
                 onVerticalDragEnd: (details) {
                   if (_isComplete) {
-                    if (_revealOffset < -constraints.maxHeight / 4) {
-                      widget.onShowCardComplete?.call();
-                    }
                     setState(() => _revealOffset = 0.0);
                   }
                 },

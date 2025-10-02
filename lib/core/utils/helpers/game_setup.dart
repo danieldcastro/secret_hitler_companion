@@ -51,7 +51,6 @@ class GameSetup {
       ImagePaths.fascist1Card,
       ImagePaths.fascist2Card,
       ImagePaths.fascist3Card,
-      ImagePaths.fascist4Card,
     ]..shuffle(Random());
 
     final liberalCards = [
